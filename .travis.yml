@@ -1,9 +1,17 @@
+
 sudo: required
 
 services:
   - docker
+
 language: java
 jdk:
   - oraclejdk8
+
 script:
+  # Build .war file and build docker image
   - docker/build
+
+  # Log in to Docker Hub and push the image we've just build
+  - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker push alexbtk/amos-ss16-proj9:1.0
