@@ -17,11 +17,40 @@
     limitations under the License.
 
 -->
-<html>
-  <head>
-    <title>Home!</title>
-  </head>
-  <body>
-	<h1>Hello World!</h1>
-  </body>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+
+	<title>The Project 9</title>
+	<meta name="description" content="The Project 9">
+	<meta name="author" content="Project9">
+
+	<!-- <link rel="stylesheet" href="css/mystyle.css?v=1.0">
+	<script type="text/javascript" src="js/jquery-2.2.3.min.js"></script>
+    -->
+
+	<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+  
+	<form method="POST" action="" >
+	<fieldset>
+		<legend>Write company name</legend>
+		<input type="text" name="companyName" maxlength="100" required>
+		<!--<input type="submit" value="Go" id="submitName">-->
+	</fieldset>
+	<fieldset>
+		<legend>Ask a question</legend>
+		<input required type="radio" name="question" value="1" />What is the company industry? <br />
+		<input required type="radio" name="question" value="2" />What are the company's products?<br />
+		<input type="submit" value="Ask" id="submitQuestion" />
+	</fieldset>
+	
+	</form>
+	<div id="answer"><br />Here will be the answer!</div>
+	<!--<script type="text/javascript" src="js/myscript.js" ></script>-->
+</body>
 </html>
