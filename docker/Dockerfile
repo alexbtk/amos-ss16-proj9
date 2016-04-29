@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
 FROM alexbtk/amos-ss16-proj9:latest
 
 ENV JETTY_RUNNER_VERSION 9.3.8.v20160314
