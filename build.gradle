@@ -29,6 +29,7 @@ dependencies {
    providedCompile 'javax.servlet:servlet-api:2.5'
    compile 'org.springframework:spring-webmvc:4.2.5.RELEASE'
    runtime 'javax.servlet:jstl:1.2'
+   compile 'com.ibm.watson.developer_cloud:java-sdk:2.10.0'
 }
 
 /* Change context path (base url). Otherwise defaults to name of project */
