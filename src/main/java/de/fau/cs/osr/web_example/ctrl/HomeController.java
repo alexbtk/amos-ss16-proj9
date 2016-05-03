@@ -27,11 +27,11 @@ import AMOSAlchemy.IAlchemyFactory;
 @Controller
 public class HomeController {
 	
-	@RequestMapping("/")
-	public String loadHomePage(@RequestParam("companyName") String companyName, Model m) {
+	@RequestMapping(value="/process")
+	public String loadProcessPage(@RequestParam("companyName") String companyName, Model m) {
 		
 		IAlchemyFactory fac = IAlchemyFactory.newInstance();
-		IAlchemy service = fac.createAlchemy("fd98eff08dde3219578ef740567a4604939f0a5f");
+		IAlchemy service = fac.createAlchemy("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
 		
 		m.addAttribute("mainIndustry","Main industry: " + service.getCompanyMainIndustry(companyName));
 		m.addAttribute("mainProduct","Main product: " + service.getCompanyMainProduct(companyName));
@@ -39,6 +39,12 @@ public class HomeController {
 		m.addAttribute("possibleCompetitors","Possible competitors: " + service.getPossibleCompetitors(companyName));
 		m.addAttribute("newsSentimentAnalisys",("News sentiment: " + service.getSentimentAnalisysOfNews(companyName)).replace("\n", "<br />"));
 				
+		return "process";
+	}
+	
+	@RequestMapping(value="/")
+	public String loadHomePage(Model m) {
+			
 		return "home";
 	}
 	

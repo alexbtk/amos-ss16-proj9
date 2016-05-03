@@ -36,7 +36,7 @@
 
 <body>
   
-	<form method="GET" action="" >
+	<form method="GET" action="process" >
 	<fieldset>
 		<legend>Write company name</legend>
 		<input type="text" name="companyName" maxlength="100" required>
@@ -50,20 +50,7 @@
 	</fieldset>
 	
 	</form>
-	<%
 	
-//	IAlchemyFactory fac = IAlchemyFactory.newInstance();
-	//IAlchemy service = fac.createAlchemy("07e9cd2bcb99c18aa05cf79bf93a0e0f3a6bafaf");
-	
-	%>
-	<div id="answer"><br />Here will be the answer!<br />
-	
-	Company Name : ${companyName}<br />
-	${mainIndustry} <br />
-	${mainProduct}<br />
-	${possibleCompetitors}<br />
-	${newsSentimentAnalisys}
-	</div>
 	<!--<script type="text/javascript" src="js/myscript.js" ></script>-->
 </body>
 </html>
