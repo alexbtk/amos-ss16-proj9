@@ -6,12 +6,12 @@ public class AlchemyFactoryImpl extends IAlchemyFactory{
 		
 	}
 
-	//@Override
+	@Override
 	public IAlchemy createAlchemy(String apiKey) {
 		return new AlchemyImpl(apiKey);
 	}
 
-	//@Override
+	@Override
 	public IAlchemyLanguage createAlchemyLanguage(String apiKey) {
 		return new AlchemyLanguageImpl(apiKey);
 	}

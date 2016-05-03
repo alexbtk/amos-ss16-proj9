@@ -19,11 +19,25 @@ package de.fau.cs.osr.web_example.ctrl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import AMOSAlchemy.IAlchemy;
+import AMOSAlchemy.IAlchemyFactory;
 
 @Controller
 public class HomeController {
+	
 	@RequestMapping("/")
-	public String loadHomePage(Model m) {
+	public String loadHomePage(@RequestParam("companyName") String companyName, Model m) {
+		
+		IAlchemyFactory fac = IAlchemyFactory.newInstance();
+		IAlchemy service = fac.createAlchemy("<key-api>");
+		
+		m.addAttribute("mainIndustry","Main industry: " + service.getCompanyMainIndustry(companyName));
+		m.addAttribute("mainProduct","Main product: " + service.getCompanyMainProduct(companyName));
+		m.addAttribute("companyName",companyName);
+				
 		return "home";
 	}
+	
 }
