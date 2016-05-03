@@ -17,7 +17,7 @@ public class AlchemyLanguageImpl implements IAlchemyLanguage{
 		service.setApiKey(apiKey);
 	}
 
-	@Override
+	//@Override
 	public Taxonomies getCompanyTaxonomies(String company, String companyUrl) throws BadRequestException{
 		//Set parameters for request
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -27,7 +27,7 @@ public class AlchemyLanguageImpl implements IAlchemyLanguage{
         return service.getTaxonomy(params); //Result from AlchemyLanguage service for taxonomies
 	}
 	
-	@Override
+	//@Override
 	public Entities getCompanyEntities(String company, String companyUrl) throws BadRequestException{
 		//Set parameters for request
 		Map<String, Object> params = new HashMap<String, Object>();

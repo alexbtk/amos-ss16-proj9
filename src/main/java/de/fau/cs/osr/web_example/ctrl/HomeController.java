@@ -31,11 +31,13 @@ public class HomeController {
 	public String loadHomePage(@RequestParam("companyName") String companyName, Model m) {
 		
 		IAlchemyFactory fac = IAlchemyFactory.newInstance();
-		IAlchemy service = fac.createAlchemy("<key-api>");
+		IAlchemy service = fac.createAlchemy("fd98eff08dde3219578ef740567a4604939f0a5f");
 		
 		m.addAttribute("mainIndustry","Main industry: " + service.getCompanyMainIndustry(companyName));
 		m.addAttribute("mainProduct","Main product: " + service.getCompanyMainProduct(companyName));
 		m.addAttribute("companyName",companyName);
+		m.addAttribute("possibleCompetitors","Possible competitors: " + service.getPossibleCompetitors(companyName));
+		m.addAttribute("newsSentimentAnalisys",("News sentiment: " + service.getSentimentAnalisysOfNews(companyName)).replace("\n", "<br />"));
 				
 		return "home";
 	}

@@ -60,7 +60,9 @@
 	
 	Company Name : ${companyName}<br />
 	${mainIndustry} <br />
-	${mainProduct}
+	${mainProduct}<br />
+	${possibleCompetitors}<br />
+	${newsSentimentAnalisys}
 	</div>
 	<!--<script type="text/javascript" src="js/myscript.js" ></script>-->
 </body>
