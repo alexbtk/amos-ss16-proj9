@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.ibm.watson.developer_cloud.alchemy.v1.AlchemyLanguage;
+import com.ibm.watson.developer_cloud.alchemy.v1.model.DocumentSentiment;
 import com.ibm.watson.developer_cloud.alchemy.v1.model.Entities;
 import com.ibm.watson.developer_cloud.alchemy.v1.model.Taxonomies;
 import com.ibm.watson.developer_cloud.service.BadRequestException;
@@ -37,5 +38,10 @@ public class AlchemyLanguageImpl implements IAlchemyLanguage{
         //Keywords k = service.getKeywords(params);
         return service.getEntities(params);
         
+	}
+	public DocumentSentiment getSentimentForText(String text) throws BadRequestException{
+		Map<String,Object> params = new HashMap<String, Object>();
+		params.put(AlchemyLanguage.TEXT, text);
+		return service.getSentiment(params);
 	}
 }

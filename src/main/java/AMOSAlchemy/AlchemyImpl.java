@@ -14,6 +14,7 @@ import com.ibm.watson.developer_cloud.alchemy.v1.model.Taxonomies;
 import com.ibm.watson.developer_cloud.alchemy.v1.model.Taxonomy;
 import com.ibm.watson.developer_cloud.service.BadRequestException;
 
+
 public class AlchemyImpl implements IAlchemy{
 
 	private IAlchemyLanguage alchemyLanguage;
