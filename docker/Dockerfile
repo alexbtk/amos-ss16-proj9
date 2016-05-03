@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-FROM alexbtk/amos-ss16-proj9:latest
+FROM osrgroup/amos-web-service-base-image:1.0
 
 ENV JETTY_RUNNER_VERSION 9.3.8.v20160314
 ENV MAVEN_DOWNLOAD_URL http://search.maven.org/remotecontent?filepath=

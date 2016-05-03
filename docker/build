@@ -31,4 +31,4 @@ cp -v ./build/libs/*.war ./docker/assets/web-service.war
 
 # Build docker image
 # --pull: Make sure that the newest version of the base image is always pulled
-docker build --pull -t alexbtk/amos-ss16-proj9:latest docker/
+docker build --pull -t osrgroup/web-service-example-project:1.0 docker/

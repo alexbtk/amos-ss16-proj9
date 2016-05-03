@@ -1,0 +1,38 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Gradle : amos-ss16-proj9.war (exploded)">
+    <output-path>$PROJECT_DIR$/classes/artifacts/amos-ss16-proj9/exploded/amos-ss16-proj9.war</output-path>
+    <properties id="gradle-properties">
+      <options external-project-path="$PROJECT_DIR$" />
+    </properties>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="amos-ss16-proj9_main/web/Web Gradle : amos-ss16-proj9.war" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="amos-ss16-proj9_main" />
+          <element id="dir-copy" path="$PROJECT_DIR$/build/resources/main" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Gradle: org.springframework:spring-webmvc:4.2.5.RELEASE" />
+          <element id="library" level="project" name="Gradle: com.ibm.watson.developer_cloud:java-sdk:2.10.0" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-beans:4.2.5.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-context:4.2.5.RELEASE" />
+          <element id="library" level="project" name="Gradle: javax.servlet:jstl:1.2" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-core:4.2.5.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-expression:4.2.5.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-web:4.2.5.RELEASE" />
+          <element id="library" level="project" name="Gradle: com.squareup.okhttp:okhttp:2.7.2" />
+          <element id="library" level="project" name="Gradle: com.google.code.gson:gson:2.6.2" />
+          <element id="library" level="project" name="Gradle: org.apache.commons:commons-lang3:3.4" />
+          <element id="library" level="project" name="Gradle: com.neovisionaries:nv-websocket-client:1.22" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-aop:4.2.5.RELEASE" />
+          <element id="library" level="project" name="Gradle: commons-logging:commons-logging:1.2" />
+          <element id="library" level="project" name="Gradle: com.squareup.okio:okio:1.6.0" />
+          <element id="library" level="project" name="Gradle: aopalliance:aopalliance:1.0" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/classes/artifacts/amos-ss16-proj9/exploded/amos-ss16-proj9.war/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>
