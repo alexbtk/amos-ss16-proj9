@@ -6,7 +6,8 @@ public class Demo {
 
 	public static void main(String[] args) {
 		IAlchemyFactory fac = IAlchemyFactory.newInstance();
-		IAlchemy service = fac.createAlchemy("1eccdb3cfc18574d5a62e986faf05016f05fbc88");
+		IAlchemy service = fac.createAlchemy("<api-key>");
+
 		try{
 			System.out.println("Main industry: " + service.getCompanyMainIndustry("Apple"));
 			System.out.println("Main product: " + service.getCompanyMainProduct("Apple"));
