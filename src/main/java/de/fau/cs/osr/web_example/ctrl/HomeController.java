@@ -56,7 +56,7 @@ public class HomeController {
 
 		IAlchemyLanguage languageService = fac.createAlchemyLanguage("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
 		DocumentSentiment sentiment = languageService.getSentimentForText(socialMediaPost);
-		m.addAttribute("textSentiment", "Sentiment of the Post:" + sentiment.getSentiment().getScore().toString());
+		m.addAttribute("textSentiment", sentiment.getSentiment().getScore().toString());
 
 		return "home";
 	}

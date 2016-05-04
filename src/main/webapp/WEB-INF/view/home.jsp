@@ -56,9 +56,8 @@
 			<legend>Write text to analyze sentiment</legend>
 			<input type="text" name="Text" maxlength="1000" required>
 			<input type="submit" value="submit" id="submitText" />
-			<div id="answer"><br />Sentiment value:<br />
+			<div id="answer"><br />Sentiment value: <br />
 			${textSentiment}<br />
-
 			</div>
 		</fieldset>
 	</form>
