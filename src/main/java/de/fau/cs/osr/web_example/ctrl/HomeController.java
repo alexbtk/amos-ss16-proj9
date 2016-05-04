@@ -16,9 +16,12 @@
  */
 package de.fau.cs.osr.web_example.ctrl;
 
+import AMOSAlchemy.IAlchemyLanguage;
+import com.ibm.watson.developer_cloud.alchemy.v1.model.DocumentSentiment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import AMOSAlchemy.IAlchemy;
@@ -26,13 +29,19 @@ import AMOSAlchemy.IAlchemyFactory;
 
 @Controller
 public class HomeController {
-	
+
+	IAlchemyFactory fac;
+	IAlchemy service;
+
+	public HomeController(){
+		fac = IAlchemyFactory.newInstance();
+		service = fac.createAlchemy("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
+	}
+
 	@RequestMapping(value="/process")
 	public String loadProcessPage(@RequestParam("companyName") String companyName, Model m) {
-		
-		IAlchemyFactory fac = IAlchemyFactory.newInstance();
-		IAlchemy service = fac.createAlchemy("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
-		
+
+
 		m.addAttribute("mainIndustry","Main industry: " + service.getCompanyMainIndustry(companyName));
 		m.addAttribute("mainProduct","Main product: " + service.getCompanyMainProduct(companyName));
 		m.addAttribute("companyName",companyName);
@@ -40,6 +49,16 @@ public class HomeController {
 		m.addAttribute("newsSentimentAnalisys",("News sentiment: " + service.getSentimentAnalisysOfNews(companyName)).replace("\n", "<br />"));
 				
 		return "process";
+	}
+
+	@RequestMapping(value="/getSentiment", method = RequestMethod.POST)
+	public String loadTextSentiment(@RequestParam("Text") String socialMediaPost, Model m) {
+
+		IAlchemyLanguage languageService = fac.createAlchemyLanguage("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
+		DocumentSentiment sentiment = languageService.getSentimentForText(socialMediaPost);
+		m.addAttribute("textSentiment", "Sentiment of the Post:" + sentiment.getSentiment().getScore().toString());
+
+		return "home";
 	}
 	
 	@RequestMapping(value="/")

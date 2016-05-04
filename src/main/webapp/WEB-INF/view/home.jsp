@@ -2,7 +2,7 @@
 <!--
 
     Copyright 2016 The Open Source Research Group,
-                   University of Erlangen-Nürnberg
+                   University of Erlangen-Nï¿½rnberg
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -49,6 +49,18 @@
 		<input type="submit" value="Ask" id="submitQuestion" />
 	</fieldset>
 	
+	</form>
+
+	<form method="POST" action="getSentiment" >
+		<fieldset>
+			<legend>Write text to analyze sentiment</legend>
+			<input type="text" name="Text" maxlength="1000" required>
+			<input type="submit" value="submit" id="submitText" />
+			<div id="answer"><br />Sentiment value:<br />
+			${textSentiment}<br />
+
+			</div>
+		</fieldset>
 	</form>
 	
 	<!--<script type="text/javascript" src="js/myscript.js" ></script>-->
