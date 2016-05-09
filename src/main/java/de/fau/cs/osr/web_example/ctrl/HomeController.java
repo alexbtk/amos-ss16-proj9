@@ -17,7 +17,14 @@
 package de.fau.cs.osr.web_example.ctrl;
 
 import AMOSAlchemy.IAlchemyLanguage;
+import AMOSTwitter.TwitterAnalyzer;
+import AMOSTwitter.TwitterCrawler;
+import twitter4j.Status;
+
 import com.ibm.watson.developer_cloud.alchemy.v1.model.DocumentSentiment;
+
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,10 +39,16 @@ public class HomeController {
 
 	IAlchemyFactory fac;
 	IAlchemy service;
+	IAlchemyLanguage languageService;
+	TwitterCrawler twitterCrawler;
+	TwitterAnalyzer twitterAnalyzer;
 
 	public HomeController(){
 		fac = IAlchemyFactory.newInstance();
 		service = fac.createAlchemy("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
+		languageService = fac.createAlchemyLanguage("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
+		twitterCrawler = new TwitterCrawler("xsqQfqabFUAX3gaoFBvShR8zP", "ZMCkHyJLyiCc25MWMJtpSuni5udZOhrLuSS616sX2hWT8rLokl","729408419602571264-oCcXJu3zfIEPZUsoYR0dHVNdiZ6GXlZ", "c9O4wafJ4Sl9APDLiHVWUVBn86WXC9Ys2HzKFAe9rBxZb");
+		twitterAnalyzer = new TwitterAnalyzer();
 	}
 
 	@RequestMapping(value="/process")
@@ -52,11 +65,14 @@ public class HomeController {
 	}
 
 	@RequestMapping(value="/getSentiment", method = RequestMethod.POST)
-	public String loadTextSentiment(@RequestParam("Text") String socialMediaPost, Model m) {
-
-		IAlchemyLanguage languageService = fac.createAlchemyLanguage("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
-		DocumentSentiment sentiment = languageService.getSentimentForText(socialMediaPost);
-		m.addAttribute("textSentiment", sentiment.getSentiment().getScore().toString());
+	public String loadTextSentiment(@RequestParam("Text") String companyName, Model m) {
+		List<Status> posts = twitterCrawler.crawlPosts(companyName);
+		Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForTweets(posts, languageService);
+		
+		
+		//IAlchemyLanguage languageService = fac.createAlchemyLanguage("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
+		//DocumentSentiment sentiment = languageService.getSentimentForText(socialMediaPost);
+		m.addAttribute("textSentiment", avgSentimentValue.toString());
 
 		return "home";
 	}

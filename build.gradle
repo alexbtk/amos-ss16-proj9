@@ -31,6 +31,7 @@ dependencies {
    runtime 'javax.servlet:jstl:1.2'
    compile 'com.ibm.watson.developer_cloud:java-sdk:2.10.0'
    compile 'org.apache.jena:apache-jena:3.0.1'
+   compile 'org.twitter4j:twitter4j-core:4.0.4'
 }
 
 /* Change context path (base url). Otherwise defaults to name of project */
