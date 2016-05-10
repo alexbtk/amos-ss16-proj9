@@ -27,8 +27,10 @@ public class AlchemyImpl implements IAlchemy{
 	
 	//@Override
 	public String getCompanyMainIndustry(String companyName) throws BadRequestException{
-		//Assumes that company has a .com website
-		String companyUrl = "http://" + companyName.toLowerCase() + ".com";
+		String companyUrl = AMOSDBPedia.DBpedia.getCompanyHomepage(companyName);
+		if(companyUrl == null)
+			companyUrl = "http://" + companyName.toLowerCase() + ".com"; //Assumes that company has a .com website if no website found on DBpedia
+		
 		Taxonomies t = alchemyLanguage.getCompanyTaxonomies(companyName, companyUrl);
 
         Taxonomy maxScore = null; //return result
@@ -44,7 +46,10 @@ public class AlchemyImpl implements IAlchemy{
 
 	//@Override
 	public String getCompanyMainProduct(String companyName) throws BadRequestException{
-		String companyUrl = "http://" + companyName.toLowerCase() + ".com";
+		String companyUrl = AMOSDBPedia.DBpedia.getCompanyHomepage(companyName);
+		if(companyUrl == null)
+			companyUrl = "http://" + companyName.toLowerCase() + ".com"; //Assumes that company has a .com website if no website found on DBpedia
+		
 		Entities e = alchemyLanguage.getCompanyEntities(companyName, companyUrl);
 		
 		Entity result = null;

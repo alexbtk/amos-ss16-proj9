@@ -36,7 +36,6 @@ public class DBpedia {
             }
             
             return result;
-            //ResultSetFormatter.out(System.out, rs, query);
 		} catch (Exception e) {
             e.printStackTrace();
         }
@@ -138,6 +137,8 @@ public class DBpedia {
 		List<String> resourceList = getResourceByLabel(label);
 		List<String> resultList = new ArrayList<String>();
 		
+		String[] companyEndings = {"Inc.", "Co.", "inc.", "co.", "Corporation", "Company"};
+		
 		for(String s : resourceList){
 			
 			if(resourceIsCompany(s)){
@@ -175,9 +176,172 @@ public class DBpedia {
 		            	}
 		            }
 				}
+			}else if(!label.endsWith(companyEndings[0]) && 
+					!label.endsWith(companyEndings[1]) && 
+					!label.endsWith(companyEndings[2]) && 
+					!label.endsWith(companyEndings[3]) && 
+					!label.endsWith(companyEndings[4]) && 
+					!label.endsWith(companyEndings[5])
+					){
+				
+				for(String ending : companyEndings){
+					List<String> comps = getCompanies(label + " " + ending); //Recursive - depth of recursion is always only 1
+					if(comps.size() > 0)
+						resultList.addAll(comps);
+				}
+				
 			}
 		}
 		
 		return resultList;
+	}
+	
+	public static String getResourceAbstract(String resource){
+		
+		resource = resource.replace("[", "");
+		resource = resource.replace("]", "");
+		resource = "<" + resource + ">";
+		
+		String queryString = 	"PREFIX dbpedia-owl: <http://dbpedia.org/ontology/> " +
+								"SELECT * " +
+								"WHERE { " +
+								    resource + " dbpedia-owl:abstract ?n . " +
+								"}";
+		
+		Query query = QueryFactory.create(queryString);
+		
+		try ( QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query) ) {
+			// Set the DBpedia specific timeout.
+            ((QueryEngineHTTP)qexec).addParam("timeout", "10000") ;
+
+            // Execute.
+            ResultSet rs = qexec.execSelect();
+            while(rs.hasNext()){
+            	QuerySolution qs = rs.next();
+            	String res = qs.getLiteral("n").toString();
+            	if(res.endsWith("@en")){
+            		res = res.replace("@en", "");
+	                return res;
+            	}
+            }
+		} catch (Exception e) {
+            e.printStackTrace();
+        }
+		
+		return null;
+	}
+	
+	public static String getCompanyAbstract(String name){
+		
+		List<String> resources = getResourceByLabel(name);
+		String companyAbstract = null;
+		
+		//Try resources until company is found
+		for(String r : resources){
+			if(resourceIsCompany(r)){
+				companyAbstract = getResourceAbstract(r);
+				break;
+			}
+		}
+		
+		return companyAbstract;
+	}
+	
+	public static String getResourceHomepage(String resource){
+		resource = resource.replace("[", "");
+		resource = resource.replace("]", "");
+		resource = "<" + resource + ">";
+		
+		String queryString = 	"PREFIX foaf: <http://xmlns.com/foaf/0.1/> " +
+				"SELECT * " +
+				"WHERE { " +
+				resource + " foaf:homepage ?n . " +
+				"}";
+
+		Query query = QueryFactory.create(queryString);
+
+		try ( QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query) ) {
+			// Set the DBpedia specific timeout.
+			((QueryEngineHTTP)qexec).addParam("timeout", "10000") ;
+
+			// Execute.
+			ResultSet rs = qexec.execSelect();
+			if(rs.hasNext()){
+				QuerySolution qs = rs.next();
+				String res = qs.getResource("n").toString();
+				return res;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	public static String getCompanyHomepage(String name){
+
+		List<String> resources = getResourceByLabel(name);
+		String companyHomepage = null;
+
+		//Try resources until company is found
+		for(String r : resources){
+			if(resourceIsCompany(r)){
+				companyHomepage = getResourceHomepage(r);
+				break;
+			}
+		}
+
+		return companyHomepage;
+	}
+	
+	public static List<String> getResourceProducts(String resource){
+		resource = resource.replace("[", "");
+		resource = resource.replace("]", "");
+		resource = "<" + resource + ">";
+		
+		List<String> resultList = new ArrayList<String>();
+		
+		String queryString = 	"PREFIX dbpedia-owl: <http://dbpedia.org/ontology/> " +
+								"SELECT * " +
+								"WHERE { " +
+								    resource + " dbpedia-owl:product ?n . " +
+								"}";
+		
+		Query query = QueryFactory.create(queryString);
+		
+		try ( QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query) ) {
+			// Set the DBpedia specific timeout.
+            ((QueryEngineHTTP)qexec).addParam("timeout", "10000") ;
+
+            // Execute.
+            ResultSet rs = qexec.execSelect();
+            while(rs.hasNext()){
+            	QuerySolution qs = rs.next();
+            	String res = qs.getResource("n").toString();
+            	String name = getResourceName(res);
+            	if(name != null)
+            		resultList.add(name);
+            }
+		} catch (Exception e) {
+            e.printStackTrace();
+        }
+		
+		return resultList;
+	}
+	
+	public static List<String> getCompanyProducts(String name){
+
+		List<String> resources = getResourceByLabel(name);
+		List<String> companyProducts = null;
+
+		//Try resources until company is found
+		for(String r : resources){
+			if(resourceIsCompany(r)){
+				companyProducts = getResourceProducts(r);
+				break;
+			}
+		}
+
+		return companyProducts;
 	}
 }
