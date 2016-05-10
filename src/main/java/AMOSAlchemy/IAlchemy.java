@@ -8,4 +8,5 @@ public interface IAlchemy {
 	public String getCompanyMainProduct(String companyName) throws BadRequestException;
 	public String getPossibleCompetitors(String companyName) throws BadRequestException;
 	public String getSentimentAnalisysOfNews(String companyName)throws BadRequestException;
+	public String getPossibleProducts(String companyName) throws BadRequestException;
 }

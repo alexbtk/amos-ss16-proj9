@@ -75,4 +75,31 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		
 		return result.getDocuments();
 	}
+	
+	public  ArrayList getPossibibleProductList(String companyName) throws BadRequestException{
+		 Map<String, Object> params = new HashMap<String, Object>();
+
+		  String[] fields =
+		      new String[] {"q.enriched.url.enrichedTitle.entities.entity.text",
+		          "q.enriched.url.enrichedTitle.entities.entity.type"};
+		  params.put(AlchemyDataNews.RETURN, StringUtils.join(fields, ","));
+		  params.put(AlchemyDataNews.START, "now-10d");
+		  params.put(AlchemyDataNews.END, "now");
+		  params.put(AlchemyDataNews.COUNT, 7);
+		  params.put("q.enriched.url.enrichedTitle.entities.entity.type", "Company");
+		  params.put("q.enriched.url.enrichedTitle.entities.entity.text", companyName);
+		  
+		  DocumentsResult result =  service.getNewsDocuments(params);
+		  Documents d = result.getDocuments();
+		  ArrayList list = new ArrayList();
+		  //System.out.println(d);
+		  for(Document d2 : d.getDocuments()){
+
+			  for(Entity e : d2.getSource().getEnriched().getArticle().getEnrichedTitle().getEntities()){
+				  if(e.getType().toString().equals("Technology") || e.getType().toString().equals("Product") )
+					  list.add(e.getText().toString());
+			  }
+		  }
+		  return list;
+	}
 }
