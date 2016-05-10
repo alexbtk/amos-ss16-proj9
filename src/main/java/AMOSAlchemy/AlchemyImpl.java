@@ -78,6 +78,23 @@ public class AlchemyImpl implements IAlchemy{
 		return possibleCompetitors;		
 	}
 	
+	public String getPossibleProducts(String companyName) throws BadRequestException{
+			
+		String possibleProducts = "";
+		String companyUrl = "http://" + companyName.toLowerCase() + ".com";
+		Entities e = alchemyLanguage.getCompanyEntities(companyName, companyUrl);
+				
+        for(Entity i : e.getEntities()){
+        	String type = i.getType();
+        	if(type.equals("Product") || type.equals("Technology")
+        			//|| type.equals("FieldTerminology")
+        			){
+        		possibleProducts += "/" + i.getText();
+        	}
+        }
+		return possibleProducts;		
+	}
+	
 	public String getSentimentAnalisysOfNews(String companyName)throws BadRequestException{
 		Documents docs = alchemyNews.getSentimentAnalisysOfNews(companyName);
 		String positive = "", negative = "";
