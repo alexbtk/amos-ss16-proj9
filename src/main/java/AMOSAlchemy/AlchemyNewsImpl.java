@@ -28,7 +28,7 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 	public  ArrayList getPossibibleCompetitorsList(String companyName) throws BadRequestException{
 		  
 		  
-		  Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<String, Object>();
 
 		  String[] fields =
 		      new String[] {"enriched.url.title", "enriched.url.url",
@@ -36,11 +36,13 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		          "q.enriched.url.enrichedTitle.entities.entity.text",
 		          "q.enriched.url.enrichedTitle.entities.entity.type"};
 		  params.put(AlchemyDataNews.RETURN, StringUtils.join(fields, ","));
-		  params.put(AlchemyDataNews.START, "now-1d");
+		  params.put(AlchemyDataNews.START, "now-10d");
 		  params.put(AlchemyDataNews.END, "now");
 		  params.put(AlchemyDataNews.COUNT, 7);
-		  params.put("q.enriched.url.enrichedTitle.entities.entity.type", "company");
-		  params.put("q.enriched.url.enrichedTitle.entities.entity.text", companyName);
+		 // params.put("q.enriched.url.enrichedTitle.entities.entity.type", "company");
+		  //params.put("q.enriched.url.enrichedTitle.entities.entity.text", companyName);
+		  params.put("q.enriched.url.entities.entity.type", "company");
+		  params.put("q.enriched.url.entities.entity.text", companyName);
 		  
 		  DocumentsResult result =  service.getNewsDocuments(params);
 		  Documents d = result.getDocuments();
@@ -75,4 +77,34 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		
 		return result.getDocuments();
 	}
+	
+	public  ArrayList getPossibibleSubTypesList(String companyName) throws BadRequestException{
+		 Map<String, Object> params = new HashMap<String, Object>();
+
+		  String[] fields =
+		      new String[] {"q.enriched.url.enrichedTitle.entities.entity.text",
+		          "q.enriched.url.enrichedTitle.entities.entity.disambiguated.subType",
+		          "q.enriched.url.enrichedTitle.entities.entity.type"};
+		  params.put(AlchemyDataNews.RETURN, StringUtils.join(fields, ","));
+		  params.put(AlchemyDataNews.START, "now-10d");
+		  params.put(AlchemyDataNews.END, "now");
+		  params.put(AlchemyDataNews.COUNT, 1);
+		  params.put("q.enriched.url.enrichedTitle.entities.entity.type", "Company");
+		  params.put("q.enriched.url.enrichedTitle.entities.entity.text", companyName);
+		  
+		  DocumentsResult result =  service.getNewsDocuments(params);
+		  Documents d = result.getDocuments();
+		  ArrayList list = new ArrayList();
+		  System.out.println(d);
+		  for(Document d2 : d.getDocuments()){
+
+			  for(Entity e : d2.getSource().getEnriched().getArticle().getEnrichedTitle().getEntities()){
+				  for(String st : e.getDisambiguated().getSubType())
+				  list.add(st);
+			  }
+		  }
+		  return list;
+	}
+	
+	
 }

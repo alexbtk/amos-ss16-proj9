@@ -9,4 +9,6 @@ public interface IAlchemyLanguage {
 	public Taxonomies getCompanyTaxonomies(String company, String companyUrl) throws BadRequestException;
 	public Entities getCompanyEntities(String company, String companyUrl) throws BadRequestException;
 	public DocumentSentiment getSentimentForText(String text) throws BadRequestException;
+	public String getKeyword(String text) throws BadRequestException;
+	public String getCat(String text) throws BadRequestException;
 }

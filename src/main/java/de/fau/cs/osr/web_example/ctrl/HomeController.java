@@ -46,8 +46,8 @@ public class HomeController {
 
 	public HomeController(){
 		fac = IAlchemyFactory.newInstance();
-		service = fac.createAlchemy("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
-		languageService = fac.createAlchemyLanguage("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
+		service = fac.createAlchemy("3f243c240023aea45fb5749d6d9cff53e673485c");
+		languageService = fac.createAlchemyLanguage("3f243c240023aea45fb5749d6d9cff53e673485c");
 		twitterCrawler = new TwitterCrawler("xsqQfqabFUAX3gaoFBvShR8zP", "ZMCkHyJLyiCc25MWMJtpSuni5udZOhrLuSS616sX2hWT8rLokl","729408419602571264-oCcXJu3zfIEPZUsoYR0dHVNdiZ6GXlZ", "c9O4wafJ4Sl9APDLiHVWUVBn86WXC9Ys2HzKFAe9rBxZb");
 		twitterAnalyzer = new TwitterAnalyzer();
 	}
@@ -56,11 +56,12 @@ public class HomeController {
 	public String loadProcessPage(@RequestParam("companyName") String companyName, Model m) {
 
 
-		m.addAttribute("mainIndustry","Main industry: " + service.getCompanyMainIndustry(companyName));
-		m.addAttribute("mainProduct","Main product: " + service.getCompanyMainProduct(companyName));
+		//m.addAttribute("mainIndustry","Main industry: " + service.getCompanyMainIndustry(companyName));
+		//m.addAttribute("mainProduct","Main product: " + service.getCompanyMainProduct(companyName));
 		m.addAttribute("companyName",companyName);
 		m.addAttribute("possibleCompetitors","Possible competitors: " + service.getPossibleCompetitors(companyName));
-		m.addAttribute("newsSentimentAnalisys",("News sentiment: " + service.getSentimentAnalisysOfNews(companyName)).replace("\n", "<br />"));
+		//m.addAttribute("newsSentimentAnalisys",("News sentiment: " + service.getSentimentAnalisysOfNews(companyName)).replace("\n", "<br />"));
+		m.addAttribute("category","Categories: " + service.getProductCategories("iPhone iPad MacBook iOS iPod"));
 				
 		return "process";
 	}
