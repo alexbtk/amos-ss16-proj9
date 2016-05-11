@@ -44,6 +44,17 @@ public class AlchemyLanguageImpl implements IAlchemyLanguage{
         
 	}
 	
+	public  Entities getCompanyRelated(String company) throws BadRequestException{
+		//Set parameters for request
+		Map<String, Object> params = new HashMap<String, Object>();
+        params.put(AlchemyLanguage.TEXT, company);
+        params.put(AlchemyLanguage.REQUIRED_ENTITIES, "Company");
+        
+        //Keywords k = service.getKeywords(params);
+        System.out.println(service.getEntities(params));
+         return null;        
+	}
+	
 	public String getKeyword(String text) throws BadRequestException{
 		Map<String, Object> params = new HashMap<String, Object>();
         params.put(AlchemyLanguage.TEXT, text);        
@@ -51,7 +62,8 @@ public class AlchemyLanguageImpl implements IAlchemyLanguage{
         Entity result = null;
         for(Entity e : k.getEntities()){        	
         	String type = e.getType();
-        	if(type.equals("FieldTerminology")){
+        	if(type.equals("FieldTerminology")||type.equals("Product") 
+        			|| type.equals("Technology")){
         		if(result == null)
         			result = e;
         		else if(e.getRelevance() > result.getRelevance())

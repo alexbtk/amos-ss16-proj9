@@ -4,6 +4,7 @@ package AMOSAlchemy;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.ibm.watson.developer_cloud.alchemy.v1.model.Document;
 import com.ibm.watson.developer_cloud.alchemy.v1.model.Documents;
@@ -14,15 +15,19 @@ import com.ibm.watson.developer_cloud.alchemy.v1.model.Taxonomies;
 import com.ibm.watson.developer_cloud.alchemy.v1.model.Taxonomy;
 import com.ibm.watson.developer_cloud.service.BadRequestException;
 
+import AMOSDBPedia.DBpedia;
+
 
 public class AlchemyImpl implements IAlchemy{
 
 	private IAlchemyLanguage alchemyLanguage;
 	private AlchemyNewsImpl alchemyNews;
+	private AlchemyConceptsImpl alchemyConcepts;
 	
 	public AlchemyImpl(String apiKey){
 		this.alchemyLanguage = new AlchemyLanguageImpl(apiKey);
 		this.alchemyNews = new AlchemyNewsImpl(apiKey);
+		this.alchemyConcepts = new AlchemyConceptsImpl(apiKey);
 	}
 	
 	//@Override
@@ -83,21 +88,75 @@ public class AlchemyImpl implements IAlchemy{
 		return possibleCompetitors;		
 	}
 	
-	public String getPossibleProducts(String companyName) throws BadRequestException{
+	public ArrayList<String> getPossibleProducts(String companyName) throws BadRequestException{
 			
 		String possibleProducts = "";
-		String companyUrl = "http://" + companyName.toLowerCase() + ".com";
+		String companyUrl = AMOSDBPedia.DBpedia.getCompanyHomepage(companyName);
 		Entities e = alchemyLanguage.getCompanyEntities(companyName, companyUrl);
-				
+		ArrayList<String> list = new ArrayList<String>();		
         for(Entity i : e.getEntities()){
         	String type = i.getType();
         	if(type.equals("Product") || type.equals("Technology")
         			//|| type.equals("FieldTerminology")
         			){
         		possibleProducts += "/" + i.getText();
+        		list.add(i.getText());
         	}
         }
-		return possibleProducts;		
+        System.out.println(list);
+		return list;		
+	}
+	
+	public boolean sameCategory(String pr1, String pr2){
+		if(pr1==null || pr2 == null)return false;
+		if(alchemyLanguage.getCat(pr1) == null)return false;
+		if(alchemyLanguage.getCat(pr2) == null)return false;
+		if(alchemyLanguage.getCat(pr1).toLowerCase().trim().equals(alchemyLanguage.getCat(pr2).toLowerCase().trim()))
+			return true;
+		return false;
+	}
+	
+	public String getCompetitorsProducts(String companyName)throws BadRequestException{
+		String result = "";
+		ArrayList list = alchemyNews.getPossibibleCompetitorsList(companyName);
+		System.out.println(list);
+		List<String> res = DBpedia.getCompanies(companyName);
+		List<String> products = /*getPossibleProducts(companyName);*/DBpedia.getCompanyProducts(res.get(0));
+		System.out.println("--");
+		ArrayList<ArrayList<String>> competitorProducts = new ArrayList<ArrayList<String>>();		
+		for(String s : products){
+			ArrayList<String> l = new ArrayList<String>();
+			l.add(s);
+			competitorProducts.add(l);
+		}
+		//System.out.println(list);
+		String possibleCompetitors = "";
+		Iterator<String> itr = list.iterator();
+		while(itr.hasNext()){
+			List<String> resC = DBpedia.getCompanies(itr.next());
+			System.out.println(resC);
+			if(!resC.equals(null) && !resC.isEmpty()){
+				List<String> productsC = /*getPossibleProducts(companyName);*/DBpedia.getCompanyProducts(resC.get(0));
+				System.out.println("-");
+				System.out.println(productsC);
+				System.out.println("-1");
+				if(productsC != null && !productsC.equals(null) && !productsC.isEmpty())
+					for(String s : productsC){
+						System.out.println("-0");
+						for(ArrayList<String> al : competitorProducts){
+							String product = al.get(0);
+							if(sameCategory(product,s))
+								al.add(s);
+						}
+					}
+			}
+		}
+		System.out.println(competitorProducts);
+		return result;
+	}
+	
+	public String getProductCategories(String products) throws BadRequestException{
+		return alchemyConcepts.getCategory(products);
 	}
 	
 	public String getSentimentAnalisysOfNews(String companyName)throws BadRequestException{

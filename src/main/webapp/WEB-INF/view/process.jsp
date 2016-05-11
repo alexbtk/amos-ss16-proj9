@@ -13,7 +13,8 @@
 	${mainIndustry} <br />
 	${mainProduct}<br />
 	${possibleCompetitors}<br />
-	${newsSentimentAnalisys}
+	${category} <br />
+ 	${newsSentimentAnalisys}
 	
 	</div>
 	<br / >

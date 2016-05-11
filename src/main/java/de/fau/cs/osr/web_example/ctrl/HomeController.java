@@ -45,8 +45,8 @@ public class HomeController {
 
 	public HomeController(){
 		fac = IAlchemyFactory.newInstance();
-		service = fac.createAlchemy("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
-		languageService = fac.createAlchemyLanguage("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
+		service = fac.createAlchemy("fd799d237109e0012b419b2aeeddc979af33a683");
+		languageService = fac.createAlchemyLanguage("fd799d237109e0012b419b2aeeddc979af33a683");
 		twitterCrawler = new TwitterCrawler("xsqQfqabFUAX3gaoFBvShR8zP", "ZMCkHyJLyiCc25MWMJtpSuni5udZOhrLuSS616sX2hWT8rLokl","729408419602571264-oCcXJu3zfIEPZUsoYR0dHVNdiZ6GXlZ", "c9O4wafJ4Sl9APDLiHVWUVBn86WXC9Ys2HzKFAe9rBxZb");
 		twitterAnalyzer = new TwitterAnalyzer();
 	}
@@ -60,6 +60,7 @@ public class HomeController {
 		m.addAttribute("companyName",companyName);
 		m.addAttribute("possibleCompetitors","Possible competitors: " + service.getPossibleCompetitors(companyName));
 		m.addAttribute("newsSentimentAnalisys",("News sentiment: " + service.getSentimentAnalisysOfNews(companyName)).replace("\n", "<br />"));
+		m.addAttribute("category","Categories: " + service.getProductCategories("iPhone iPad MacBook iOS iPod"));
 				
 		return "process";
 	}
