@@ -43,6 +43,71 @@ public class DBpedia {
 		return null;
 	}
 	
+	public static String getResourceLabel(String resource){
+		resource = resource.replace("[", "");
+		resource = resource.replace("]", "");
+		resource = "<" + resource + ">";
+		
+		String queryString = 	"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> " +
+								"SELECT * " +
+								"WHERE { " +
+								    resource + " rdfs:label ?n . " +
+								"}";
+		
+		Query query = QueryFactory.create(queryString);
+		
+		try ( QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query) ) {
+			// Set the DBpedia specific timeout.
+            ((QueryEngineHTTP)qexec).addParam("timeout", "10000") ;
+
+            // Execute.
+            ResultSet rs = qexec.execSelect();
+            while(rs.hasNext()){
+            	QuerySolution qs = rs.next();
+            	String res = qs.getLiteral("n").getString();
+            	if(res.endsWith("@en")){
+	            	res = res.replace("\"", "");
+	            	res = res.replace("@en", "");
+	                return res;
+            	}
+            }
+		} catch (Exception e) {
+            e.printStackTrace();
+        }
+		
+		return null;
+	}
+	
+	public static List<String> getResourceByName(String name){
+
+		String queryString = 	"PREFIX prop: <http://dbpedia.org/property/> " +
+				"SELECT * " +
+				"WHERE { " + 
+					"?n prop:name \"" + name + "\"@en . " +
+				"}";
+
+		Query query = QueryFactory.create(queryString);
+
+		try ( QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query) ) {
+			// Set the DBpedia specific timeout.
+			((QueryEngineHTTP)qexec).addParam("timeout", "10000") ;
+
+			// Execute.
+			ResultSet rs = qexec.execSelect();
+			List<String> result = new ArrayList<String>();
+			while(rs.hasNext()){
+				QuerySolution qs = rs.next();
+				String res = qs.getResource("n").toString();
+				result.add(res);
+			}
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
 	public static String getResourceName(String resource){
 		resource = resource.replace("[", "");
 		resource = resource.replace("]", "");
@@ -143,8 +208,9 @@ public class DBpedia {
 			
 			if(resourceIsCompany(s)){
 				String name = getResourceName(s);
-				if(name != null)
+				if(name != null){
 					resultList.add(name);
+				}
 			}
 			else if(resourceHasDisambiguations(s)){
 				String resource = s;
@@ -233,7 +299,7 @@ public class DBpedia {
 	
 	public static String getCompanyAbstract(String name){
 		
-		List<String> resources = getResourceByLabel(name);
+		List<String> resources = getResourceByName(name);
 		String companyAbstract = null;
 		
 		//Try resources until company is found
@@ -280,7 +346,7 @@ public class DBpedia {
 	
 	public static String getCompanyHomepage(String name){
 
-		List<String> resources = getResourceByLabel(name);
+		List<String> resources = getResourceByName(name);
 		String companyHomepage = null;
 
 		//Try resources until company is found
@@ -331,7 +397,7 @@ public class DBpedia {
 	
 	public static List<String> getCompanyProducts(String name){
 
-		List<String> resources = getResourceByLabel(name);
+		List<String> resources = getResourceByName(name);
 		List<String> companyProducts = null;
 
 		//Try resources until company is found
