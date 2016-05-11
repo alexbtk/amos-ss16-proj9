@@ -30,6 +30,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import AMOSAlchemy.IAlchemy;
 import AMOSAlchemy.IAlchemyFactory;
@@ -75,6 +76,24 @@ public class HomeController {
 		m.addAttribute("textSentiment", avgSentimentValue.toString());
 
 		return "home";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/getCompanies", method = RequestMethod.POST)
+	public String loadCompanies(@RequestParam("Text") String companyName, Model m){
+		List<String> list = AMOSDBPedia.DBpedia.getCompanies(companyName);
+		
+		if(list != null && list.size() > 0){
+			String retJson = "{\"companies\":[\"" + list.get(0) + "\"";
+		
+			for(int i = 1; i < list.size(); i++){
+				retJson += ", \"" + list.get(i) + "\"";
+			}
+			
+			return retJson + "]}";
+		}else{
+			return "{\"companies\":[]}";
+		}
 	}
 	
 	@RequestMapping(value="/")

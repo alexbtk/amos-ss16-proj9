@@ -19,13 +19,22 @@ package de.fau.cs.osr.web_example.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "de.fau.cs.osr.web_example.ctrl")
-public class WebConfig {
+public class WebConfig extends WebMvcConfigurerAdapter{
+	
+	@Override
+ 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    	registry.addResourceHandler("/css/**").addResourceLocations("/css/");
+    	registry.addResourceHandler("/js/**").addResourceLocations("/js/");
+ 	}
+
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
 		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
