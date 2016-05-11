@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	var tags = ["Test1", "Test2", "Test3"];
+	var tags = [];
 
 	$( "#companyInput" ).autocomplete({
       	source: function(request, response) {
