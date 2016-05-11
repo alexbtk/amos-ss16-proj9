@@ -31,7 +31,7 @@ public class AlchemyConceptsImpl {
 	
 	public String getCategory(String product){
 		String category = "";
-		alchemyLanguage.getCompanyRelated("Apple");
+		//alchemyLanguage.getCompanyRelated("Apple");
 	
 		Annotations annotations = service.annotateText(Graph.WIKIPEDIA, product);
 		for(ScoredConcept a : annotations.getAnnotations()){
