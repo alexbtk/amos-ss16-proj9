@@ -13,7 +13,8 @@ public class Demo {
 		System.out.println(DBpedia.getResourceByLabel(res.get(0)));
 		System.out.println(DBpedia.getCompanyAbstract(res.get(0)));
 		System.out.println(DBpedia.getCompanyHomepage(res.get(0)));
-		
+
+		System.out.println(DBpedia.getCompanyIndustrysResources(res.get(0)));
 		System.out.println();
 		List<String> products = DBpedia.getCompanyProducts(res.get(0));
 		for(String s : products)
