@@ -14,46 +14,41 @@ import com.ibm.watson.developer_cloud.concept_insights.v2.model.ConceptMetadata;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.Graph;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.RequestedFields;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.ScoredConcept;
+import com.ibm.watson.developer_cloud.service.BadRequestException;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.Concepts;
 
 public class AlchemyConceptsImpl {
 	
 	ConceptInsights service;
-	AlchemyLanguageImpl alchemyLanguage;
 	
-	AlchemyConceptsImpl(String apiKey){
+	AlchemyConceptsImpl(){
 		String username = "c8adbf89-3f4d-400a-a929-11a3e2c1eb7a";
 		String password = "FhyZEpyQUXXe";
 		service = new ConceptInsights();
 		service.setUsernameAndPassword(username,password);
-		this.alchemyLanguage = new AlchemyLanguageImpl(apiKey);
 	}
 	
-	public String getCategory(String product){
-		String category = "";
-		//alchemyLanguage.getCompanyRelated("Apple");
-	
+	public String getAbstract(String product){
 		Annotations annotations = service.annotateText(Graph.WIKIPEDIA, product);
 		for(ScoredConcept a : annotations.getAnnotations()){
 			
-			Concept concept = new Concept("wikipedia", "en-latest", a.getConcept().getLabel());
-			ConceptMetadata response = service.getConcept(concept);
-			//System.out.println(response);
-			String cat = alchemyLanguage.getCat(response.getAbstract());
-			
-			if(cat != null)
-				category += "/" + a.getConcept().getLabel() + "-" +
-						cat;
-			//System.out.println(alchemyLanguage.getCat(response.getAbstract()));
+			Concept concept = new Concept(Graph.WIKIPEDIA, a.getConcept().getLabel());
+			try{
+				ConceptMetadata response = service.getConcept(concept);
+				return response.getAbstract();
+			}
+			catch(Exception e){//can not catch the exception for Samsung Galaxy text
+				System.out.println("Could not find abstract...");
+				return null;
+			}
 		}
-		
-		//System.out.println(annotations);
-	    
-		return category;
+		return null;
 	}
 	
 	
 	public String getRelatedProducs(String product){
+		// Just a possibility of getting Related content
+		// ToDo, use abstract instead of name of product
 		String category = "";
 
 		final Map<String, Object> params = new HashMap<String, Object>();

@@ -20,17 +20,17 @@ import AMOSDBPedia.DBpedia;
 
 public class AlchemyImpl implements IAlchemy{
 
-	private IAlchemyLanguage alchemyLanguage;
+	private AlchemyLanguageImpl alchemyLanguage;
 	private AlchemyNewsImpl alchemyNews;
 	private AlchemyConceptsImpl alchemyConcepts;
 	
 	public AlchemyImpl(String apiKey){
 		this.alchemyLanguage = new AlchemyLanguageImpl(apiKey);
 		this.alchemyNews = new AlchemyNewsImpl(apiKey);
-		this.alchemyConcepts = new AlchemyConceptsImpl(apiKey);
+		this.alchemyConcepts = new AlchemyConceptsImpl();//put here pass and username
 	}
 	
-	//@Override
+	@Override
 	public String getCompanyMainIndustry(String companyName) throws BadRequestException{
 		String companyUrl = AMOSDBPedia.DBpedia.getCompanyHomepage(companyName);
 		if(companyUrl == null)
@@ -49,7 +49,7 @@ public class AlchemyImpl implements IAlchemy{
 		return maxScore.getLabel();
 	}
 
-	//@Override
+	@Override
 	public String getCompanyMainProduct(String companyName) throws BadRequestException{
 		String companyUrl = AMOSDBPedia.DBpedia.getCompanyHomepage(companyName);
 		if(companyUrl == null)
@@ -67,7 +67,6 @@ public class AlchemyImpl implements IAlchemy{
         			result = i;
         	}
         }
-        //System.out.println(e);
 		
         if(result == null)
         	return "No main product found...";
@@ -75,11 +74,10 @@ public class AlchemyImpl implements IAlchemy{
         	return result.getText();
 	}
 	
-	//@Override
+	@Override
 	public String getPossibleCompetitors(String companyName) throws BadRequestException{
 		
 		ArrayList list = alchemyNews.getPossibibleCompetitorsList(companyName);
-		//System.out.println(list);
 		String possibleCompetitors = "";
 		Iterator<String> itr = list.iterator();
 		while(itr.hasNext()){
@@ -91,58 +89,62 @@ public class AlchemyImpl implements IAlchemy{
 	public ArrayList<String> getPossibleProducts(String companyName) throws BadRequestException{
 			
 		String possibleProducts = "";
-		String companyUrl = AMOSDBPedia.DBpedia.getCompanyHomepage(companyName);
-		Entities e = alchemyLanguage.getCompanyEntities(companyName, companyUrl);
+		List<String> res = DBpedia.getCompanies(companyName);
+		String companyUrl = AMOSDBPedia.DBpedia.getCompanyHomepage(res.get(0));
+		System.out.println(companyUrl);
+		Entities e = alchemyLanguage.getCompanyEntities(res.get(0), companyUrl);
 		ArrayList<String> list = new ArrayList<String>();		
         for(Entity i : e.getEntities()){
         	String type = i.getType();
         	if(type.equals("Product") || type.equals("Technology")
-        			//|| type.equals("FieldTerminology")
+        			//|| type.equals("FieldTerminology") 
+        			||	type.equals("OperatingSystem") ||	type.equals("Facility")
         			){
         		possibleProducts += "/" + i.getText();
         		list.add(i.getText());
         	}
         }
-        System.out.println(list);
-		return list;		
+        return list;		
 	}
 	
 	public boolean sameCategory(String pr1, String pr2){
 		if(pr1==null || pr2 == null)return false;
-		if(alchemyLanguage.getCat(pr1) == null)return false;
-		if(alchemyLanguage.getCat(pr2) == null)return false;
-		if(alchemyLanguage.getCat(pr1).toLowerCase().trim().equals(alchemyLanguage.getCat(pr2).toLowerCase().trim()))
+		//use DBpedia to get product category/type
+		String pr1Cat = getProductCategories(pr1);
+		String pr2Cat = getProductCategories(pr2);
+		System.out.println(pr1+"-"+pr1Cat+"|"+pr2+"-"+pr2Cat);
+		if(pr1Cat == null)return false;
+		if(pr2Cat == null)return false;
+		if(pr1Cat.toLowerCase().trim().equals(pr2Cat.toLowerCase().trim()))
 			return true;
 		return false;
 	}
 	
 	public String getCompetitorsProducts(String companyName)throws BadRequestException{
 		String result = "";
-		ArrayList list = alchemyNews.getPossibibleCompetitorsList(companyName);
-		System.out.println(list);
+		ArrayList list = new ArrayList();//alchemyNews.getPossibibleCompetitorsList(companyName);
+		list.add("Microsoft");
+		list.add("Lenovo");// for testing
+		//use DBpedia to get competitors
 		List<String> res = DBpedia.getCompanies(companyName);
-		List<String> products = /*getPossibleProducts(companyName);*/DBpedia.getCompanyProducts(res.get(0));
-		System.out.println("--");
+		List<String> products = getPossibleProducts(companyName);
+		products.addAll(DBpedia.getCompanyProducts(res.get(0)));
 		ArrayList<ArrayList<String>> competitorProducts = new ArrayList<ArrayList<String>>();		
 		for(String s : products){
 			ArrayList<String> l = new ArrayList<String>();
 			l.add(s);
 			competitorProducts.add(l);
 		}
-		//System.out.println(list);
 		String possibleCompetitors = "";
 		Iterator<String> itr = list.iterator();
 		while(itr.hasNext()){
-			List<String> resC = DBpedia.getCompanies(itr.next());
-			System.out.println(resC);
+			String competitor = itr.next();
+			List<String> resC = DBpedia.getCompanies(competitor);
 			if(!resC.equals(null) && !resC.isEmpty()){
-				List<String> productsC = /*getPossibleProducts(companyName);*/DBpedia.getCompanyProducts(resC.get(0));
-				System.out.println("-");
-				System.out.println(productsC);
-				System.out.println("-1");
+				List<String> productsC = getPossibleProducts(competitor);
+				productsC.addAll(DBpedia.getCompanyProducts(resC.get(0)));
 				if(productsC != null && !productsC.equals(null) && !productsC.isEmpty())
 					for(String s : productsC){
-						System.out.println("-0");
 						for(ArrayList<String> al : competitorProducts){
 							String product = al.get(0);
 							if(sameCategory(product,s))
@@ -151,24 +153,21 @@ public class AlchemyImpl implements IAlchemy{
 					}
 			}
 		}
-		System.out.println(competitorProducts);
 		return result;
 	}
 	
 	public String getProductCategories(String products) throws BadRequestException{
-		return alchemyConcepts.getCategory(products);
+		return alchemyLanguage.getRelationObject(alchemyConcepts.getAbstract(products));
 	}
 	
 	public String getSentimentAnalisysOfNews(String companyName)throws BadRequestException{
 		Documents docs = alchemyNews.getSentimentAnalisysOfNews(companyName);
 		String positive = "", negative = "";
 		Integer total = 0, poz = 0, neg = 0;
-		//System.out.println(docs);
 		for(Document d : docs.getDocuments()){
 			
 			String  sentiment = d.getSource().getEnriched().getArticle().getEnrichedTitle().getSentiment().getType().toString();
 			String  score = d.getSource().getEnriched().getArticle().getEnrichedTitle().getSentiment().getScore().toString();
-			//System.out.println(sentiment+" "+score);
 			if(sentiment.equals("POSITIVE")){
 				++poz;
 				positive += d.getSource().getEnriched().getArticle().getTitle().toString()+"\n";

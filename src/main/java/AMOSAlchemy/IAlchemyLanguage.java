@@ -10,5 +10,5 @@ public interface IAlchemyLanguage {
 	public Entities getCompanyEntities(String company, String companyUrl) throws BadRequestException;
 	public DocumentSentiment getSentimentForText(String text) throws BadRequestException;
 	public String getKeyword(String text) throws BadRequestException;
-	public String getCat(String text) throws BadRequestException;
+	public String getRelationObject(String text) throws BadRequestException;
 }

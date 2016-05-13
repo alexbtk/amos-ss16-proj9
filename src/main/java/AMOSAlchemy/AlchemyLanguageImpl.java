@@ -22,7 +22,7 @@ public class AlchemyLanguageImpl implements IAlchemyLanguage{
 		service.setApiKey(apiKey);
 	}
 
-	//@Override
+	@Override
 	public Taxonomies getCompanyTaxonomies(String company, String companyUrl) throws BadRequestException{
 		//Set parameters for request
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -32,12 +32,16 @@ public class AlchemyLanguageImpl implements IAlchemyLanguage{
         return service.getTaxonomy(params); //Result from AlchemyLanguage service for taxonomies
 	}
 	
-	//@Override
+	@Override
 	public Entities getCompanyEntities(String company, String companyUrl) throws BadRequestException{
 		//Set parameters for request
 		Map<String, Object> params = new HashMap<String, Object>();
         params.put(AlchemyLanguage.URL, companyUrl);
-        params.put(AlchemyLanguage.ENTITIES, company);
+        params.put(AlchemyLanguage.XPATH, companyUrl);
+        params.put(AlchemyLanguage.CQUERY, companyUrl);
+        params.put(AlchemyLanguage.SOURCE_TEXT, AlchemyLanguage.RAW);
+        params.put(AlchemyLanguage.MAX_RETRIEVE, 200);
+        //params.put(AlchemyLanguage.ENTITIES, "Product");
         
         //Keywords k = service.getKeywords(params);
         return service.getEntities(params);
@@ -50,15 +54,16 @@ public class AlchemyLanguageImpl implements IAlchemyLanguage{
         params.put(AlchemyLanguage.TEXT, company);
         params.put(AlchemyLanguage.REQUIRED_ENTITIES, "Company");
         
-        //Keywords k = service.getKeywords(params);
         System.out.println(service.getEntities(params));
          return null;        
 	}
 	
 	public String getKeyword(String text) throws BadRequestException{
-		Map<String, Object> params = new HashMap<String, Object>();
+		// Get entities from text in order to analyze
+		Map<String, Object> params = new HashMap<String, Object>();		
         params.put(AlchemyLanguage.TEXT, text);        
         Entities k = service.getEntities(params);
+        
         Entity result = null;
         for(Entity e : k.getEntities()){        	
         	String type = e.getType();
@@ -76,16 +81,15 @@ public class AlchemyLanguageImpl implements IAlchemyLanguage{
            	return result.getText();
 	}
 	
-	public String getCat(String text) throws BadRequestException{
+	public String getRelationObject(String text) throws BadRequestException{
 		Map<String, Object> params = new HashMap<String, Object>();
         params.put(AlchemyLanguage.TEXT, text);    
         SAORelations k = service.getRelations(params);
-        //System.out.println(k);
         
         for( SAORelation r : k.getRelations()){
+        	// Check for 'to be' verb
         	if(r.getAction().getText().equals("is")){
         		 return getKeyword(r.getObject().getText());
-        		//return r.getObject().getText();
         	}
         }
         return null;
