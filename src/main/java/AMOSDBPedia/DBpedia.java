@@ -410,4 +410,72 @@ public class DBpedia {
 
 		return companyProducts;
 	}
+	
+	//get the resources based on a property(not null)
+	//resource,result - <http://dbpedia.org/resource/someresource> or null
+	public static List<String> getResourcesQuery(String resource, String propriety, String propertyResult){
+		List<String> resultList = new ArrayList<String>();
+		String prefixes = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+        
+		"PREFIX type: <http://dbpedia.org/class/yago/>"+
+		"PREFIX dbpedia-owl: <http://dbpedia.org/ontology/> " +
+		"PREFIX prop: <http://dbpedia.org/property/>";
+		String queryString = "";
+		
+		if(resource!=null){
+			//get the property of the resource
+			queryString = "SELECT ?n " +
+					"WHERE { " +
+				    resource + " "+ propriety + " ?n . " +
+				"}";
+		}else{
+			// get the resources that have that property
+			queryString = "SELECT ?n " +
+					"WHERE { " +
+					"?n "+ propriety + " " + propertyResult + 
+				"}";
+		}
+		Query query = QueryFactory.create(prefixes+queryString);
+		
+		try ( QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query) ) {
+			// Set the DBpedia specific timeout.
+            ((QueryEngineHTTP)qexec).addParam("timeout", "10000") ;
+
+            // Execute.
+            ResultSet rs = qexec.execSelect();
+            while(rs.hasNext()){
+            	QuerySolution qs = rs.next();
+            	String res = qs.getResource("n").toString();
+            	if(res != null)
+            		resultList.add(res);
+            }
+		} catch (Exception e) {
+            e.printStackTrace();
+        }
+		return resultList;
+	}
+	
+	public static List<String> getCompanyIndustrysResources(String name){
+
+		List<String> resources = getResourceByName(name);
+		if(resources == null){
+			resources = getResourceByLabel(name);
+		}else{
+			resources.addAll(getResourceByLabel(name));
+		}
+		System.out.println(resources);
+		List<String> companyIndustry = null;
+
+		//Try resources until company is found
+		for(String resource : resources){
+			if(resourceIsCompany(resource)){
+				resource = resource.replace("[", "");
+				resource = resource.replace("]", "");
+				resource = "<" + resource + ">";
+				companyIndustry = getResourcesQuery(resource,"dbpedia-owl:industry",null);
+				break;
+			}
+		}
+
+		return companyIndustry;
+	}
 }
