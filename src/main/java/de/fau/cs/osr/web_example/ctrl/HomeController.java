@@ -17,6 +17,7 @@
 package de.fau.cs.osr.web_example.ctrl;
 
 import AMOSAlchemy.IAlchemyLanguage;
+import AMOSFacebook.FacebookCrawler;
 import AMOSTwitter.TwitterAnalyzer;
 import AMOSTwitter.TwitterCrawler;
 import twitter4j.Status;
@@ -44,12 +45,14 @@ public class HomeController {
 	TwitterCrawler twitterCrawler;
 	TwitterAnalyzer twitterAnalyzer;
 
+	
 	public HomeController(){
 		fac = IAlchemyFactory.newInstance();
 		service = fac.createAlchemy("3f243c240023aea45fb5749d6d9cff53e673485c");
 		languageService = fac.createAlchemyLanguage("3f243c240023aea45fb5749d6d9cff53e673485c");
 		twitterCrawler = new TwitterCrawler("xsqQfqabFUAX3gaoFBvShR8zP", "ZMCkHyJLyiCc25MWMJtpSuni5udZOhrLuSS616sX2hWT8rLokl","729408419602571264-oCcXJu3zfIEPZUsoYR0dHVNdiZ6GXlZ", "c9O4wafJ4Sl9APDLiHVWUVBn86WXC9Ys2HzKFAe9rBxZb");
 		twitterAnalyzer = new TwitterAnalyzer();
+		
 	}
 
 	@RequestMapping(value="/process")
@@ -99,7 +102,7 @@ public class HomeController {
 	
 	@RequestMapping(value="/")
 	public String loadHomePage(Model m) {
-			
+		
 		return "home";
 	}
 	
