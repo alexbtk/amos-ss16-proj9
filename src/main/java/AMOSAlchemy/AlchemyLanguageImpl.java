@@ -103,7 +103,12 @@ public class AlchemyLanguageImpl implements IAlchemyLanguage{
         
         return service.getConcepts(params);        
 	}
-	
+	/**
+	 * Analyzes the sentiment of a given text with help of alchemy api
+	 * 
+	 * @param text	text to analyze
+	 * @return DocumentSentiment object with sentiment values inside
+	 */
 	public DocumentSentiment getSentimentForText(String text) throws BadRequestException{
 		Map<String,Object> params = new HashMap<String, Object>();
 		params.put(AlchemyLanguage.TEXT, text);

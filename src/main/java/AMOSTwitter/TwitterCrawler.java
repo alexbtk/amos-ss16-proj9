@@ -12,6 +12,10 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 
+/**
+ * Class to access twiter4j library and to crawl tweets 
+ * 
+ */
 public class TwitterCrawler {
 
 	private final AccessToken accessToken;
@@ -28,7 +32,13 @@ public class TwitterCrawler {
 		// twitter = new TwitterFactory().getInstance(accessToken);
 		// twitter.setOAuthConsumer(consumerKey, consumerSecret);
 	}
-
+	
+	/**
+	 * Get posts/tweets concerning a specific company name
+	 * 
+	 * @param companyName	company name to search tweets for
+	 * @return	list of tweets (with additional attributes) about searched company
+	 */
 	public List<Status> crawlPosts(String companyName) {
 		try {
 			Query query = new Query("#" + companyName);
