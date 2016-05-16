@@ -13,8 +13,8 @@ public class Demo {
 			System.out.println("Main industry: " + service.getCompanyMainIndustry("Apple"));
 			System.out.println("Main product: " + service.getCompanyMainProduct("Apple"));
 			System.out.println("Possible competitors: " + service.getPossibleCompetitors("Apple"));
-			System.out.println("News sentiment: " + service.getSentimentAnalysisOfNews("Apple"));
-			System.out.println("Categories: Ipod-" + service.getProductCategories("iPod"));
+			System.out.println("News sentiment: " + service.getSentimentAnalysisOfNews("Apple","Company"));
+			System.out.println("Competitors Sentiment: Ipod-" + service.getCompetitorsProductSentiment("iPod"));
 			
 		} catch(BadRequestException e){
 			System.out.println("Could not find company...");

@@ -21,8 +21,8 @@ public class Demo {
 			System.out.println(s);
 		System.out.println();
 		System.out.println(DBpedia.resourceIsProduct("<http://dbpedia.org/resource/IPhone>"));
-		System.out.println(DBpedia.getCompanyCompetitors("Microsoft"));
-		System.out.println(DBpedia.getRelatedProduct("http://dbpedia.org/resource/IPhone"));
+		System.out.println(DBpedia.getCompanyCompetitorsName("Microsoft"));
+		System.out.println(DBpedia.getProductCompetitorsName("Android"));
 	}
 	
 }

@@ -3,8 +3,10 @@ package AMOSAlchemy;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.ibm.watson.developer_cloud.alchemy.v1.model.Document;
 import com.ibm.watson.developer_cloud.alchemy.v1.model.Documents;
@@ -192,13 +194,14 @@ public class AlchemyImpl implements IAlchemy{
 	}
 	
 	/**
-	 * Get new with sentiment analysis about a company
+	 * Get new with sentiment analysis about an entity
 	 * 
-	 * @param companyName
+	 * @param name - company or product
+	 * @param entity
 	 * @return list of news
 	 */
-	public String getSentimentAnalysisOfNews(String companyName)throws BadRequestException{
-		Documents docs = alchemyNews.getSentimentAnalysisOfNews(companyName);
+	public String getSentimentAnalysisOfNews(String name, String entity)throws BadRequestException{
+		Documents docs = alchemyNews.getSentimentAnalysisOfNews(name,entity);
 		String positive = "", negative = "";
 		Integer total = 0, poz = 0, neg = 0;
 		for(Document d : docs.getDocuments()){
@@ -219,6 +222,48 @@ public class AlchemyImpl implements IAlchemy{
 			}
 		}
 		return "Positive articles: "+poz.toString()+"\n"+positive+" Negative Articles: "+neg.toString()+"\n"+negative;
+	}
+	
+	/**
+	 * Get new with sentiment analysis about an entity
+	 * 
+	 * @param name - company or product
+	 * @param entity
+	 * @return list of news
+	 */
+	public double getNumberSentimentAnalysisOfNews(String name, String entity)throws BadRequestException{
+		Documents docs = alchemyNews.getSentimentAnalysisOfNews(name,entity);
+		if(docs == null || docs.getDocuments() == null) return 0;
+		String positive = "", negative = "";
+		Integer total = 0, poz = 0, neg = 0;
+		for(Document d : docs.getDocuments()){
+			
+			String  sentiment = d.getSource().getEnriched().getArticle().getEnrichedTitle().getSentiment().getType().toString();
+			String  score = d.getSource().getEnriched().getArticle().getEnrichedTitle().getSentiment().getScore().toString();
+			if(sentiment.equals("POSITIVE")){
+				++poz;				
+			}
+			if(sentiment.equals("NEGATIVE")){
+				++neg;				
+			}
+		}
+		return ((poz-neg)/(poz+neg));
+	}
+	
+	/**
+	 * GEt the sentiment of the competitors products
+	 * 
+	 * @param name - product name
+	 * @return map(product,sentiment)
+	 */
+	public Map<String, String> getCompetitorsProductSentiment(String name){
+		List<String> products = DBpedia.getProductCompetitorsName(name);
+		products.add(name);
+		Map<String, String> relatedproduct = new HashMap<String, String>();
+		for(String product : products){
+			relatedproduct.put(product, String.valueOf(getNumberSentimentAnalysisOfNews(product,"product")));
+		}
+		return relatedproduct;
 	}
 
 }

@@ -70,22 +70,23 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 	 * Get news that have information about company and get the sentiment analysis
 	 * 
 	 * @param companyName - company name
+	 * @param entity - entity(company,product)
 	 * @return Documents that have information about news
 	 */
-	public  Documents getSentimentAnalysisOfNews(String companyName) throws BadRequestException{
+	public  Documents getSentimentAnalysisOfNews(String companyName, String entity) throws BadRequestException{
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		String[] fields =
 		      new String[] {"enriched.url.title", "enriched.url.url",
 		          "enriched.url.enrichedTitle.docSentiment"};
 		params.put(AlchemyDataNews.RETURN, StringUtils.join(fields, ","));
-		params.put(AlchemyDataNews.START, "now-1d");
+		params.put(AlchemyDataNews.START, "now-5d");
 		params.put(AlchemyDataNews.END, "now");
 		params.put(AlchemyDataNews.COUNT, 7);
 		//params.put("q.enriched.url.title", "Apple");
-		//params.put("q.enriched.url.text", "Apple");
-		params.put("q.enriched.url.enrichedTitle.entities.entity.type", "company");
-		params.put("q.enriched.url.enrichedTitle.entities.entity.text", companyName);
+		params.put("q.enriched.url.text", companyName);
+		params.put("q.enriched.url.enrichedTitle.entities.entity.type", entity);
+		//params.put("q.enriched.url.enrichedTitle.entities.entity.text", companyName);
 
 		DocumentsResult result =  service.getNewsDocuments(params);
 		
