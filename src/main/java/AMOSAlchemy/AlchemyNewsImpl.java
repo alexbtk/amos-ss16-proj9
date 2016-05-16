@@ -14,7 +14,10 @@ import com.ibm.watson.developer_cloud.alchemy.v1.model.DocumentsResult;
 import com.ibm.watson.developer_cloud.alchemy.v1.model.Entities;
 import com.ibm.watson.developer_cloud.alchemy.v1.model.Entity;
 import com.ibm.watson.developer_cloud.service.BadRequestException;
-
+/**
+ * class to use AlchelmyNewsApi
+ *
+ */
 public  class AlchemyNewsImpl implements IAlchemyNews{
 	
 	private AlchemyDataNews service;
@@ -24,7 +27,12 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		service.setApiKey(apiKey);
 	}
 	
-	
+	/**
+	 * Get possible competitors from news. If others company names appear in the same context.
+	 * 
+	 * @param companyName - company name
+	 * @return list of possible competitors name
+	 */
 	public  ArrayList getPossibibleCompetitorsList(String companyName) throws BadRequestException{
 		  
 		  
@@ -58,7 +66,13 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		  return list;
 	}
 	
-	public  Documents getSentimentAnalisysOfNews(String companyName) throws BadRequestException{
+	/**
+	 * Get news that have information about company and get the sentiment analysis
+	 * 
+	 * @param companyName - company name
+	 * @return Documents that have information about news
+	 */
+	public  Documents getSentimentAnalysisOfNews(String companyName) throws BadRequestException{
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		String[] fields =
@@ -78,6 +92,12 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		return result.getDocuments();
 	}
 	
+	/**
+	 * Get industries of a company
+	 * 
+	 * @param comapanyName - company name
+	 * @return list of possible industries of a company
+	 */
 	public  ArrayList getPossibibleSubTypesList(String companyName) throws BadRequestException{
 		 Map<String, Object> params = new HashMap<String, Object>();
 

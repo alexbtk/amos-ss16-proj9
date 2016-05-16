@@ -74,6 +74,12 @@ public class AlchemyImpl implements IAlchemy{
         	return result.getText();
 	}
 	
+	/**
+	 * Get possible competitors
+	 * 
+	 * @param companyName
+	 * @return list of competitors
+	 */
 	@Override
 	public String getPossibleCompetitors(String companyName) throws BadRequestException{
 		
@@ -86,6 +92,12 @@ public class AlchemyImpl implements IAlchemy{
 		return possibleCompetitors;		
 	}
 	
+	/**
+	 * Get possible products list using company web site
+	 * 
+	 * @param companyName
+	 * @return list of product founded on web site
+	 */
 	public ArrayList<String> getPossibleProducts(String companyName) throws BadRequestException{
 			
 		String possibleProducts = "";
@@ -107,6 +119,13 @@ public class AlchemyImpl implements IAlchemy{
         return list;		
 	}
 	
+	/**
+	 * Check if two products are from same category
+	 * 
+	 * @param pr1 - product2 name
+	 * @param pr2 - product1 name
+	 * @return true if product are from same category
+	 */
 	public boolean sameCategory(String pr1, String pr2){
 		if(pr1==null || pr2 == null)return false;
 		//use DBpedia to get product category/type
@@ -120,6 +139,12 @@ public class AlchemyImpl implements IAlchemy{
 		return false;
 	}
 	
+	/**
+	 * Get possible competitors from news
+	 * 
+	 * @param companyName
+	 * @return possible competitors list
+	 */
 	public String getCompetitorsProducts(String companyName)throws BadRequestException{
 		String result = "";
 		ArrayList list = new ArrayList();//alchemyNews.getPossibibleCompetitorsList(companyName);
@@ -156,12 +181,24 @@ public class AlchemyImpl implements IAlchemy{
 		return result;
 	}
 	
+	/**
+	 * Get product category using product abstract and keywords.
+	 * 
+	 * @param product - product name
+	 * @return product category
+	 */
 	public String getProductCategories(String products) throws BadRequestException{
 		return alchemyLanguage.getRelationObject(alchemyConcepts.getAbstract(products));
 	}
 	
-	public String getSentimentAnalisysOfNews(String companyName)throws BadRequestException{
-		Documents docs = alchemyNews.getSentimentAnalisysOfNews(companyName);
+	/**
+	 * Get new with sentiment analysis about a company
+	 * 
+	 * @param companyName
+	 * @return list of news
+	 */
+	public String getSentimentAnalysisOfNews(String companyName)throws BadRequestException{
+		Documents docs = alchemyNews.getSentimentAnalysisOfNews(companyName);
 		String positive = "", negative = "";
 		Integer total = 0, poz = 0, neg = 0;
 		for(Document d : docs.getDocuments()){

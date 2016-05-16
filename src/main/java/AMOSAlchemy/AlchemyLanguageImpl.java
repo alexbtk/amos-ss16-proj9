@@ -29,7 +29,8 @@ public class AlchemyLanguageImpl implements IAlchemyLanguage{
         params.put(AlchemyLanguage.URL, companyUrl);
         params.put(AlchemyLanguage.ENTITIES, company);
         
-        return service.getTaxonomy(params); //Result from AlchemyLanguage service for taxonomies
+        return service.getTaxonomy(params); 
+        //Result from AlchemyLanguage service for taxonomies
 	}
 	
 	@Override
@@ -41,23 +42,15 @@ public class AlchemyLanguageImpl implements IAlchemyLanguage{
         params.put(AlchemyLanguage.CQUERY, companyUrl);
         params.put(AlchemyLanguage.SOURCE_TEXT, AlchemyLanguage.RAW);
         params.put(AlchemyLanguage.MAX_RETRIEVE, 200);
-        //params.put(AlchemyLanguage.ENTITIES, "Product");
         
-        //Keywords k = service.getKeywords(params);
         return service.getEntities(params);
         
 	}
 	
-	public  Entities getCompanyRelated(String company) throws BadRequestException{
-		//Set parameters for request
-		Map<String, Object> params = new HashMap<String, Object>();
-        params.put(AlchemyLanguage.TEXT, company);
-        params.put(AlchemyLanguage.REQUIRED_ENTITIES, "Company");
-        
-        System.out.println(service.getEntities(params));
-         return null;        
-	}
 	
+	/**
+	 * Get keywords from a text
+	 */
 	public String getKeyword(String text) throws BadRequestException{
 		// Get entities from text in order to analyze
 		Map<String, Object> params = new HashMap<String, Object>();		
@@ -81,6 +74,12 @@ public class AlchemyLanguageImpl implements IAlchemyLanguage{
            	return result.getText();
 	}
 	
+	/**
+	 * Get object that is preceded by 'to be' verb
+	 * 
+	 * @param text
+	 * @return the object
+	 */
 	public String getRelationObject(String text) throws BadRequestException{
 		Map<String, Object> params = new HashMap<String, Object>();
         params.put(AlchemyLanguage.TEXT, text);    
@@ -95,6 +94,14 @@ public class AlchemyLanguageImpl implements IAlchemyLanguage{
         return null;
 	}
 	
+	/**
+	 * Get company concepts
+	 * 
+	 * @param company - company name
+	 * @param companyUrl
+	 * @return Concepts that are found about company
+	 * @throws BadRequestException
+	 */
 	public Concepts getCompanyConcepts(String company, String companyUrl) throws BadRequestException{
 		//Set parameters for request
 		Map<String, Object> params = new HashMap<String, Object>();

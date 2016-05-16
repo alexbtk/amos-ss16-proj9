@@ -414,8 +414,13 @@ public class DBpedia {
 		return companyProducts;
 	}
 	
-	// Help function
+	/**
+	 * Run queries and return ?n variable
+	 * @param queryString - String that is a query
+	 * @return list of resources or labels
+	 */
 	public static List<String> runQuery(String queryString){
+		// TOdo: generalize from ?n to multiple variables
 		List<String> resultList = new ArrayList<String>();
 		
 		Query query = QueryFactory.create(queryString);
@@ -438,11 +443,19 @@ public class DBpedia {
 		return resultList;
 	}
 	
-	//help function
-	//get the resources based on a property(not null)
-	//resource,result - <http://dbpedia.org/resource/someresource> or null
+	
+	/**
+	 * Get resources based on simple query: ?concept1 ?property ?concept2
+	 * 
+	 * @param resource - concept1
+	 * @param property - property of the concept1 that are concept2
+	 * @param propertyResult - concept2
+	 * @return	list of resources
+	 */
 	public static List<String> getResourcesQuery(String resource, String propriety, String propertyResult){
-
+		// help function
+		// get the resources based on a property(not null)
+		// resource,result - <http://dbpedia.org/resource/someresource> or null
 		String prefixes = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+        
 		"PREFIX type: <http://dbpedia.org/class/yago/>"+
 		"PREFIX dbpedia-owl: <http://dbpedia.org/ontology/> " +
@@ -483,8 +496,13 @@ public class DBpedia {
 	}
 	
 
-	
-	public static List<String> getCompanyIndustrysResources(String name){
+	/**
+	 * Get company's industries
+	 * 
+	 * @param name - company name
+	 * @return	list of resources
+	 */
+	public static List<String> getCompanyIndustriesResources(String name){
 		// Correct name is needed
 		List<String> resources = getResourceByName(name);
 		if(resources == null){
@@ -508,6 +526,12 @@ public class DBpedia {
 		return companyIndustries;
 	}
 	
+	/**
+	 * Get company competitors using the types and categories
+	 * 
+	 * @param name - company name
+	 * @return	list of resources
+	 */
 	public static List<String> getCompanyCompetitors(String name){
 		// Correct name is needed
 		List<String> resources = getResourceByName(name);
@@ -554,6 +578,12 @@ public class DBpedia {
 		return companycompetitors;
 	}
 	
+	/**
+	 * Check if resource is a product
+	 * 
+	 * @param resource - string resource <http://linktoresource>
+	 * @return	true if resource is a product property of another product
+	 */
 	public static boolean resourceIsProduct(String resource){
 		String queryString = 	"PREFIX dbpedia-owl: <http://dbpedia.org/ontology/> " + 
 								"SELECT ?n " +
@@ -565,6 +595,12 @@ public class DBpedia {
 		return !(runQuery(queryString).isEmpty());		
 	}
 	
+	/**
+	 * Get product categories
+	 * 
+	 * @param product name
+	 * @return	list of resources
+	 */
 	public static List<String> getProductCategory(String name){
 		List<String> resources = new ArrayList();
 		if(name.startsWith("http://")){
@@ -596,6 +632,12 @@ public class DBpedia {
 		return null;
 	}
 	
+	/**
+	 * Get product types
+	 * 
+	 * @param name - product name
+	 * @return	list of resources of types
+	 */
 	public static List<String> getProductTypes(String name){
 		List<String> resources = new ArrayList();
 		if(name.startsWith("http://")){
@@ -627,11 +669,25 @@ public class DBpedia {
 		return null;
 	}
 	
+	/**
+	 * Check if the two types are from same category or refer to same idea of type 
+	 * 
+	 * @param type1 - name of the first type
+	 * @param type2 - name of the second type
+	 * @return	true if the type are the same
+	 */
 	public static boolean equalType(String type1, String type2){
 		// ToDo: find a way to determine witch types are good as criteria.
 		return type1.equals(type2);
 	}
 	
+	/**
+	 * Check if the two product are from same category 
+	 * 
+	 * @param prod1 - name of the first product
+	 * @param prod2 - name of the second product
+	 * @return	true if the products are from same category
+	 */
 	public static boolean sameCategory(String prod1, String prod2, int epsilon){
 		// Check types
 		List<String> types1 = getProductTypes(prod1);
@@ -659,11 +715,24 @@ public class DBpedia {
 		return false;
 	}
 	
+	/**
+	 * Check if the two product are from same company 
+	 * 
+	 * @param prod1 - name of the first product
+	 * @param prod2 - name of the second product
+	 * @return	true if the products are from same company
+	 */
 	public static boolean isSameCompanyProducts(String prod1, String prod2){
 		// Todo
 		return false;
 	}
 	
+	/**
+	 * Get product that are in the same category with current product
+	 * 
+	 * @param name - name of the product
+	 * @return	lists of resources related product
+	 */
 	public static List<String> getRelatedProduct(String name){
 		List<String> resources = new ArrayList();
 		if(name.startsWith("http://")){

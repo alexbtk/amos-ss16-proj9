@@ -16,7 +16,10 @@ import com.ibm.watson.developer_cloud.concept_insights.v2.model.RequestedFields;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.ScoredConcept;
 import com.ibm.watson.developer_cloud.service.BadRequestException;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.Concepts;
-
+/**
+ * Class to use ConceptInsights
+ *
+ */
 public class AlchemyConceptsImpl {
 	
 	ConceptInsights service;
@@ -28,6 +31,12 @@ public class AlchemyConceptsImpl {
 		service.setUsernameAndPassword(username,password);
 	}
 	
+	/**
+	 * Get product abstract from concept
+	 * 
+	 * @param product - product name
+	 * @return Abstract
+	 */
 	public String getAbstract(String product){
 		Annotations annotations = service.annotateText(Graph.WIKIPEDIA, product);
 		for(ScoredConcept a : annotations.getAnnotations()){
@@ -45,7 +54,12 @@ public class AlchemyConceptsImpl {
 		return null;
 	}
 	
-	
+	/**
+	 * Get related products using GraphRelatedConcepts
+	 * 
+	 * @param product - product name
+	 * @return products that have the same concept
+	 */
 	public String getRelatedProducs(String product){
 		// Just a possibility of getting Related content
 		// ToDo, use abstract instead of name of product
