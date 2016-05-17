@@ -14,7 +14,7 @@ public class Demo {
 			System.out.println("Main product: " + service.getCompanyMainProduct("Apple"));
 			System.out.println("Possible competitors: " + service.getPossibleCompetitors("Apple"));
 			System.out.println("News sentiment: " + service.getSentimentAnalysisOfNews("Apple","Company"));
-			System.out.println("Competitors Product Sentiment: Android - " + service.getCompetitorsProductSentiment("Android"));
+			System.out.println("Competitors Sentiment: Iphone-" + service.getCompetitorsProductSentiment("IPhone","<http://dbpedia.org/resource/Apple_Inc.>"));
 			
 		} catch(BadRequestException e){
 			System.out.println("Could not find company...");

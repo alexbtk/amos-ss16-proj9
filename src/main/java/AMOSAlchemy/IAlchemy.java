@@ -15,6 +15,6 @@ public interface IAlchemy {
 	public ArrayList<String> getPossibleProducts(String companyName) throws BadRequestException;
 	public String getCompetitorsProducts(String companyName)throws BadRequestException;
 	public boolean sameCategory(String pr1, String pr2);
-	public Map<String, String> getCompetitorsProductSentiment(String name);
+	public Map<String, String> getCompetitorsProductSentiment(String name,String companyResource);
 	public double getNumberSentimentAnalysisOfNews(String name, String entity)throws BadRequestException;
 }

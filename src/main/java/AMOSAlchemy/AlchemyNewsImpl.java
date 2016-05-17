@@ -55,7 +55,6 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		  DocumentsResult result =  service.getNewsDocuments(params);
 		  Documents d = result.getDocuments();
 		  ArrayList list = new ArrayList();
-		  //System.out.println(d);
 		  for(Document d2 : d.getDocuments()){
 
 			  for(Entity e : d2.getSource().getEnriched().getArticle().getEnrichedTitle().getEntities()){
@@ -90,7 +89,7 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		params.put("q.enriched.url.enrichedTitle.entities.entity.type", entity);
 		//get company/product taxonomy
 		//q.enriched.url.enrichedTitle.taxonomy.taxonomy_.label=technology+and+computing
-		//q.enriched.url.entities.entity = |text=Ipod,type=O[Technology^Product]|
+		//q.enriched.url.entities.entity = |text=Ipad,type=O[Technology^Product]|
 	
 		DocumentsResult result =  service.getNewsDocuments(params);
 		return result.getDocuments();

@@ -254,10 +254,11 @@ public class AlchemyImpl implements IAlchemy{
 	 * GEt the sentiment of the competitors products
 	 * 
 	 * @param name - product name
+	 * @param companyResource
 	 * @return map(product,sentiment)
 	 */
-	public Map<String, String> getCompetitorsProductSentiment(String name){
-		List<String> products = DBpedia.getProductCompetitorsName(name);
+	public Map<String, String> getCompetitorsProductSentiment(String name, String companyResource){
+		List<String> products = DBpedia.getProductCompetitorsName(name,companyResource);
 		products.add(name);
 		Map<String, String> relatedproduct = new HashMap<String, String>();
 		for(String product : products){

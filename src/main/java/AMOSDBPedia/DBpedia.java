@@ -748,7 +748,8 @@ public class DBpedia {
 	 * @param prod2 - name of the second product
 	 * @return	true if the products are from same company
 	 */
-	public static boolean isSameCompanyProducts(String prod1, String prod2){
+	public static boolean isSameCompanyProducts(String prod1, String prod2, String companyResource){
+		//Todo: need also the correct company
 		String queryString = "PREFIX dbpedia-owl: <http://dbpedia.org/ontology/> " + 
 				"PREFIX dbpedia-owl: <http://dbpedia.org/ontology/> " + 
 				"SELECT ?n " +
@@ -756,6 +757,7 @@ public class DBpedia {
 				  "?n a dbpedia-owl:Company."+
 				  "?n  dbpedia-owl:product "+prod1+"."+
 				  "?n  dbpedia-owl:product "+prod2+"."+
+				  "FILTER(?n = "+companyResource+" )"+
 				 // write others filters or product type
 				"} LIMIT 1";
 		
@@ -766,9 +768,10 @@ public class DBpedia {
 	 * Get product that are in the same category with current product
 	 * 
 	 * @param name - name of the product
+	 * @param companyResource
 	 * @return	map of resources and categories that are related to product
 	 */
-	public static Map<String, String> getRelatedProductResources(String name){
+	public static Map<String, String> getRelatedProductResources(String name, String companyResource){
 		List<String> resources = new ArrayList();
 		
 		if(name.startsWith("http://")){
@@ -798,7 +801,7 @@ public class DBpedia {
 							s = s.replace("[", "");
 							s = s.replace("]", "");
 							if(resourceIsProduct("<"+s+">"))
-								if(sameCategory(s,resource,3) && !isSameCompanyProducts("<"+s+">","<"+resource+">"))
+								if(sameCategory(s,resource,2) && !isSameCompanyProducts("<"+s+">","<"+resource+">",companyResource))
 									relatedproduct.put(s,cat);
 						}
 					}
@@ -813,10 +816,11 @@ public class DBpedia {
 	/**
 	 * Get competitors name
 	 * 
-	 * @param product
+	 * @param product - product name
+	 * @param companyResource 
 	 * @return Return competitors Names
 	 */
-	public static List getProductCompetitorsName(String name){
+	public static List getProductCompetitorsName(String name,String companyResource){
 		
 		List<String> resources = getResourceByName(name);
 		if(resources == null){
@@ -826,7 +830,7 @@ public class DBpedia {
 		}
 		for(String resource : resources){
 			if(resourceIsProduct('<'+resource+'>')){
-				Map<String, String> competitorsResources = getRelatedProductResources(resource);
+				Map<String, String> competitorsResources = getRelatedProductResources(resource,companyResource);
 				List<String> competitorsNames = new ArrayList();
 				for(Map.Entry<String, String> entry : competitorsResources.entrySet()){
 					String competitor = getResourceName(entry.getKey());
@@ -834,7 +838,7 @@ public class DBpedia {
 						competitorsNames.add(competitor);
 				}
 				return competitorsNames;
-			}			
+			}		
 		}
 		return null;
 	}

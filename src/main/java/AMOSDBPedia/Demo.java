@@ -22,7 +22,7 @@ public class Demo {
 		System.out.println();
 		System.out.println(DBpedia.resourceIsProduct("<http://dbpedia.org/resource/IPhone>"));
 		System.out.println(DBpedia.getCompanyCompetitorsName("Microsoft"));
-		System.out.println(DBpedia.getProductCompetitorsName("Android"));
+		System.out.println(DBpedia.getProductCompetitorsName("IPhone","<http://dbpedia.org/resource/Apple_Inc.>"));
 	}
 	
 }
