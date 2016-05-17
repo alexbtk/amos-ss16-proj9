@@ -78,18 +78,19 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 
 		String[] fields =
 		      new String[] {"enriched.url.title", "enriched.url.url",
-		          "enriched.url.enrichedTitle.docSentiment"};
+		          "enriched.url.enrichedTitle.docSentiment","q.enriched.url.enrichedTitle.entities.entity.text",
+		          "q.enriched.url.entities.entity.text","q.enriched.url.entities.entity.type",
+		          "q.enriched.url.enrichedTitle.entities.entity.type"};
 		params.put(AlchemyDataNews.RETURN, StringUtils.join(fields, ","));
 		params.put(AlchemyDataNews.START, "now-5d");
 		params.put(AlchemyDataNews.END, "now");
-		params.put(AlchemyDataNews.COUNT, 7);
-		//params.put("q.enriched.url.title", "Apple");
-		params.put("q.enriched.url.text", companyName);
+		params.put(AlchemyDataNews.COUNT, 20);
+		params.put("q.enriched.url.title","O["+companyName+"]");
+		params.put("q.enriched.url.enrichedTitle.entities.entity.text", companyName);
 		params.put("q.enriched.url.enrichedTitle.entities.entity.type", entity);
-		//params.put("q.enriched.url.enrichedTitle.entities.entity.text", companyName);
-
+	
 		DocumentsResult result =  service.getNewsDocuments(params);
-		
+		System.out.println(result.getDocuments());
 		return result.getDocuments();
 	}
 	

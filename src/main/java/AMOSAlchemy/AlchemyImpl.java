@@ -261,7 +261,7 @@ public class AlchemyImpl implements IAlchemy{
 		products.add(name);
 		Map<String, String> relatedproduct = new HashMap<String, String>();
 		for(String product : products){
-			relatedproduct.put(product, String.valueOf(getNumberSentimentAnalysisOfNews(product,"product")));
+			relatedproduct.put(product, String.valueOf(getNumberSentimentAnalysisOfNews(product,"O[Product^Technology^OperatingSystem^Facility^FieldTerminology]")));
 		}
 		return relatedproduct;
 	}
