@@ -85,12 +85,14 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		params.put(AlchemyDataNews.START, "now-5d");
 		params.put(AlchemyDataNews.END, "now");
 		params.put(AlchemyDataNews.COUNT, 20);
-		params.put("q.enriched.url.title","O["+companyName+"]");
+		params.put("q.enriched.url.title",companyName);
 		params.put("q.enriched.url.enrichedTitle.entities.entity.text", companyName);
 		params.put("q.enriched.url.enrichedTitle.entities.entity.type", entity);
+		//get company/product taxonomy
+		//q.enriched.url.enrichedTitle.taxonomy.taxonomy_.label=technology+and+computing
+		//q.enriched.url.entities.entity = |text=Ipod,type=O[Technology^Product]|
 	
 		DocumentsResult result =  service.getNewsDocuments(params);
-		System.out.println(result.getDocuments());
 		return result.getDocuments();
 	}
 	
