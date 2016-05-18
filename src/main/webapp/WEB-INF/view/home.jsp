@@ -28,10 +28,11 @@
 	<!-- <link rel="stylesheet" href="css/mystyle.css?v=1.0">
 	<script type="text/javascript" src="js/jquery-2.2.3.min.js"></script>
     -->
-    <link rel="stylesheet" href="/amos-ss16-proj9/css/jquery-ui.css">
-    <script src="/amos-ss16-proj9/js/jquery-2.2.3.js"></script>
-    <script src="/amos-ss16-proj9/js/jquery-ui.js"></script>
-    <script src="/amos-ss16-proj9/js/script.js"></script>
+    
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/jquery-ui.css">
+    <script src="${pageContext.request.contextPath}/js/jquery-2.2.3.js"></script>
+    <script src="${pageContext.request.contextPath}/js/jquery-ui.js"></script>
+    <script src="${pageContext.request.contextPath}/js/script.js"></script>
 
 	<!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -62,6 +63,22 @@
 			<input type="submit" value="submit" id="submitText" />
 			<div id="answer"><br />Average Twitter Posts sentiment value: <br />
 			${textSentiment}<br />
+			</div>
+		</fieldset>
+	</form>
+	
+	<form method="POST" action="getTone" >
+		<fieldset>
+			<legend>Write text to analyze tone</legend>
+			Text:
+			<input type="text" name="Text" required><br />
+			Username:
+			<input type="text" name="Username" maxlength="100" required><br />
+			Password:
+			<input type="text" name="Password" maxlength="100" required><br />
+			<input type="submit" value="submit" id="submitText" />
+			<div id="answer"><br />Tone results:<br />
+			${textTone}<br />
 			</div>
 		</fieldset>
 	</form>

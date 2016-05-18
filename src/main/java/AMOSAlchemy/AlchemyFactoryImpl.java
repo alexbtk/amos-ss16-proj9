@@ -15,5 +15,10 @@ public class AlchemyFactoryImpl extends IAlchemyFactory{
 	public IAlchemyLanguage createAlchemyLanguage(String apiKey) {
 		return new AlchemyLanguageImpl(apiKey);
 	}
+
+	@Override
+	public IAlchemyToneAnalyzer createAlchemyToneAnalyzer(String username, String password) {
+		return new AlchemyToneAnalyzerImpl(username, password);
+	}
 	
 }

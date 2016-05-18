@@ -17,6 +17,7 @@
 package de.fau.cs.osr.web_example.ctrl;
 
 import AMOSAlchemy.IAlchemyLanguage;
+import AMOSAlchemy.IAlchemyToneAnalyzer;
 import AMOSFacebook.FacebookCrawler;
 import AMOSTwitter.TwitterAnalyzer;
 import AMOSTwitter.TwitterCrawler;
@@ -78,6 +79,19 @@ public class HomeController {
 		//IAlchemyLanguage languageService = fac.createAlchemyLanguage("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
 		//DocumentSentiment sentiment = languageService.getSentimentForText(socialMediaPost);
 		m.addAttribute("textSentiment", avgSentimentValue.toString());
+
+		return "home";
+	}
+	
+	@RequestMapping(value="/getTone", method = RequestMethod.POST)
+	public String loadTextTone(@RequestParam("Text") String text, @RequestParam("Username") String username, @RequestParam("Password") String password, Model m) {
+		
+		IAlchemyToneAnalyzer toneAnalyzer = fac.createAlchemyToneAnalyzer(username, password);
+		String tone = toneAnalyzer.getToneAsString(text);
+		
+		//IAlchemyLanguage languageService = fac.createAlchemyLanguage("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
+		//DocumentSentiment sentiment = languageService.getSentimentForText(socialMediaPost);
+		m.addAttribute("textTone", tone);
 
 		return "home";
 	}
