@@ -478,7 +478,7 @@ public class DBpedia {
 		"PREFIX skos: <http://www.w3.org/2004/02/skos/core#>" +
 		"PREFIX prop: <http://dbpedia.org/property/>";
 		String queryString = "";
-		String queryLimit = "20";
+		String queryLimit = "10";
 		// get all properties
 		if(propriety == null){
 			queryString = "SELECT ?n " +

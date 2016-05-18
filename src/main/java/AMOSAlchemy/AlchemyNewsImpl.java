@@ -79,13 +79,14 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		      new String[] {"enriched.url.title", "enriched.url.url",
 		          "enriched.url.enrichedTitle.docSentiment","q.enriched.url.enrichedTitle.entities.entity.text",
 		          "q.enriched.url.entities.entity.text","q.enriched.url.entities.entity.type",
-		          "q.enriched.url.enrichedTitle.entities.entity.type"};
+		          "q.enriched.url.enrichedTitle.entities.entity.type",
+		          "q.enriched.url.enrichedTitle.taxonomy"};
 		params.put(AlchemyDataNews.RETURN, StringUtils.join(fields, ","));
 		params.put(AlchemyDataNews.START, "now-5d");
 		params.put(AlchemyDataNews.END, "now");
 		params.put(AlchemyDataNews.COUNT, 20);
-		params.put("q.enriched.url.title",companyName);
-		params.put("q.enriched.url.enrichedTitle.entities.entity.text", companyName);
+		params.put("q.enriched.url.title","["+companyName+"]");
+		params.put("q.enriched.url.enrichedTitle.entities.entity.text", "O["+companyName.trim().replace(" ", "^")+"^"+companyName+"]");
 		params.put("q.enriched.url.enrichedTitle.entities.entity.type", entity);
 		//get company/product taxonomy
 		//q.enriched.url.enrichedTitle.taxonomy.taxonomy_.label=technology+and+computing

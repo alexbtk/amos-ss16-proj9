@@ -204,23 +204,24 @@ public class AlchemyImpl implements IAlchemy{
 		Documents docs = alchemyNews.getSentimentAnalysisOfNews(name,entity);
 		String positive = "", negative = "";
 		Integer total = 0, poz = 0, neg = 0;
-		for(Document d : docs.getDocuments()){
-			
-			String  sentiment = d.getSource().getEnriched().getArticle().getEnrichedTitle().getSentiment().getType().toString();
-			String  score = d.getSource().getEnriched().getArticle().getEnrichedTitle().getSentiment().getScore().toString();
-			if(sentiment.equals("POSITIVE")){
-				++poz;
-				positive += d.getSource().getEnriched().getArticle().getTitle().toString()+"\n";
-				positive += d.getSource().getEnriched().getArticle().getUrl().toString()+"\n\n";
+		if(docs != null && docs.getDocuments() != null)
+			for(Document d : docs.getDocuments()){
 				
+				String  sentiment = d.getSource().getEnriched().getArticle().getEnrichedTitle().getSentiment().getType().toString();
+				String  score = d.getSource().getEnriched().getArticle().getEnrichedTitle().getSentiment().getScore().toString();
+				if(sentiment.toLowerCase().equals("positive")){
+					++poz;
+					positive += d.getSource().getEnriched().getArticle().getTitle().toString()+"\n";
+					positive += d.getSource().getEnriched().getArticle().getUrl().toString()+"\n\n";
+					
+				}
+				if(sentiment.toLowerCase().equals("negative")){
+					++neg;
+					negative += d.getSource().getEnriched().getArticle().getTitle().toString()+"\n";
+					negative += d.getSource().getEnriched().getArticle().getUrl().toString()+"\n\n";
+					
+				}
 			}
-			if(sentiment.equals("NEGATIVE")){
-				++neg;
-				negative += d.getSource().getEnriched().getArticle().getTitle().toString()+"\n";
-				negative += d.getSource().getEnriched().getArticle().getUrl().toString()+"\n\n";
-				
-			}
-		}
 		return "Positive articles: "+poz.toString()+"\n"+positive+" Negative Articles: "+neg.toString()+"\n"+negative;
 	}
 	
@@ -240,14 +241,14 @@ public class AlchemyImpl implements IAlchemy{
 			
 			String  sentiment = d.getSource().getEnriched().getArticle().getEnrichedTitle().getSentiment().getType().toString();
 			String  score = d.getSource().getEnriched().getArticle().getEnrichedTitle().getSentiment().getScore().toString();
-			if(sentiment.equals("POSITIVE")){
+			if(sentiment.toLowerCase().equals("positive")){
 				++poz;				
 			}
-			if(sentiment.equals("NEGATIVE")){
+			if(sentiment.toLowerCase().equals("negative")){
 				++neg;				
 			}
 		}
-		return ((poz-neg)/(poz+neg));
+		return ((poz-neg)*1.0/(poz+neg)*1.0);
 	}
 	
 	/**
