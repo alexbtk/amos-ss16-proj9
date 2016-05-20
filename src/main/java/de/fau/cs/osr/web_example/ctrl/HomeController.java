@@ -18,6 +18,7 @@ package de.fau.cs.osr.web_example.ctrl;
 
 import AMOSAlchemy.IAlchemyLanguage;
 import AMOSAlchemy.IAlchemyToneAnalyzer;
+import AMOSDBPedia.DBpedia;
 import AMOSFacebook.FacebookCrawler;
 import AMOSTwitter.TwitterAnalyzer;
 import AMOSTwitter.TwitterCrawler;
@@ -25,8 +26,11 @@ import twitter4j.Status;
 
 import com.ibm.watson.developer_cloud.alchemy.v1.model.DocumentSentiment;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,8 +53,8 @@ public class HomeController {
 	
 	public HomeController(){
 		fac = IAlchemyFactory.newInstance();
-		service = fac.createAlchemy("3f243c240023aea45fb5749d6d9cff53e673485c");
-		languageService = fac.createAlchemyLanguage("3f243c240023aea45fb5749d6d9cff53e673485c");
+		service = fac.createAlchemy("1eccdb3cfc18574d5a62e986faf05016f05fbc88");
+		languageService = fac.createAlchemyLanguage("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
 		twitterCrawler = new TwitterCrawler("xsqQfqabFUAX3gaoFBvShR8zP", "ZMCkHyJLyiCc25MWMJtpSuni5udZOhrLuSS616sX2hWT8rLokl","729408419602571264-oCcXJu3zfIEPZUsoYR0dHVNdiZ6GXlZ", "c9O4wafJ4Sl9APDLiHVWUVBn86WXC9Ys2HzKFAe9rBxZb");
 		twitterAnalyzer = new TwitterAnalyzer();
 		
@@ -112,6 +116,34 @@ public class HomeController {
 		}else{
 			return "{\"companies\":[]}";
 		}
+	}
+	
+	/**
+	 * Get the request from javascript.
+	 * 
+	 * @param requests - the parameters from requests, key are the name of checkbox, the value are the companyName(could be sent another info)
+	 * @param m - the model
+	 * @return return for each entry in the map a vector with json objects, title and content.
+	 */
+	@ResponseBody
+	@RequestMapping(value="/qeuryRequest", method = RequestMethod.POST)
+	public String queryResponse(@RequestParam Map<String, String>  requests, Model m){
+		List answers = new ArrayList();
+		//Todo - catch error: incorrect companyName, noResult
+		if(requests.containsKey("question1")){
+			answers.add("{\"title\":\"Main industry(Alchemy)\",\"content\":\"" + 
+					service.getCompanyMainIndustry(requests.get("question1"))+"\"}");
+		}
+		if(requests.containsKey("question3a")){
+			answers.add("{\"title\":\"Company competitors(DBpedia)\",\"content\":\"" + 
+					StringUtils.join(DBpedia.getCompanyCompetitorsName(requests.get("question3a")), ",")+"\"}");
+		}
+		if(requests.containsKey("question3b")){
+			answers.add("{\"title\":\"Company competitors(Alchemy)\",\"content\":\"" + 
+					service.getPossibleCompetitors(requests.get("question3b"))+"\"}");
+		}
+		
+		return "["+StringUtils.join(answers, ",")+"]";
 	}
 	
 	@RequestMapping(value="/")

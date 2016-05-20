@@ -41,20 +41,46 @@
 
 <body>
   
-	<form method="GET" action="process" >
+	<form method="GET" action="process" id="principalForm">
 	<fieldset>
-		<legend>Write company name</legend>
-		<input id="companyInput" type="text" name="companyName" maxlength="100" required>
-		<!--<input type="submit" value="Go" id="submitName">-->
-	</fieldset>
-	<fieldset>
-		<legend>Ask a question</legend>
-		<input required type="radio" name="question" value="1" />What is the company industry? <br />
-		<input required type="radio" name="question" value="2" />What are the company's products?<br />
+		<legend>Company Profile</legend> 
+		<label for="companyInput">Company Name</label> <br />
+		<input id="companyInput" type="text" name="companyName" maxlength="100" required><br />	
+		
+		<input  type="checkbox" name="question1" id="question1" />
+		<label for="question1">What is the company industry(Alchemy/Home page/Taxonomies)?</label> <br />
+		
+		<input  type="checkbox" name="question2" id="question2"/>
+		<label for="question2">What is the company main product(Alchemy/Home page/Entities)?</label><br />
+		
+		<input  type="checkbox" name="question3a" id="question3a"/>		
+		<label for="question3a">What are the company competitors(DBpedia/Industry)?</label><br />
+		
+		<input  type="checkbox" name="question3b" id="question3b"/>
+		<label for="question3b">What are the company competitors(Alchemy/News)?</label><br />		
+		
+		<input  type="checkbox" name="question4" id="question4"/>
+		<label for="question3">What are the company news sentiment(Alchemy/News)?</label><br />		
+		
+		<input  type="checkbox" name="question5a" id="question5a"/>		
+		<label for="question5a">What are the company products(DBpedia/Category)?</label><br />
+		
+		<input  type="checkbox" name="question5b" id="question5b"/>		
+		<label for="question5b">What are the company products(Alchemy/Home page)?</label><br />
+		
+		<input  type="checkbox" name="question5c" id="question5c"/>		
+		<label for="question5c">What are the company competitors products(DBpedia/Category)?</label><br />
+		
+		<input  type="checkbox" name="question5d" id="question5d"/>		
+		<label for="question5d">What are the company competitors products Sentiment(DBpedia/Category)?</label><br />
+		
 		<input type="submit" value="Ask" id="submitQuestion" />
+		<input type="submit" value="Advanced options" id="submitAdvancedQuestion" />
 	</fieldset>
 	
 	</form>
+	
+	<div id="displayAnswers"></div>
 
 	<form method="POST" action="getSentiment" >
 		<fieldset>
