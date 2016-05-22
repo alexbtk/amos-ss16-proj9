@@ -534,6 +534,36 @@ public class DBpedia {
 	}
 	
 	/**
+	 * Get names and resources of companies industries
+	 * 
+	 * @param companyName 
+	 * @return return a hashmap with a entry <name,resurce>
+	 */
+	public static HashMap<String,String> getCompanyIndustriesNames(String companyName){
+		List<String> list = getCompanyIndustriesResources(companyName);
+		HashMap<String,String> map = new HashMap<String,String>();
+		for(String l : list){
+			map.put(getResourceName(l), l);
+		}
+		return map;
+	}
+	
+	/**
+	 * Get companies from a industry
+	 * 
+	 * @param resource - industry resource
+	 * @return return a hashmap with a entry <companyName,resurce>
+	 */
+	public static HashMap<String,String> getIndustryCompaniesNames(String resource){
+		List<String> list  = getResourcesQuery(null,"dbpedia-owl:industry",resource);
+		HashMap<String,String> map = new HashMap<String,String>();
+		for(String l : list){
+			map.put(getResourceName(l), l);
+		}
+		return map;
+	}
+	
+	/**
 	 * Get company competitors using the types and categories
 	 * 
 	 * @param name - company name

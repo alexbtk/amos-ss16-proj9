@@ -29,6 +29,16 @@ $(document).ready(function(){
 	});
 	
 	/**
+	 * Get companies from one industry
+	 * 
+	 * @param resource - industry resource
+	 */
+	function getIndustryCompanies(resource){
+		sentRequest({'industryCompanies':'<'+decodeURI(resource)+'>'},"resource","displayAnswers");
+	
+	}
+	
+	/**
 	 * General request function that will get information from controller
 	 * 
 	 * @param params - the parameters that will be sent
@@ -55,21 +65,70 @@ $(document).ready(function(){
 						div.append($("<div></div>").append(res[i]['content']));
 					}
 					obj.html(div);
+				}else if(displayMode == "resource"){
+					div = $("<div id = 'accordion'></div>");
+					for(var i=0; i < res.length; ++i){
+						div.append('<span style="cursor:auto;" class="'+encodeURI(res[i]['resource'])+'">'+res[i]['name']+"</span><br />");
+					}
+					obj.html(div);
+					$("#accordion span").click(function(){
+						var resu = $(this).attr("class");
+						getIndustryCompanies(resu);
+					});
+				}else if(displayMode == "return"){
+					return res;
 				}
 			});
 	}
 	
 	$("#submitQuestion").click(function(){
 		companyName = $( "#companyInput" ).val();
+		if(companyName == ""){
+			alert("Write company Name");
+			return false;
+		}
 		params = {};
+		var ok = 1;
 		$( "#principalForm input[type=checkbox]" ).each(function(){
 			if(this.checked){
 				params[$(this).attr('name')] = companyName;
+				ok = 0;
 				//$("#displayAnswers").append($(this).attr('name'));				
 			}
 		});
+		if(ok == 1){
+			alert("Check a question!");
+			return false;
+		}
 		sentRequest(params,"simple","displayAnswers");
 		return false;
 	});
+	
+	$("#submitAdvancedQuestion").click(function(){
+		
+		companyName = $( "#companyInput" ).val();
+		if(companyName == ""){
+			alert("Write company Name");
+			return false;
+		}
+		params = {};
+		var ok = 0;
+		$( "#principalForm input[type=checkbox]" ).each(function(){
+			if(this.checked){
+				params[$(this).attr('name')] = companyName;
+				++ok;
+				//$("#displayAnswers").append($(this).attr('name'));				
+			}
+		});
+		if(ok != 1){
+			alert("Check one question!");
+			return false;
+		}
+		if(typeof params['question3a'] !== 'undefined'){
+			sentRequest({'industries':companyName},"resource","displayAnswers");
+		}		
+		return false;
+	});
+	
 	
 });

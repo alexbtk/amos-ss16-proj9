@@ -27,6 +27,8 @@ import twitter4j.Status;
 import com.ibm.watson.developer_cloud.alchemy.v1.model.DocumentSentiment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -141,6 +143,24 @@ public class HomeController {
 		if(requests.containsKey("question3b")){
 			answers.add("{\"title\":\"Company competitors(Alchemy)\",\"content\":\"" + 
 					service.getPossibleCompetitors(requests.get("question3b"))+"\"}");
+		}
+		if(requests.containsKey("industries")){
+			HashMap<String,String> map = DBpedia.getCompanyIndustriesNames(requests.get("industries"));
+			Iterator it = map.entrySet().iterator();
+		    while (it.hasNext()) {
+		        Map.Entry pair = (Map.Entry)it.next();
+		        it.remove(); 
+		        answers.add("{\"name\":\""+pair.getKey()+"\",\"resource\":\"" + pair.getValue()+"\"}");
+		    }
+		}
+		if(requests.containsKey("industryCompanies")){
+			HashMap<String,String> map = DBpedia.getIndustryCompaniesNames(requests.get("industryCompanies"));
+			Iterator it = map.entrySet().iterator();
+		    while (it.hasNext()) {
+		        Map.Entry pair = (Map.Entry)it.next();
+		        //it.remove(); 
+		        answers.add("{\"name\":\""+pair.getKey()+"\",\"resource\":\"" + pair.getValue()+"\"}");
+		    }
 		}
 		
 		return "["+StringUtils.join(answers, ",")+"]";

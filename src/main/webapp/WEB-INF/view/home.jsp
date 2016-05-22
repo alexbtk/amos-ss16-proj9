@@ -45,7 +45,7 @@
 	<fieldset>
 		<legend>Company Profile</legend> 
 		<label for="companyInput">Company Name</label> <br />
-		<input id="companyInput" type="text" name="companyName" maxlength="100" required><br />	
+		<input required id="companyInput" type="text" name="companyName" maxlength="100" required><br />	
 		
 		<input  type="checkbox" name="question1" id="question1" />
 		<label for="question1">What is the company industry(Alchemy/Home page/Taxonomies)?</label> <br />
