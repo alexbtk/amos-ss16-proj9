@@ -34,9 +34,31 @@ $(document).ready(function(){
 	 * @param resource - industry resource
 	 */
 	function getIndustryCompanies(resource){
-		sentRequest({'industryCompanies':'<'+decodeURI(resource)+'>'},"resource","displayAnswers");
+		sentRequest({'industryCompanies':'<'+decodeURI(resource)+'>'},"resource","dialog");
 	
 	}
+	
+	function showDialog(){
+		$( "#dialog" ).dialog({
+			autoOpen: false,
+			width: 400,
+			buttons: [
+				{
+					text: "Ok",
+					click: function() {
+						$( this ).dialog( "close" );
+					}
+				},
+				{
+					text: "Cancel",
+					click: function() {
+						$( this ).dialog( "close" );
+					}
+				}
+			]
+		});
+	}
+	showDialog();
 	
 	/**
 	 * General request function that will get information from controller
@@ -58,20 +80,30 @@ $(document).ready(function(){
 					}
 					obj.html(div);
 					$( "#accordion" ).accordion();
-				}else if(displayMode == "simple"){
-					div = $("<div id = 'accordion'></div>");
+				}else if(displayMode == "tabs"){
+					div = $("<div id = 'tabs'></div>");
+					var ul = $("<ul></ul>");
 					for(var i=0; i < res.length; ++i){
-						div.append($("<h2></h2>").append(res[i]['title']));
-						div.append($("<div></div>").append(res[i]['content']));
+						ul.append($("<li></li>").append($("<a href='#tabs-"+i+"'></a>").append(res[i]['title'])));
+						div.append($("<div id='tabs-"+i+"'></div>").append(res[i]['content']));
+					}
+					obj.html(div.prepend(ul));
+					$( "#tabs" ).tabs();
+				}else if(displayMode == "simple"){
+					div = $("<div id = 'simple'></div>");
+					for(var i=0; i < res.length; ++i){
+						div.append($("<h3></h3>").append(res[i]['title']));
+						div.append($("<p></p>").append(res[i]['content']));
 					}
 					obj.html(div);
 				}else if(displayMode == "resource"){
-					div = $("<div id = 'accordion'></div>");
+					div = $("<ul id = 'list'></ul>");
 					for(var i=0; i < res.length; ++i){
-						div.append('<span style="cursor:auto;" class="'+encodeURI(res[i]['resource'])+'">'+res[i]['name']+"</span><br />");
+						div.append('<li style="cursor: pointer;" class="'+encodeURI(res[i]['resource'])+'">'+res[i]['name']+"</li>");
 					}
 					obj.html(div);
-					$("#accordion span").click(function(){
+					$( "#dialog" ).dialog( "open" );
+					$("#dialog #list li").click(function(){
 						var resu = $(this).attr("class");
 						getIndustryCompanies(resu);
 					});
@@ -100,7 +132,7 @@ $(document).ready(function(){
 			alert("Check a question!");
 			return false;
 		}
-		sentRequest(params,"simple","displayAnswers");
+		sentRequest(params,"tabs","displayAnswers");
 		return false;
 	});
 	
@@ -125,7 +157,7 @@ $(document).ready(function(){
 			return false;
 		}
 		if(typeof params['question3a'] !== 'undefined'){
-			sentRequest({'industries':companyName},"resource","displayAnswers");
+			sentRequest({'industries':companyName},"resource","dialog");
 		}		
 		return false;
 	});

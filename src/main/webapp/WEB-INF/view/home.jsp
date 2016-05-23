@@ -81,6 +81,8 @@
 	</form>
 	
 	<div id="displayAnswers"></div>
+	<!-- ui-dialog -->
+	<div id="dialog" title="Advanced Options"></div>
 
 	<form method="POST" action="getSentiment" >
 		<fieldset>
