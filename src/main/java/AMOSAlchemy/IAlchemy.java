@@ -1,3 +1,10 @@
+/*!
+*
+* AMOS-SS16-PROJ9
+*
+* Released under the AGPL license
+* Date: 2016-05-25
+*/
 package AMOSAlchemy;
 
 import java.util.ArrayList;
@@ -17,4 +24,5 @@ public interface IAlchemy {
 	public boolean sameCategory(String pr1, String pr2);
 	public Map<String, String> getCompetitorsProductSentiment(String name,String companyResource);
 	public double getNumberSentimentAnalysisOfNews(String name, String entity)throws BadRequestException;
+	public void setAlchemyConceptsImpl(String username, String password);
 }

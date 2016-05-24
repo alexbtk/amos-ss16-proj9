@@ -1,3 +1,10 @@
+/*!
+*
+* AMOS-SS16-PROJ9
+*
+* Released under the AGPL license
+* Date: 2016-05-25
+*/
 package AMOSAlchemy;
 
 import com.ibm.watson.developer_cloud.alchemy.v1.model.DocumentSentiment;

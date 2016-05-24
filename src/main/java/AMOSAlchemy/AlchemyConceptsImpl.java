@@ -1,3 +1,10 @@
+/*!
+*
+* AMOS-SS16-PROJ9
+*
+* Released under the AGPL license
+* Date: 2016-05-25
+*/
 package AMOSAlchemy;
 
 import java.util.ArrayList;
@@ -24,9 +31,7 @@ public class AlchemyConceptsImpl {
 	
 	ConceptInsights service;
 	
-	AlchemyConceptsImpl(){
-		String username = "c8adbf89-3f4d-400a-a929-11a3e2c1eb7a";
-		String password = "FhyZEpyQUXXe";
+	AlchemyConceptsImpl(String username, String password){
 		service = new ConceptInsights();
 		service.setUsernameAndPassword(username,password);
 	}

@@ -1,3 +1,10 @@
+/*!
+*
+* AMOS-SS16-PROJ9
+*
+* Released under the AGPL license
+* Date: 2016-05-25
+*/
 package AMOSAlchemy;
 
 import com.ibm.watson.developer_cloud.service.BadRequestException;
@@ -7,6 +14,7 @@ public class Demo {
 	public static void main(String[] args) {
 		IAlchemyFactory fac = IAlchemyFactory.newInstance();
 		IAlchemy service = fac.createAlchemy("<api-key>");
+		service.setAlchemyConceptsImpl("<username>","<password>");
 
 		try{
 			

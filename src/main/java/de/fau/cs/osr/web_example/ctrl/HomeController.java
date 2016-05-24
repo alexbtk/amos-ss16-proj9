@@ -55,7 +55,8 @@ public class HomeController {
 	
 	public HomeController(){
 		fac = IAlchemyFactory.newInstance();
-		service = fac.createAlchemy("1eccdb3cfc18574d5a62e986faf05016f05fbc88");
+		service = fac.createAlchemy("fd98eff08dde3219578ef740567a4604939f0a5f");
+		//service.setAlchemyConceptsImpl("<username>","<password>");
 		languageService = fac.createAlchemyLanguage("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
 		twitterCrawler = new TwitterCrawler("xsqQfqabFUAX3gaoFBvShR8zP", "ZMCkHyJLyiCc25MWMJtpSuni5udZOhrLuSS616sX2hWT8rLokl","729408419602571264-oCcXJu3zfIEPZUsoYR0dHVNdiZ6GXlZ", "c9O4wafJ4Sl9APDLiHVWUVBn86WXC9Ys2HzKFAe9rBxZb");
 		twitterAnalyzer = new TwitterAnalyzer();
@@ -66,11 +67,7 @@ public class HomeController {
 	public String loadProcessPage(@RequestParam("companyName") String companyName, Model m) {
 
 
-		//m.addAttribute("mainIndustry","Main industry: " + service.getCompanyMainIndustry(companyName));
-		//m.addAttribute("mainProduct","Main product: " + service.getCompanyMainProduct(companyName));
 		m.addAttribute("companyName",companyName);
-		m.addAttribute("possibleCompetitors","Possible competitors: " + service.getPossibleCompetitors(companyName));
-		//m.addAttribute("newsSentimentAnalisys",("News sentiment: " + service.getSentimentAnalisysOfNews(companyName)).replace("\n", "<br />"));
 		m.addAttribute("category","Categories: " + service.getProductCategories("iPhone iPad MacBook iOS iPod"));
 				
 		return "process";
@@ -145,6 +142,10 @@ public class HomeController {
 			answers.add("{\"title\":\"Company competitors(Alchemy)\",\"content\":\"" + 
 					service.getPossibleCompetitors(requests.get("question3b"))+"\"}");
 		}
+		if(requests.containsKey("question4")){
+			answers.add("{\"title\":\"News Sentiment(Alchemy)\",\"content\":\"" + 
+					(service.getSentimentAnalysisOfNews(requests.get("question4"),"Company")).replace("\n", "<br />")+"\"}");
+		}
 		if(requests.containsKey("industries")){
 			HashMap<String,String> map = DBpedia.getCompanyIndustriesNames(requests.get("industries"));
 			Iterator it = map.entrySet().iterator();
@@ -159,7 +160,7 @@ public class HomeController {
 			Iterator it = map.entrySet().iterator();
 		    while (it.hasNext()) {
 		        Map.Entry pair = (Map.Entry)it.next();
-		        //it.remove(); 
+		        it.remove(); 
 		        answers.add("{\"name\":\""+pair.getKey()+"\",\"resource\":\"" + pair.getValue()+"\"}");
 		    }
 		}

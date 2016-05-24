@@ -1,3 +1,10 @@
+/*!
+*
+* AMOS-SS16-PROJ9
+*
+* Released under the AGPL license
+* Date: 2016-05-25
+*/
 package AMOSAlchemy;
 
 
@@ -29,7 +36,10 @@ public class AlchemyImpl implements IAlchemy{
 	public AlchemyImpl(String apiKey){
 		this.alchemyLanguage = new AlchemyLanguageImpl(apiKey);
 		this.alchemyNews = new AlchemyNewsImpl(apiKey);
-		this.alchemyConcepts = new AlchemyConceptsImpl();//put here pass and username
+	}
+	
+	public void setAlchemyConceptsImpl(String username, String password){
+		this.alchemyConcepts = new AlchemyConceptsImpl(username,password);
 	}
 	
 	@Override
