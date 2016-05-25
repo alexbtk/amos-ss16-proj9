@@ -1,6 +1,62 @@
 $(document).ready(function(){
 	var tags = [];
 
+	$( "#login" ).hide();
+	
+	if(getCookie("apiKey") == ""){
+		$( "#content" ).hide();
+		$( "#login" ).show();
+	}
+		
+	
+	//Set credetials in login field
+	$("#apiKey").val(getCookie("apiKey"));
+	$("#toneAnalyzerUsername").val(getCookie("toneAnalyzerUsername"));
+	$("#toneAnalyzerPassword").val(getCookie("toneAnalyzerPassword"));
+	$("#twitterConsumerKey").val(getCookie("twitterConsumerKey"));
+	$("#twitterConsumerSecret").val(getCookie("twitterConsumerSecret"));
+	$("#twitterToken").val(getCookie("twitterToken"));
+	$("#twitterTokenSecret").val(getCookie("twitterTokenSecret"));
+	
+	$( "#loginButton" ).on("click", function(){
+		//set cookies
+		setCookie("apiKey", $("#apiKey").val(), 1);
+		setCookie("toneAnalyzerUsername", $("#toneAnalyzerUsername").val(), 1);
+		setCookie("toneAnalyzerPassword", $("#toneAnalyzerPassword").val(), 1);
+		setCookie("twitterConsumerKey", $("#twitterConsumerKey").val(), 1);
+		setCookie("twitterConsumerSecret", $("#twitterConsumerSecret").val(), 1);
+		setCookie("twitterToken", $("#twitterToken").val(), 1);
+		setCookie("twitterTokenSecret", $("#twitterTokenSecret").val(), 1);
+		
+		//hide login show container
+		$( "#login" ).fadeOut(500, function(){
+			$( "#content" ).fadeIn(500);
+		});
+	});
+	
+	$( "#logoutButton" ).on("click", function(){
+		$( "#content" ).fadeOut(500, function(){
+			//Clear form
+			$("#apiKey").val("");
+			$("#toneAnalyzerUsername").val("");
+			$("#toneAnalyzerPassword").val("");
+			$("#twitterConsumerKey").val("");
+			$("#twitterConsumerSecret").val("");
+			$("#twitterToken").val("");
+			$("#twitterTokenSecret").val("");
+			
+			//Remove credentials
+			setCookie("apiKey", "", 1);
+			setCookie("toneAnalyzerUsername", "", 1);
+			setCookie("toneAnalyzerPassword", "", 1);
+			setCookie("twitterConsumerKey", "", 1);
+			setCookie("twitterConsumerSecret", "", 1);
+			setCookie("twitterToken", "", 1);
+			setCookie("twitterTokenSecret", "", 1);
+			
+			$( "#login" ).fadeIn(500);
+		});
+	});
 	$( "#companyInput" ).autocomplete({
       	source: function(request, response) {
         			response(tags);
@@ -27,6 +83,28 @@ $(document).ready(function(){
   			});
   		}
 	});
+	
+	function setCookie(cname, cvalue, exdays) {
+	    var d = new Date();
+	    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+	    var expires = "expires="+d.toUTCString();
+	    document.cookie = cname + "=" + cvalue + "; " + expires;
+	}
+
+	function getCookie(cname) {
+	    var name = cname + "=";
+	    var ca = document.cookie.split(';');
+	    for(var i = 0; i < ca.length; i++) {
+	        var c = ca[i];
+	        while (c.charAt(0) == ' ') {
+	            c = c.substring(1);
+	        }
+	        if (c.indexOf(name) == 0) {
+	            return c.substring(name.length, c.length);
+	        }
+	    }
+	    return "";
+	}
 	
 	/**
 	 * Get companies from one industry

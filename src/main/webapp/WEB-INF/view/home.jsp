@@ -64,94 +64,135 @@
 
 <body>
 	<div class="container">
-		<form method="GET" action="process" id="principalForm">
+		<div id="login">
+			<legend>Login</legend>
 			<fieldset>
-				<legend>Company Profile</legend>
-				<label for="companyInput">Company Name</label> <br /> <input
-					required id="companyInput" type="text" name="companyName"
-					maxlength="100" required><br /> <input type="checkbox"
-					name="question1" id="question1" /> <label for="question1">What
-					is the company industry(Alchemy/Home page/Taxonomies)?</label> <br /> <input
-					type="checkbox" name="question2" id="question2" /> <label
-					for="question2">What is the company main
-					product(Alchemy/Home page/Entities)?</label><br /> <input type="checkbox"
-					name="question3a" id="question3a" /> <label for="question3a">What
-					are the company competitors(DBpedia/Industry)?</label><br /> <input
-					type="checkbox" name="question3b" id="question3b" /> <label
-					for="question3b">What are the company
-					competitors(Alchemy/News)?</label><br /> <input type="checkbox"
-					name="question4" id="question4" /> <label for="question3">What
-					are the company news sentiment(Alchemy/News)?</label><br /> <input
-					type="checkbox" name="question5a" id="question5a" /> <label
-					for="question5a">What are the company
-					products(DBpedia/Category)?</label><br /> <input type="checkbox"
-					name="question5b" id="question5b" /> <label for="question5b">What
-					are the company products(Alchemy/Home page)?</label><br /> <input
-					type="checkbox" name="question5c" id="question5c" /> <label
-					for="question5c">What are the company competitors
-					products(DBpedia/Category)?</label><br /> <input type="checkbox"
-					name="question5d" id="question5d" /> <label for="question5d">What
-					are the company competitors products Sentiment(DBpedia/Category)?</label><br />
-
-				<input type="submit" value="Ask" id="submitQuestion" /> <input
-					type="submit" value="Advanced options" id="submitAdvancedQuestion" />
+				<table>
+					<tbody>
+						<tr>
+							<td><label for="apiKey">Alchemy API-Key</label></td>
+						</tr>
+						<tr>
+							<td><input id="apiKey" type="text" maxLength=100 /></td>
+						</tr>
+						<tr>
+							<td style="min-width:180px"><label for="toneAnalyzerUsername">Toneanalyzer Username</label></td>
+							<td style="min-width:180px"><label for="toneAnalyzerPassword">Toneanalyzer Password</label></td>
+						</tr>
+						<tr>
+							<td><input id="toneAnalyzerUsername" type="text" maxLength=100 /></td>
+							<td><input id="toneAnalyzerPassword" type="text" maxLength=100 /></td>
+						</tr>
+						<tr>
+							<td style="min-width:180px"><label for="twitterConsumerKey">Twitter Consumer Key</label></td>
+							<td style="min-width:180px"><label for="twitterConsumerSecret">Twitter Consumer Secret</label></td>
+							<td style="min-width:180px"><label for="twitterToken">Twitter Token</label></td>
+							<td style="min-width:180px"><label for="twitterTokenSecret">Twitter Token Secret</label></td>
+						</tr>
+						<tr>
+							<td><input id="twitterConsumerKey" type="text" maxLength=100 /></td>
+							<td><input id="twitterConsumerSecret" type="text" maxLength=100 /></td>
+							<td><input id="twitterToken" type="text" maxLength=100 /></td>
+							<td><input id="twitterTokenSecret" type="text" maxLength=100 /></td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<br /><br />
+				<button id="loginButton">Login</button>
 			</fieldset>
-
-		</form>
-
-		<div id="displayAnswers"></div>
-		<!-- ui-dialog -->
-		<div id="dialog" title="Advanced Options"></div>
-
-		<form method="POST" action="getSentiment">
-			<fieldset>
-				<legend>Write company name to analyze twitter posts
-					sentiment</legend>
-				<input type="text" name="Text" maxlength="1000" required> <input
-					type="submit" value="submit" id="submitText" />
-				<div id="answer">
-					<br />Average Twitter Posts sentiment value: <br />
-					${textSentiment}<br />
-
-				</div>
-			</fieldset>
-		</form>
-		<div class="row">
-			<c:choose>
-				<c:when test="${fn:length(postsList) > 1}">
-					<c:forEach begin="0" end="${fn:length(postsList) - 1}" var="index">
-						<p><button type="button" class="btn btn-xs" data-toggle="collapse"
-							data-target="#<c:out value="${postsList[index].getId()}" />">+</button>Tweet from User
-							<c:out value="${postsList[index].getUser().getName()}" /></p>
-						<div id="<c:out value="${postsList[index].getId()}" />"
-							class="collapse">
-							<c:out value="${postsList[index].getText()}" />
-						</div>
-
-					</c:forEach>
-				</c:when>
-				<c:otherwise>
-				</c:otherwise>
-			</c:choose>
-
 		</div>
+		<div id="content">
+			<form method="GET" action="process" id="principalForm">
+				<fieldset>
+					<legend>Company Profile</legend>
+					<label for="companyInput">Company Name</label> <br /> <input
+						required id="companyInput" type="text" name="companyName"
+						maxlength="100" required><br /> <input type="checkbox"
+						name="question1" id="question1" /> <label for="question1">What
+						is the company industry(Alchemy/Home page/Taxonomies)?</label> <br /> <input
+						type="checkbox" name="question2" id="question2" /> <label
+						for="question2">What is the company main
+						product(Alchemy/Home page/Entities)?</label><br /> <input type="checkbox"
+						name="question3a" id="question3a" /> <label for="question3a">What
+						are the company competitors(DBpedia/Industry)?</label><br /> <input
+						type="checkbox" name="question3b" id="question3b" /> <label
+						for="question3b">What are the company
+						competitors(Alchemy/News)?</label><br /> <input type="checkbox"
+						name="question4" id="question4" /> <label for="question3">What
+						are the company news sentiment(Alchemy/News)?</label><br /> <input
+						type="checkbox" name="question5a" id="question5a" /> <label
+						for="question5a">What are the company
+						products(DBpedia/Category)?</label><br /> <input type="checkbox"
+						name="question5b" id="question5b" /> <label for="question5b">What
+						are the company products(Alchemy/Home page)?</label><br /> <input
+						type="checkbox" name="question5c" id="question5c" /> <label
+						for="question5c">What are the company competitors
+						products(DBpedia/Category)?</label><br /> <input type="checkbox"
+						name="question5d" id="question5d" /> <label for="question5d">What
+						are the company competitors products Sentiment(DBpedia/Category)?</label><br />
+	
+					<input type="submit" value="Ask" id="submitQuestion" /> <input
+						type="submit" value="Advanced options" id="submitAdvancedQuestion" />
+				</fieldset>
+	
+			</form>
+	
+			<div id="displayAnswers"></div>
+			<!-- ui-dialog -->
+			<div id="dialog" title="Advanced Options"></div>
+	
+			<form method="POST" action="getSentiment">
+				<fieldset>
+					<legend>Write company name to analyze twitter posts
+						sentiment</legend>
+					<input type="text" name="Text" maxlength="1000" required> <input
+						type="submit" value="submit" id="submitText" />
+					<div id="answer">
+						<br />Average Twitter Posts sentiment value: <br />
+						${textSentiment}<br />
+	
+					</div>
+				</fieldset>
+			</form>
+			<div class="row">
+				<c:choose>
+					<c:when test="${fn:length(postsList) > 1}">
+						<c:forEach begin="0" end="${fn:length(postsList) - 1}" var="index">
+							<p><button type="button" class="btn btn-xs" data-toggle="collapse"
+								data-target="#<c:out value="${postsList[index].getId()}" />">+</button>Tweet from User
+								<c:out value="${postsList[index].getUser().getName()}" /></p>
+							<div id="<c:out value="${postsList[index].getId()}" />"
+								class="collapse">
+								<c:out value="${postsList[index].getText()}" />
+							</div>
+	
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+					</c:otherwise>
+				</c:choose>
+	
+			</div>
+	
+	
+			<form method="POST" action="getTone">
+				<fieldset>
+					<legend>Write text to analyze tone</legend>
+					Text: <input type="text" name="Text" required><br />
+					 <input
+						type="submit" value="submit" id="submitText" />
+					<div id="answer">
+						<br />Tone results:<br /> ${textTone}<br />
+					</div>
+				</fieldset>
+			</form>
 
-
-		<form method="POST" action="getTone">
-			<fieldset>
-				<legend>Write text to analyze tone</legend>
-				Text: <input type="text" name="Text" required><br />
-				Username: <input type="text" name="Username" maxlength="100"
-					required><br /> Password: <input type="text"
-					name="Password" maxlength="100" required><br /> <input
-					type="submit" value="submit" id="submitText" />
-				<div id="answer">
-					<br />Tone results:<br /> ${textTone}<br />
-				</div>
-			</fieldset>
-		</form>
-
+			<br /><br />
+			<button id="logoutButton">Logout</button>
+			<br /><br />
 		<!--<script type="text/javascript" src="js/myscript.js" ></script>-->
+		</div>
 	</div>
 </body>
 </html>

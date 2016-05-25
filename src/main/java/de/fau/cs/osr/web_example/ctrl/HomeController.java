@@ -35,6 +35,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,18 +56,13 @@ public class HomeController {
 	
 	public HomeController(){
 		fac = IAlchemyFactory.newInstance();
-		service = fac.createAlchemy("fd98eff08dde3219578ef740567a4604939f0a5f");
-		//service.setAlchemyConceptsImpl("<username>","<password>");
-		languageService = fac.createAlchemyLanguage("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
-		twitterCrawler = new TwitterCrawler("xsqQfqabFUAX3gaoFBvShR8zP", "ZMCkHyJLyiCc25MWMJtpSuni5udZOhrLuSS616sX2hWT8rLokl","729408419602571264-oCcXJu3zfIEPZUsoYR0dHVNdiZ6GXlZ", "c9O4wafJ4Sl9APDLiHVWUVBn86WXC9Ys2HzKFAe9rBxZb");
 		twitterAnalyzer = new TwitterAnalyzer();
-		
 	}
 
 	@RequestMapping(value="/process")
-	public String loadProcessPage(@RequestParam("companyName") String companyName, Model m) {
-
-
+	public String loadProcessPage(@RequestParam("companyName") String companyName, @CookieValue("apiKey") String apiKey, Model m) {
+		service = fac.createAlchemy(apiKey);
+		
 		m.addAttribute("companyName",companyName);
 		m.addAttribute("category","Categories: " + service.getProductCategories("iPhone iPad MacBook iOS iPod"));
 				
@@ -74,7 +70,10 @@ public class HomeController {
 	}
 
 	@RequestMapping(value="/getSentiment", method = RequestMethod.POST)
-	public String loadTextSentiment(@RequestParam("Text") String companyName, Model m) {
+	public String loadTextSentiment(@RequestParam("Text") String companyName, @CookieValue("apiKey") String apiKey, @CookieValue("twitterConsumerKey") String consumerKey, @CookieValue("twitterConsumerSecret") String consumerSecret, @CookieValue("twitterToken") String token, @CookieValue("twitterTokenSecret") String tokenSecret, Model m) {
+		languageService = fac.createAlchemyLanguage(apiKey);
+		twitterCrawler = new TwitterCrawler(consumerKey, consumerSecret, token, tokenSecret);
+		
 		List<Status> posts = twitterCrawler.crawlPosts(companyName);
 		Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForTweets(posts, languageService);
 		
@@ -88,14 +87,15 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/getTone", method = RequestMethod.POST)
-	public String loadTextTone(@RequestParam("Text") String text, @RequestParam("Username") String username, @RequestParam("Password") String password, Model m) {
+	public String loadTextTone(@RequestParam("Text") String text, @CookieValue("toneAnalyzerUsername") String username, @CookieValue("toneAnalyzerPassword") String password, Model m) {
 		
 		IAlchemyToneAnalyzer toneAnalyzer = fac.createAlchemyToneAnalyzer(username, password);
+		
 		String tone = toneAnalyzer.getToneAsString(text);
 		
 		//IAlchemyLanguage languageService = fac.createAlchemyLanguage("593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f");
 		//DocumentSentiment sentiment = languageService.getSentimentForText(socialMediaPost);
-		m.addAttribute("textTone", tone);
+		m.addAttribute("textTone", username + " " + password + " <br />" + tone);
 
 		return "home";
 	}
@@ -127,7 +127,9 @@ public class HomeController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/qeuryRequest", method = RequestMethod.POST)
-	public String queryResponse(@RequestParam Map<String, String>  requests, Model m){
+	public String queryResponse(@RequestParam Map<String, String>  requests, @CookieValue("apiKey") String apiKey, Model m){
+		this.service = fac.createAlchemy(apiKey);
+		
 		List answers = new ArrayList();
 		//Todo - catch error: incorrect companyName, noResult
 		if(requests.containsKey("question1")){
