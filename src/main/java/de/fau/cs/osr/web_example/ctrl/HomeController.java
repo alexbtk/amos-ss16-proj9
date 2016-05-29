@@ -127,8 +127,10 @@ public class HomeController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/qeuryRequest", method = RequestMethod.POST)
-	public String queryResponse(@RequestParam Map<String, String>  requests, @CookieValue("apiKey") String apiKey, Model m){
+	public String queryResponse(@RequestParam Map<String, String>  requests, @CookieValue("apiKey") String apiKey, @CookieValue("twitterConsumerKey") String consumerKey, @CookieValue("twitterConsumerSecret") String consumerSecret, @CookieValue("twitterToken") String token, @CookieValue("twitterTokenSecret") String tokenSecret, Model m){
 		this.service = fac.createAlchemy(apiKey);
+		languageService = fac.createAlchemyLanguage(apiKey);
+		twitterCrawler = new TwitterCrawler(consumerKey, consumerSecret, token, tokenSecret);
 		
 		List answers = new ArrayList();
 		//Todo - catch error: incorrect companyName, noResult
@@ -147,6 +149,22 @@ public class HomeController {
 		if(requests.containsKey("question4")){
 			answers.add("{\"title\":\"News Sentiment(Alchemy)\",\"content\":\"" + 
 					(service.getSentimentAnalysisOfNews(requests.get("question4"),"Company")).replace("\n", "<br />")+"\"}");
+		}
+		if(requests.containsKey("question6")){
+			List<Status> posts = twitterCrawler.crawlPosts(requests.get("question6"));
+			Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForTweets(posts, languageService);
+			answers.add("{\"title\":\"Twiter vs News Sentiment\",\"content\":\"" + 
+					"<p>News: " + service.getNumberSentimentAnalysisOfNews(requests.get("question6"),"Company")+ 
+					"</p><p>Twiter:"+avgSentimentValue.toString()+"</p>\"}");
+		}
+		if(requests.containsKey("products")){
+			List products = new ArrayList();
+			List<String> DBproducts = DBpedia.getCompanyProducts(requests.get("products"));
+			for(String p : DBproducts){
+				products.add("{\"name\":\""+p+"\"}");
+			}
+			answers.add("{\"title\":\"Company Products(DBpedia)\",\"content\":[" + 
+					StringUtils.join(products, ",")+"]}");
 		}
 		if(requests.containsKey("industries")){
 			HashMap<String,String> map = DBpedia.getCompanyIndustriesNames(requests.get("industries"));

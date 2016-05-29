@@ -49,6 +49,8 @@
 	href="${pageContext.request.contextPath}/css/jquery-ui.css">
 <script src="${pageContext.request.contextPath}/js/jquery-2.2.3.js"></script>
 <script src="${pageContext.request.contextPath}/js/jquery-ui.js"></script>
+<script src="${pageContext.request.contextPath}/js/util.js"></script>
+<script src="${pageContext.request.contextPath}/js/AMOSAlchemy.js"></script>
 <script src="${pageContext.request.contextPath}/js/script.js"></script>
 
 <!-- Latest compiled and minified Bootstrap JavaScript -->
@@ -119,7 +121,7 @@
 						type="checkbox" name="question3b" id="question3b" /> <label
 						for="question3b">What are the company
 						competitors(Alchemy/News)?</label><br /> <input type="checkbox"
-						name="question4" id="question4" /> <label for="question3">What
+						name="question4" id="question4" /> <label for="question4">What
 						are the company news sentiment(Alchemy/News)?</label><br /> <input
 						type="checkbox" name="question5a" id="question5a" /> <label
 						for="question5a">What are the company
@@ -131,6 +133,8 @@
 						products(DBpedia/Category)?</label><br /> <input type="checkbox"
 						name="question5d" id="question5d" /> <label for="question5d">What
 						are the company competitors products Sentiment(DBpedia/Category)?</label><br />
+						<input type="checkbox" name="question6" id="question6" />
+						<label for="question6">Twiter vs News Sentiment?</label><br />
 	
 					<input type="submit" value="Ask" id="submitQuestion" /> <input
 						type="submit" value="Advanced options" id="submitAdvancedQuestion" />

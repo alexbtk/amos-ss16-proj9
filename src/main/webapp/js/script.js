@@ -37,7 +37,7 @@ $(document).ready(function(){
 	$( "#logoutButton" ).on("click", function(){
 		$( "#content" ).fadeOut(500, function(){
 			//Clear form
-			$("#apiKey").val("");
+			/*$("#apiKey").val("");
 			$("#toneAnalyzerUsername").val("");
 			$("#toneAnalyzerPassword").val("");
 			$("#twitterConsumerKey").val("");
@@ -52,7 +52,7 @@ $(document).ready(function(){
 			setCookie("twitterConsumerKey", "", 1);
 			setCookie("twitterConsumerSecret", "", 1);
 			setCookie("twitterToken", "", 1);
-			setCookie("twitterTokenSecret", "", 1);
+			setCookie("twitterTokenSecret", "", 1);*/
 			
 			$( "#login" ).fadeIn(500);
 		});
@@ -84,27 +84,7 @@ $(document).ready(function(){
   		}
 	});
 	
-	function setCookie(cname, cvalue, exdays) {
-	    var d = new Date();
-	    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-	    var expires = "expires="+d.toUTCString();
-	    document.cookie = cname + "=" + cvalue + "; " + expires;
-	}
-
-	function getCookie(cname) {
-	    var name = cname + "=";
-	    var ca = document.cookie.split(';');
-	    for(var i = 0; i < ca.length; i++) {
-	        var c = ca[i];
-	        while (c.charAt(0) == ' ') {
-	            c = c.substring(1);
-	        }
-	        if (c.indexOf(name) == 0) {
-	            return c.substring(name.length, c.length);
-	        }
-	    }
-	    return "";
-	}
+	
 	
 	/**
 	 * Get companies from one industry
@@ -185,6 +165,18 @@ $(document).ready(function(){
 						var resu = $(this).attr("class");
 						getIndustryCompanies(resu);
 					});
+				}else if(displayMode == "link"){
+					div = $("<ul id = 'list'></ul>");
+					for(var i=0; i < res[0]['content'].length; ++i){
+						div.append('<li style="cursor: pointer;" class="'+res[0]['content'][i]['name']+'">'+res[0]['content'][i]['name']+"</li>");
+					}
+					obj.html(div);
+					$( "#dialog" ).attr("title",res[0]['title']);
+					$( "#dialog" ).dialog( "open" );
+					$("#dialog #list li").click(function(){
+						var productName = $(this).attr("class");
+						getNewsSentimentByRegions(productName);
+					});
 				}else if(displayMode == "return"){
 					return res;
 				}
@@ -202,8 +194,7 @@ $(document).ready(function(){
 		$( "#principalForm input[type=checkbox]" ).each(function(){
 			if(this.checked){
 				params[$(this).attr('name')] = companyName;
-				ok = 0;
-				//$("#displayAnswers").append($(this).attr('name'));				
+				ok = 0;			
 			}
 		});
 		if(ok == 1){
@@ -226,8 +217,7 @@ $(document).ready(function(){
 		$( "#principalForm input[type=checkbox]" ).each(function(){
 			if(this.checked){
 				params[$(this).attr('name')] = companyName;
-				++ok;
-				//$("#displayAnswers").append($(this).attr('name'));				
+				++ok;				
 			}
 		});
 		if(ok != 1){
@@ -236,7 +226,10 @@ $(document).ready(function(){
 		}
 		if(typeof params['question3a'] !== 'undefined'){
 			sentRequest({'industries':companyName},"resource","dialog");
-		}		
+		}
+		if(typeof params['question5a'] !== 'undefined'){
+			sentRequest({'products':companyName},"link","dialog");
+		}
 		return false;
 	});
 		
