@@ -5,7 +5,7 @@
 * Released under the AGPL license
 * Date: 2016-05-25
 */
-//$(document).ready(function(){
+
 	
 	/**
 	 * Make a query to Alchemy News via http
@@ -60,11 +60,10 @@
 	}
 	
 	/**
-	 * Make the query
+	 * Create the query parameters, and set callback function for AlchemyNewsQuery
 	 * @returns
 	 */
 	function getNewsSentimentByRegions(name){
-		//var name = "Iphone";
 		var params = {
 			'return':'q.enriched.url.title,q.enriched.url.entities',
 			'start':'now-3d',
@@ -77,6 +76,4 @@
 		AlchemyNewsQuery(params, processNewsSentimentByRegions);
 	}
 	
-	//getNewsSentimentByRegions();	
-    
-//});
+
