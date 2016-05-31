@@ -52,6 +52,7 @@
 <script src="${pageContext.request.contextPath}/js/util.js"></script>
 <script src="${pageContext.request.contextPath}/js/AMOSAlchemy.js"></script>
 <script src="${pageContext.request.contextPath}/js/script.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap-slider.js"></script>
 
 <!-- Latest compiled and minified Bootstrap JavaScript -->
 <script
@@ -157,6 +158,7 @@
 						${textSentiment}<br />
 	
 					</div>
+					<input id="twittersentiment_slider" type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="5" data-slider-enabled="false"/>
 				</fieldset>
 			</form>
 			<div class="row">

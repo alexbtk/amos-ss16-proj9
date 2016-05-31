@@ -246,3 +246,11 @@ $('.row .btn').on('click', function(e) {
     var $collapse = $this.closest('.collapse-group').find('.collapse');
     $collapse.collapse('toggle');
 });
+
+/**
+ * Twitter sentiment slider
+ * 
+ */
+
+$("#twittersentiment_slider").slider();
+ 
