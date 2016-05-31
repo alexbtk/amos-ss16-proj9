@@ -16,7 +16,7 @@
 	 */
 	function AlchemyNewsQuery(params, functionCallback) {
 	    var apiKey = params.apikey;
-		var query = "http://gateway-a.watsonplatform.net/calls/data/GetNews?"+ 	
+		var query = "https://gateway-a.watsonplatform.net/calls/data/GetNews?"+ 	
 		"apikey="+apiKey+
 		"&outputMode=json"+
 		"&start="+params.start+  
