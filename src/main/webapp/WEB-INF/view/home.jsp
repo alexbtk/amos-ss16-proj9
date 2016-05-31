@@ -43,22 +43,46 @@
 	integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
 	crossorigin="anonymous">
 
-
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+	integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
+	crossorigin="anonymous">
 
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/jquery-ui.css">
+	<!-- Link to bootstrap slider css -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/css/bootstrap-slider.css">
+
+<style type="text/css">
+#twitterslider .slider-selection {
+	background: red;
+}
+
+#twitterslider .slider-track-high {
+	background: green;
+}
+
+</style>
+
+
+
 <script src="${pageContext.request.contextPath}/js/jquery-2.2.3.js"></script>
 <script src="${pageContext.request.contextPath}/js/jquery-ui.js"></script>
 <script src="${pageContext.request.contextPath}/js/util.js"></script>
-<script src="${pageContext.request.contextPath}/js/AMOSAlchemy.js"></script>
-<script src="${pageContext.request.contextPath}/js/script.js"></script>
-<script src="${pageContext.request.contextPath}/js/bootstrap-slider.js"></script>
-
-<!-- Latest compiled and minified Bootstrap JavaScript -->
+<script src="${pageContext.request.contextPath}/js/modernizr.js"></script>
+<!-- Latest compiled and minified Bootstrap and Modernizr JavaScript -->
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
 	integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
 	crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/bootstrap-slider.js"></script>
+
+<script src="${pageContext.request.contextPath}/js/AMOSAlchemy.js"></script>
+<script src="${pageContext.request.contextPath}/js/script.js"></script>
+
+
+
 
 <!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -154,13 +178,17 @@
 					<input type="text" name="Text" maxlength="1000" required> <input
 						type="submit" value="submit" id="submitText" />
 					<div id="answer">
-						<br />Average Twitter Posts sentiment value: <br />
-						${textSentiment}<br />
+						<br />Average Twitter Posts sentiment value:<br />
+						<input id="twitterslider" type="text" data-slider-min="-1" data-slider-max="1" data-slider-step="0.1" data-slider-value="${textSentiment}" data-slider-enabled="false"/>
 	
 					</div>
-					<input id="twittersentiment_slider" type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="5" data-slider-enabled="false"/>
+					
 				</fieldset>
 			</form>
+			<div class="row">
+			
+			</div>
+			
 			<div class="row">
 				<c:choose>
 					<c:when test="${fn:length(postsList) > 1}">

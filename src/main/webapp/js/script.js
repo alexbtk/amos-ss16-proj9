@@ -232,25 +232,31 @@ $(document).ready(function(){
 		}
 		return false;
 	});
+	
+	/**
+	 * Collapse functionality for twitter posts
+	 * 
+	 */
+
+	$('.row .btn').on('click', function(e) {
+	    e.preventDefault();
+	    var $this = $(this);
+	    var $collapse = $this.closest('.collapse-group').find('.collapse');
+	    $collapse.collapse('toggle');
+	});
+	
+	/**
+	 * Twitter sentiment slider
+	 * 
+	 */
+	//Instantiate a slider
+	var mySlider = new Slider("#twitterslider", {
+	    id: "twitterslider"
+	});
 		
 });
 
-/**
- * Collapse functionality for twitter posts
- * 
- */
 
-$('.row .btn').on('click', function(e) {
-    e.preventDefault();
-    var $this = $(this);
-    var $collapse = $this.closest('.collapse-group').find('.collapse');
-    $collapse.collapse('toggle');
-});
 
-/**
- * Twitter sentiment slider
- * 
- */
 
-$("#twittersentiment_slider").slider();
- 
+
