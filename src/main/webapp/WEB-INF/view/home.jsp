@@ -50,7 +50,7 @@
 
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/jquery-ui.css">
-	<!-- Link to bootstrap slider css -->
+<!-- Link to bootstrap slider css -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/css/bootstrap-slider.css">
 
@@ -62,7 +62,6 @@
 #twitterslider .slider-track-high {
 	background: green;
 }
-
 </style>
 
 
@@ -76,7 +75,8 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
 	integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
 	crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/bootstrap-slider.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/bootstrap-slider.js"></script>
 
 <script src="${pageContext.request.contextPath}/js/AMOSAlchemy.js"></script>
 <script src="${pageContext.request.contextPath}/js/script.js"></script>
@@ -103,29 +103,38 @@
 							<td><input id="apiKey" type="text" maxLength=100 /></td>
 						</tr>
 						<tr>
-							<td style="min-width:180px"><label for="toneAnalyzerUsername">Toneanalyzer Username</label></td>
-							<td style="min-width:180px"><label for="toneAnalyzerPassword">Toneanalyzer Password</label></td>
+							<td style="min-width: 180px"><label
+								for="toneAnalyzerUsername">Toneanalyzer Username</label></td>
+							<td style="min-width: 180px"><label
+								for="toneAnalyzerPassword">Toneanalyzer Password</label></td>
 						</tr>
 						<tr>
-							<td><input id="toneAnalyzerUsername" type="text" maxLength=100 /></td>
-							<td><input id="toneAnalyzerPassword" type="text" maxLength=100 /></td>
+							<td><input id="toneAnalyzerUsername" type="text"
+								maxLength=100 /></td>
+							<td><input id="toneAnalyzerPassword" type="text"
+								maxLength=100 /></td>
 						</tr>
 						<tr>
-							<td style="min-width:180px"><label for="twitterConsumerKey">Twitter Consumer Key</label></td>
-							<td style="min-width:180px"><label for="twitterConsumerSecret">Twitter Consumer Secret</label></td>
-							<td style="min-width:180px"><label for="twitterToken">Twitter Token</label></td>
-							<td style="min-width:180px"><label for="twitterTokenSecret">Twitter Token Secret</label></td>
+							<td style="min-width: 180px"><label for="twitterConsumerKey">Twitter
+									Consumer Key</label></td>
+							<td style="min-width: 180px"><label
+								for="twitterConsumerSecret">Twitter Consumer Secret</label></td>
+							<td style="min-width: 180px"><label for="twitterToken">Twitter
+									Token</label></td>
+							<td style="min-width: 180px"><label for="twitterTokenSecret">Twitter
+									Token Secret</label></td>
 						</tr>
 						<tr>
 							<td><input id="twitterConsumerKey" type="text" maxLength=100 /></td>
-							<td><input id="twitterConsumerSecret" type="text" maxLength=100 /></td>
+							<td><input id="twitterConsumerSecret" type="text"
+								maxLength=100 /></td>
 							<td><input id="twitterToken" type="text" maxLength=100 /></td>
 							<td><input id="twitterTokenSecret" type="text" maxLength=100 /></td>
 						</tr>
 					</tbody>
 				</table>
-				
-				<br /><br />
+
+				<br /> <br />
 				<button id="loginButton">Login</button>
 			</fieldset>
 		</div>
@@ -158,19 +167,18 @@
 						products(DBpedia/Category)?</label><br /> <input type="checkbox"
 						name="question5d" id="question5d" /> <label for="question5d">What
 						are the company competitors products Sentiment(DBpedia/Category)?</label><br />
-						<input type="checkbox" name="question6" id="question6" />
-						<label for="question6">Twiter vs News Sentiment?</label><br />
-	
-					<input type="submit" value="Ask" id="submitQuestion" /> <input
+					<input type="checkbox" name="question6" id="question6" /> <label
+						for="question6">Twiter vs News Sentiment?</label><br /> <input
+						type="submit" value="Ask" id="submitQuestion" /> <input
 						type="submit" value="Advanced options" id="submitAdvancedQuestion" />
 				</fieldset>
-	
+
 			</form>
-	
+
 			<div id="displayAnswers"></div>
 			<!-- ui-dialog -->
 			<div id="dialog" title="Advanced Options"></div>
-	
+
 			<form method="POST" action="getSentiment">
 				<fieldset>
 					<legend>Write company name to analyze twitter posts
@@ -178,43 +186,122 @@
 					<input type="text" name="Text" maxlength="1000" required> <input
 						type="submit" value="submit" id="submitText" />
 					<div id="answer">
-						<br />Average Twitter Posts sentiment value:<br />
-						<input id="twitterslider" type="text" data-slider-min="-1" data-slider-max="1" data-slider-step="0.1" data-slider-value="${textSentiment}" data-slider-enabled="false"/>
-	
+						<br />Average Twitter Posts sentiment value:<br /> <input
+							id="twitterslider" type="text" data-slider-min="-1"
+							data-slider-max="1" data-slider-step="0.1"
+							data-slider-value="${textSentiment}" data-slider-enabled="false" />
+
 					</div>
-					
+
 				</fieldset>
 			</form>
+			<br>
 			<div class="row">
-			
+				<div class="tabbable">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#negsent" data-toggle="tab">Negative
+								Sentiment</a></li>
+						<li><a href="#neutsent" data-toggle="tab">Neutral
+								Sentiment</a></li>
+						<li><a href="#possent" data-toggle="tab">Positive
+								Sentiment</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="negsent">
+							<c:choose>
+								<c:when test="${fn:length(postsList) > 1}">
+									<c:forEach begin="0" end="${fn:length(postsList) - 1}"
+										var="index">
+										<c:choose>
+											<c:when
+												test="${sentimentlist.get(postsList[index].getId()) < 0}">
+												<p>
+													<button type="button" class="btn btn-xs"
+														data-toggle="collapse"
+														data-target="#<c:out value="${postsList[index].getId()}" />">+</button>
+													Tweet from User
+													<c:out value="${postsList[index].getUser().getName()}" />
+												</p>
+												<div id="<c:out value="${postsList[index].getId()}" />"
+													class="collapse">
+													<c:out value="${postsList[index].getText()}" />
+												</div>
+											</c:when>
+											<c:otherwise>
+											</c:otherwise>
+										</c:choose>
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+								</c:otherwise>
+							</c:choose>
+						</div>
+						<div class="tab-pane" id="neutsent">
+							<c:choose>
+								<c:when test="${fn:length(postsList) > 1}">
+									<c:forEach begin="0" end="${fn:length(postsList) - 1}"
+										var="index">
+										<c:choose>
+											<c:when
+												test="${(sentimentlist.get(postsList[index].getId()) >= 0) and (sentimentlist.get(postsList[index].getId()) <= 0.5)}">
+												<p>
+													<button type="button" class="btn btn-xs"
+														data-toggle="collapse"
+														data-target="#<c:out value="${postsList[index].getId()}" />">+</button>
+													Tweet from User
+													<c:out value="${postsList[index].getUser().getName()}" />
+												</p>
+												<div id="<c:out value="${postsList[index].getId()}" />"
+													class="collapse">
+													<c:out value="${postsList[index].getText()}" />
+												</div>
+											</c:when>
+											<c:otherwise>
+											</c:otherwise>
+										</c:choose>
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+								</c:otherwise>
+							</c:choose>
+						</div>
+						<div class="tab-pane" id="possent">
+							<c:choose>
+								<c:when test="${fn:length(postsList) > 1}">
+									<c:forEach begin="0" end="${fn:length(postsList) - 1}"
+										var="index">
+										<c:choose>
+										<c:when
+											test="${sentimentlist.get(postsList[index].getId()) > 0.5}">
+											<p>
+												<button type="button" class="btn btn-xs"
+													data-toggle="collapse"
+													data-target="#<c:out value="${postsList[index].getId()}" />">+</button>
+												Tweet from User
+												<c:out value="${postsList[index].getUser().getName()}" />
+											</p>
+											<div id="<c:out value="${postsList[index].getId()}" />"
+												class="collapse">
+												<c:out value="${postsList[index].getText()}" />
+											</div>
+										</c:when>
+										</c:choose>
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+								</c:otherwise>
+							</c:choose>
+						</div>
+					</div>
+				</div>
+
 			</div>
-			
-			<div class="row">
-				<c:choose>
-					<c:when test="${fn:length(postsList) > 1}">
-						<c:forEach begin="0" end="${fn:length(postsList) - 1}" var="index">
-							<p><button type="button" class="btn btn-xs" data-toggle="collapse"
-								data-target="#<c:out value="${postsList[index].getId()}" />">+</button>Tweet from User
-								<c:out value="${postsList[index].getUser().getName()}" /></p>
-							<div id="<c:out value="${postsList[index].getId()}" />"
-								class="collapse">
-								<c:out value="${postsList[index].getText()}" />
-							</div>
-	
-						</c:forEach>
-					</c:when>
-					<c:otherwise>
-					</c:otherwise>
-				</c:choose>
-	
-			</div>
-	
-	
+			<br>
+
 			<form method="POST" action="getTone">
 				<fieldset>
 					<legend>Write text to analyze tone</legend>
-					Text: <input type="text" name="Text" required><br />
-					 <input
+					Text: <input type="text" name="Text" required><br /> <input
 						type="submit" value="submit" id="submitText" />
 					<div id="answer">
 						<br />Tone results:<br /> ${textTone}<br />
@@ -222,10 +309,10 @@
 				</fieldset>
 			</form>
 
-			<br /><br />
+			<br /> <br />
 			<button id="logoutButton">Logout</button>
-			<br /><br />
-		<!--<script type="text/javascript" src="js/myscript.js" ></script>-->
+			<br /> <br />
+			<!--<script type="text/javascript" src="js/myscript.js" ></script>-->
 		</div>
 	</div>
 </body>
