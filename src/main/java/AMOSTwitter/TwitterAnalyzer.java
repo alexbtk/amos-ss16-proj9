@@ -8,6 +8,7 @@
 package AMOSTwitter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.ibm.watson.developer_cloud.alchemy.v1.model.DocumentSentiment;
@@ -51,6 +52,21 @@ public class TwitterAnalyzer {
 		}
 
 		return sumSentiment / (sentimentValues.size());
+	}
+	
+	public HashMap<Long, Double> getSentimentForEachTweet(List<Status> tweets, IAlchemyLanguage languageService){
+		DocumentSentiment sentiment;
+		HashMap<Long, Double> map = new HashMap<Long, Double>();
+		for (Status tweet: tweets){
+			try {
+				sentiment = languageService.getSentimentForText(tweet.getText());
+				map.put(tweet.getId(), sentiment.getSentiment().getScore().doubleValue());
+			} catch (Exception e) {
+				// Exception handling is for pussies
+			}
+		}
+		
+		return map;
 	}
 
 }
