@@ -154,7 +154,7 @@ public class HomeController {
 			List<Status> posts = twitterCrawler.crawlPosts(requests.get("question6"));
 			Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForTweets(posts, languageService);
 			answers.add("{\"title\":\"Twiter vs News Sentiment\",\"content\":\"" + 
-					"<p>News: " + service.getNumberSentimentAnalysisOfNews(requests.get("question6"),"Company")+ 
+					"<p>News: " + service.getNumberSentimentAnalysisOfNews(requests.get("question6"),"Company","1")+ 
 					"</p><p>Twiter:"+avgSentimentValue.toString()+"</p>\"}");
 		}
 		if(requests.containsKey("products")){

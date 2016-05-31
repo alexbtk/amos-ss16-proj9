@@ -211,7 +211,7 @@ public class AlchemyImpl implements IAlchemy{
 	 * @return list of news
 	 */
 	public String getSentimentAnalysisOfNews(String name, String entity)throws BadRequestException{
-		Documents docs = alchemyNews.getSentimentAnalysisOfNews(name,entity);
+		Documents docs = alchemyNews.getSentimentAnalysisOfNews(name,entity,"5");
 		String positive = "", negative = "";
 		Integer total = 0, poz = 0, neg = 0;
 		if(docs != null && docs.getDocuments() != null)
@@ -242,8 +242,9 @@ public class AlchemyImpl implements IAlchemy{
 	 * @param entity
 	 * @return list of news
 	 */
-	public double getNumberSentimentAnalysisOfNews(String name, String entity)throws BadRequestException{
-		Documents docs = alchemyNews.getSentimentAnalysisOfNews(name,entity);
+	public double getNumberSentimentAnalysisOfNews(String name, String entity, String days)throws BadRequestException{
+		Documents docs = alchemyNews.getSentimentAnalysisOfNews(name,entity,days);
+		System.out.println(docs);
 		if(docs == null || docs.getDocuments() == null) return 0;
 		String positive = "", negative = "";
 		Integer total = 0, poz = 0, neg = 0;
@@ -273,7 +274,7 @@ public class AlchemyImpl implements IAlchemy{
 		products.add(name);
 		Map<String, String> relatedproduct = new HashMap<String, String>();
 		for(String product : products){
-			relatedproduct.put(product, String.valueOf(getNumberSentimentAnalysisOfNews(product,"O[Product^Technology^OperatingSystem^Facility^FieldTerminology]")));
+			relatedproduct.put(product, String.valueOf(getNumberSentimentAnalysisOfNews(product,"O[Product^Technology^OperatingSystem^Facility^FieldTerminology]","5")));
 		}
 		return relatedproduct;
 	}

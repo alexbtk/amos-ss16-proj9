@@ -72,14 +72,17 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		  return list;
 	}
 	
+
+	
 	/**
 	 * Get news that have information about company and get the sentiment analysis
 	 * 
 	 * @param companyName - company name
 	 * @param entity - entity(company,product)
+	 * @param days - interval of time
 	 * @return Documents that have information about news
 	 */
-	public  Documents getSentimentAnalysisOfNews(String companyName, String entity) throws BadRequestException{
+	public  Documents getSentimentAnalysisOfNews(String companyName, String entity, String days) throws BadRequestException{
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		String[] fields =
@@ -87,9 +90,12 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		          "enriched.url.enrichedTitle.docSentiment","q.enriched.url.enrichedTitle.entities.entity.text",
 		          "q.enriched.url.entities.entity.text","q.enriched.url.entities.entity.type",
 		          "q.enriched.url.enrichedTitle.entities.entity.type",
+		          "q.enriched.url.relations.relation.location",
+		          "q.enriched.url.enrichedTitle.relations.relation.location.entities.entity.disambiguated.geo",
+		          "q.enriched.url.enrichedTitle.relations.relation.location",
 		          "q.enriched.url.enrichedTitle.taxonomy"};
 		params.put(AlchemyDataNews.RETURN, StringUtils.join(fields, ","));
-		params.put(AlchemyDataNews.START, "now-5d");
+		params.put(AlchemyDataNews.START, "now-"+days+"d");
 		params.put(AlchemyDataNews.END, "now");
 		params.put(AlchemyDataNews.COUNT, 20);
 		params.put("q.enriched.url.title","["+companyName+"]");
@@ -100,6 +106,33 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		//q.enriched.url.entities.entity = |text=Ipad,type=O[Technology^Product]|
 	
 		DocumentsResult result =  service.getNewsDocuments(params);
+		return result.getDocuments();
+	}
+	
+	public Documents getSentimentAnalysisOfNewsByRegion(String name, String entity) throws BadRequestException{
+		Map<String, Object> params = new HashMap<String, Object>();
+
+		String[] fields =
+		      new String[] {//"enriched.url.title", "enriched.url.url",
+		          //"enriched.url.enrichedTitle.docSentiment",
+		         // "q.enriched.url.enrichedTitle.entities.entity.text",
+		          "enriched.url.title"};
+		params.put(AlchemyDataNews.RETURN, "enriched.url.title,enriched.url.entities");
+		params.put(AlchemyDataNews.START, "now-30d");
+		params.put(AlchemyDataNews.END, "now");
+		//params.put(AlchemyDataNews.COUNT, 20);
+		params.put("q.enriched.url.title","Apple");
+		//params.put("q.enriched.url.enrichedTitle.entities.entity.text", "O["+name.trim().replace(" ", "^")+"^"+name+"]");
+		//params.put("q.enriched.url.enrichedTitle.entities.entity.type", entity);
+		//params.put("q.enriched.url.entities.entity.type", "O[City^Country]");
+		
+		//get company/product taxonomy
+		//q.enriched.url.enrichedTitle.taxonomy.taxonomy_.label=technology+and+computing
+		//q.enriched.url.entities.entity = |text=Ipad,type=O[Technology^Product]|
+	
+		DocumentsResult result =  service.getNewsDocuments(params);//.getDocuments().getDocuments().get(0).getSource().getEnriched().getArticle();
+		//http://gateway-a.watsonplatform.net/calls/data/GetNews?apikey=593ca91c29ecc4b14b7c4fa5f9f36164ac4abe6f&
+		//outputMode=json&start=now-30d&end=now&q.enriched.url.title=Apple&return=q.enriched.url.entities
 		return result.getDocuments();
 	}
 	

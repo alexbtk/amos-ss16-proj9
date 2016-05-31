@@ -23,6 +23,6 @@ public interface IAlchemy {
 	public String getCompetitorsProducts(String companyName)throws BadRequestException;
 	public boolean sameCategory(String pr1, String pr2);
 	public Map<String, String> getCompetitorsProductSentiment(String name,String companyResource);
-	public double getNumberSentimentAnalysisOfNews(String name, String entity)throws BadRequestException;
+	public double getNumberSentimentAnalysisOfNews(String name, String entity,String days)throws BadRequestException;
 	public void setAlchemyConceptsImpl(String username, String password);
 }
