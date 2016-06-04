@@ -21,7 +21,7 @@ public class Demo {
 			System.out.println("Main industry: " + service.getCompanyMainIndustry("Apple"));
 			System.out.println("Main product: " + service.getCompanyMainProduct("Apple"));
 			System.out.println("Possible competitors: " + service.getPossibleCompetitors("Apple"));
-			System.out.println("News sentiment: " + service.getSentimentAnalysisOfNews("Apple","Company"));
+			System.out.println("News sentiment: " + service.getSentimentAnalysisOfNews("Apple","Company", "now-5d", "now", 20));
 			System.out.println("Competitors Sentiment: Iphone-" + service.getCompetitorsProductSentiment("IPhone","<http://dbpedia.org/resource/Apple_Inc.>"));
 			
 		} catch(BadRequestException e){

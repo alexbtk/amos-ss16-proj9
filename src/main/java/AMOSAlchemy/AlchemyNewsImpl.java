@@ -82,7 +82,7 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 	 * @param days - interval of time
 	 * @return Documents that have information about news
 	 */
-	public  Documents getSentimentAnalysisOfNews(String companyName, String entity, String days) throws BadRequestException{
+	public  Documents getSentimentAnalysisOfNews(String companyName, String entity, String startTime, String endTime, int count) throws BadRequestException{
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		String[] fields =
@@ -95,9 +95,9 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		          "q.enriched.url.enrichedTitle.relations.relation.location",
 		          "q.enriched.url.enrichedTitle.taxonomy"};
 		params.put(AlchemyDataNews.RETURN, StringUtils.join(fields, ","));
-		params.put(AlchemyDataNews.START, "now-"+days+"d");
-		params.put(AlchemyDataNews.END, "now");
-		params.put(AlchemyDataNews.COUNT, 20);
+		params.put(AlchemyDataNews.START, startTime);
+		params.put(AlchemyDataNews.END, endTime);
+		params.put(AlchemyDataNews.COUNT, count);
 		params.put("q.enriched.url.title","["+companyName+"]");
 		params.put("q.enriched.url.enrichedTitle.entities.entity.text", "O["+companyName.trim().replace(" ", "^")+"^"+companyName+"]");
 		params.put("q.enriched.url.enrichedTitle.entities.entity.type", entity);

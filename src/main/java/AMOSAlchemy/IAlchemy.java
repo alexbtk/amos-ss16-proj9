@@ -18,11 +18,12 @@ public interface IAlchemy {
 	public String getCompanyMainIndustry(String companyName) throws BadRequestException;
 	public String getCompanyMainProduct(String companyName) throws BadRequestException;
 	public String getPossibleCompetitors(String companyName) throws BadRequestException;
-	public String getSentimentAnalysisOfNews(String companyName, String entity)throws BadRequestException;
+	public String getSentimentAnalysisOfNews(String companyName, String entity, String startTime, String endTime, int limit)throws BadRequestException;
 	public ArrayList<String> getPossibleProducts(String companyName) throws BadRequestException;
 	public String getCompetitorsProducts(String companyName)throws BadRequestException;
 	public boolean sameCategory(String pr1, String pr2);
 	public Map<String, String> getCompetitorsProductSentiment(String name,String companyResource);
-	public double getNumberSentimentAnalysisOfNews(String name, String entity,String days)throws BadRequestException;
+	public double getNumberSentimentAnalysisOfNews(String name, String entity, String startTime, String endTime, int limit)throws BadRequestException;
 	public void setAlchemyConceptsImpl(String username, String password);
+	public double getAvgNewsSentiment(String companyName, String entity, String startTime, String endTime, int limit)throws BadRequestException;
 }

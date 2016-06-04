@@ -77,7 +77,8 @@
 	crossorigin="anonymous"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/bootstrap-slider.js"></script>
-
+<script src="${pageContext.request.contextPath}/js/d3.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/graphs.js"></script>
 <script src="${pageContext.request.contextPath}/js/AMOSAlchemy.js"></script>
 <script src="${pageContext.request.contextPath}/js/script.js"></script>
 
@@ -141,10 +142,15 @@
 		<div id="content">
 			<form method="GET" action="process" id="principalForm">
 				<fieldset>
-					<legend>Company Profile</legend>
-					<label for="companyInput">Company Name</label> <br /> <input
+				<legend>Company Name</legend> <br /> <input
 						required id="companyInput" type="text" name="companyName"
-						maxlength="100" required><br /> <input type="checkbox"
+						maxlength="100" required><br /> 
+					<legend>Timeframe</legend>
+					  <input id="oneWeekButton" type="radio" name="timeframe" value="oneWeek" checked> 1 Week<br/>
+					  <input id="twoWeekButton" type="radio" name="timeframe" value="twoWeek"> 2 Week<br />
+					  <input id="fourWeekButton" type="radio" name="timeframe" value="fourWeek"> 4 Week <br />
+					<legend>Company Profile</legend>
+					<input type="checkbox"
 						name="question1" id="question1" /> <label for="question1">What
 						is the company industry(Alchemy/Home page/Taxonomies)?</label> <br /> <input
 						type="checkbox" name="question2" id="question2" /> <label
@@ -168,13 +174,17 @@
 						name="question5d" id="question5d" /> <label for="question5d">What
 						are the company competitors products Sentiment(DBpedia/Category)?</label><br />
 					<input type="checkbox" name="question6" id="question6" /> <label
-						for="question6">Twiter vs News Sentiment?</label><br /> <input
+						for="question6">Twiter vs News Sentiment?</label><br /> 
+						<input type="checkbox" name="avgNewsSentimentGraph" id="avgNewsSentimentGraphCheckbox" /> <label for="avgNewsSentimentGraphCheckbox">Average News Sentiment Graph</label><br />
+						<input
 						type="submit" value="Ask" id="submitQuestion" /> <input
 						type="submit" value="Advanced options" id="submitAdvancedQuestion" />
+						
 				</fieldset>
 
 			</form>
-
+			<input type="submit" value="Dummy Graph" id="dummyGraphSubmit" />
+			<div id="avgSentimentGraph"></div>
 			<div id="displayAnswers"></div>
 			<!-- ui-dialog -->
 			<div id="dialog" title="Advanced Options"></div>

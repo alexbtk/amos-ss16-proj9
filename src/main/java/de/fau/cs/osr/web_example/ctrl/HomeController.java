@@ -149,13 +149,13 @@ public class HomeController {
 		}
 		if(requests.containsKey("question4")){
 			answers.add("{\"title\":\"News Sentiment(Alchemy)\",\"content\":\"" + 
-					(service.getSentimentAnalysisOfNews(requests.get("question4"),"Company")).replace("\n", "<br />")+"\"}");
+					(service.getSentimentAnalysisOfNews(requests.get("question4"),"Company", "now-5d", "now", 20)).replace("\n", "<br />")+"\"}");
 		}
 		if(requests.containsKey("question6")){
 			List<Status> posts = twitterCrawler.crawlPosts(requests.get("question6"));
 			Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForTweets(posts, languageService);
 			answers.add("{\"title\":\"Twiter vs News Sentiment\",\"content\":\"" + 
-					"<p>News: " + service.getNumberSentimentAnalysisOfNews(requests.get("question6"),"Company","1")+ 
+					"<p>News: " + service.getNumberSentimentAnalysisOfNews(requests.get("question6"),"Company", "now-1d", "now", 20)+ 
 					"</p><p>Twiter:"+avgSentimentValue.toString()+"</p>\"}");
 		}
 		if(requests.containsKey("products")){
@@ -184,6 +184,22 @@ public class HomeController {
 		        it.remove(); 
 		        answers.add("{\"name\":\""+pair.getKey()+"\",\"resource\":\"" + pair.getValue()+"\"}");
 		    }
+		}
+		if(requests.containsKey("avgNewsSentimentGraph")){
+			String resultString = "{\"title\":\"News Sentiment Graph\",\"values\": [";
+			int days = Integer.parseInt(requests.get("avgNewsSentimentGraphWeeks"));
+			if(days > 0){
+				double avgSentiment = this.service.getAvgNewsSentiment(requests.get("avgNewsSentimentGraph"), "Company", "now-7d", "now", 5);
+				resultString += avgSentiment;
+				
+				for(int i = 1; i < days; i++){
+					avgSentiment = this.service.getAvgNewsSentiment(requests.get("avgNewsSentimentGraph"), "Company", "now-" + (7*i) + "d", "now-" + (7*(i-1)) + "d", 5);
+					resultString += ", " + avgSentiment;
+				}
+				
+				resultString += "]}";
+				answers.add(resultString);
+			}
 		}
 		
 		return "["+StringUtils.join(answers, ",")+"]";

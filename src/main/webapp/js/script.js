@@ -142,8 +142,23 @@ $(document).ready(function(){
 					div = $("<div id = 'tabs'></div>");
 					var ul = $("<ul></ul>");
 					for(var i=0; i < res.length; ++i){
-						ul.append($("<li></li>").append($("<a href='#tabs-"+i+"'></a>").append(res[i]['title'])));
-						div.append($("<div id='tabs-"+i+"'></div>").append(res[i]['content']));
+						if('values' in res[i]){
+							ul.append($("<li></li>").append($("<a href='#tabs-"+i+"'></a>").append(res[i]['title'])));
+							var values = "";
+							var data = [];
+							var i = 0;
+							res[i]['values'].forEach(function(entry) {
+							    values = values + entry + " ";
+							    data.push({"time" : "now-"+(i*7)+"d", "value" : entry});
+							    i++;
+							});
+							div.append($("<div id='tabs-"+i+"'></div>"));
+							drawGraph(data, "#tabs-" + i);
+						}
+						else{
+							ul.append($("<li></li>").append($("<a href='#tabs-"+i+"'></a>").append(res[i]['title'])));
+							div.append($("<div id='tabs-"+i+"'></div>").append(res[i]['content']));
+						}
 					}
 					obj.html(div.prepend(ul));
 					$( "#tabs" ).tabs();
@@ -194,9 +209,26 @@ $(document).ready(function(){
 		$( "#principalForm input[type=checkbox]" ).each(function(){
 			if(this.checked){
 				params[$(this).attr('name')] = companyName;
-				ok = 0;			
+				
+				if($(this).attr('name') == "avgNewsSentimentGraph")
+					params["avgNewsSentimentGraphWeeks"] = "7";
+				ok = 0;
 			}
 		});
+		
+		if($("#oneWeekButton").prop("checked")){
+			params['timeframe'] = '1';
+		}
+		else if($("#twoWeekButton").prop("checked")){
+			params['timeframe'] = '2';
+		}
+		else if($("#fourWeekButton").prop("checked")){
+			params['timeframe'] = '4';
+		}
+		else{
+			params['timeframe'] = '1';
+		}
+		
 		if(ok == 1){
 			alert("Check a question!");
 			return false;
@@ -252,6 +284,17 @@ $(document).ready(function(){
 	//Instantiate a slider
 	var mySlider = new Slider("#twitterslider", {
 	    id: "twitterslider"
+	});
+	
+	$("#dummyGraphSubmit").click(function(){
+		var values = [-1.2, -1.4, 0.2, 0.4, -0.5, 0.8, 0.4];
+		var data = [];
+		var i = 0;
+		values.forEach(function(entry) {
+		    data.push({"time" : "now-"+(i*7)+"d", "value" : entry});
+		    i++;
+		});
+		drawGraph(data, "#avgSentimentGraph");
 	});
 		
 });

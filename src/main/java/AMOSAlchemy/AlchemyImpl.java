@@ -210,8 +210,8 @@ public class AlchemyImpl implements IAlchemy{
 	 * @param entity
 	 * @return list of news
 	 */
-	public String getSentimentAnalysisOfNews(String name, String entity)throws BadRequestException{
-		Documents docs = alchemyNews.getSentimentAnalysisOfNews(name,entity,"5");
+	public String getSentimentAnalysisOfNews(String name, String entity, String startTime, String endTime, int count)throws BadRequestException{
+		Documents docs = alchemyNews.getSentimentAnalysisOfNews(name, entity, startTime, endTime, count);
 		String positive = "", negative = "";
 		Integer total = 0, poz = 0, neg = 0;
 		if(docs != null && docs.getDocuments() != null)
@@ -242,8 +242,8 @@ public class AlchemyImpl implements IAlchemy{
 	 * @param entity
 	 * @return list of news
 	 */
-	public double getNumberSentimentAnalysisOfNews(String name, String entity, String days)throws BadRequestException{
-		Documents docs = alchemyNews.getSentimentAnalysisOfNews(name,entity,days);
+	public double getNumberSentimentAnalysisOfNews(String name, String entity, String startTime, String endTime, int count)throws BadRequestException{
+		Documents docs = alchemyNews.getSentimentAnalysisOfNews(name,entity,startTime, endTime, count);
 		System.out.println(docs);
 		if(docs == null || docs.getDocuments() == null) return 0;
 		String positive = "", negative = "";
@@ -274,9 +274,26 @@ public class AlchemyImpl implements IAlchemy{
 		products.add(name);
 		Map<String, String> relatedproduct = new HashMap<String, String>();
 		for(String product : products){
-			relatedproduct.put(product, String.valueOf(getNumberSentimentAnalysisOfNews(product,"O[Product^Technology^OperatingSystem^Facility^FieldTerminology]","5")));
+			relatedproduct.put(product, String.valueOf(getNumberSentimentAnalysisOfNews(product,"O[Product^Technology^OperatingSystem^Facility^FieldTerminology]","now-5d", "now", 20)));
 		}
 		return relatedproduct;
+	}
+	
+	@Override
+	public double getAvgNewsSentiment(String companyName, String entity, String startTime, String endTime, int limit)
+			throws BadRequestException {
+		Documents docs = alchemyNews.getSentimentAnalysisOfNews(companyName, entity, startTime, endTime, limit);
+		double avgSentiment = 0.0;
+		if(docs != null && docs.getDocuments() != null){
+			int numDocs = docs.getDocuments().size();
+			for(Document d : docs.getDocuments()){
+				double sentiment = d.getSource().getEnriched().getArticle().getEnrichedTitle().getSentiment().getScore().doubleValue();
+				//System.out.println(sentiment);
+				avgSentiment += sentiment;
+			}
+			avgSentiment = avgSentiment/(double)numDocs;
+		}
+		return avgSentiment;
 	}
 
 }
