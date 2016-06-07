@@ -1,3 +1,10 @@
+/*!
+*
+* AMOS-SS16-PROJ9
+*
+* Released under the AGPL license
+* Date: 2016-05-25
+*/
 $(document).ready(function(){
 	var tags = [];
 
@@ -194,6 +201,21 @@ $(document).ready(function(){
 					});
 				}else if(displayMode == "return"){
 					return res;
+				}else if(displayMode == "map"){
+					var places = [];
+					for(var i=0; i < res[0]['content'].length; ++i){
+						var entry = {};
+						entry['name'] = res[0]['content'][i]['name'];
+						var point = res[0]['content'][i]['point'];
+						var two = point.split("&");
+						entry['long'] = parseFloat(two[0]);
+						entry['lat'] = parseFloat(two[1]);
+						places.push(entry);
+					}
+					console.log(places);
+			
+					$( "#dialog" ).dialog( "option", "width", 500 ).dialog( "open" );
+					createMap('dialog',places);
 				}
 			});
 	}
@@ -261,6 +283,12 @@ $(document).ready(function(){
 		}
 		if(typeof params['question5a'] !== 'undefined'){
 			sentRequest({'products':companyName},"link","dialog");
+		}
+		if(typeof params['question7'] !== 'undefined'){
+			sentRequest({'question7':companyName},"map","dialog");
+		}
+		if(typeof params['question8'] !== 'undefined'){
+			getNewsRelation(companyName);
 		}
 		return false;
 	});

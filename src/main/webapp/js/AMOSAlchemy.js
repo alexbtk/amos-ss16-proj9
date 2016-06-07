@@ -14,7 +14,7 @@
 	 * @param functionCallback - function that will be called when the ajax is finished
 	 * @returns
 	 */
-	function AlchemyNewsQuery(params, functionCallback) {
+	function AlchemyNewsQuery(params, functionCallback,name) {
 	    var apiKey = params.apikey;
 		var query = "https://gateway-a.watsonplatform.net/calls/data/GetNews?"+ 	
 		"apikey="+apiKey+
@@ -25,7 +25,7 @@
 		"&return="+params.return;
 	    $.ajax({url: query, success: function(result){
 			console.log(result);
-			functionCallback(result);
+			functionCallback(result,name);
 	    }});
 	}
 
@@ -35,7 +35,7 @@
 	 * @param result - json with documents from Alchemy
 	 * @returns
 	 */
-	function processNewsSentimentByRegions(result) {
+	function processNewsSentimentByRegions(result,_p) {
 	    if(result['status'] == "OK"){
 	    	var regions = {};
 			var docs = result['result']['docs'];
@@ -75,5 +75,55 @@
 
 		AlchemyNewsQuery(params, processNewsSentimentByRegions);
 	}
+	
+	function processNewsRelation(result,name){
+		if(result['status'] == "OK"){
+	    	var actions = {};
+			var docs = result['result']['docs'];
+			var rel = $("<ul><ul/>");
+			for(var i in docs){
+				var relations = docs[i]['source']['enriched']['url']['enrichedTitle']['relations'];
+				for(var j in relations){
+					if(relations[j]['subject']['text'] == name){
+						if(typeof actions[relations[j]['action']['verb']['text']] == 'undefined')
+							actions[relations[j]['action']['verb']['text']] = [{
+								"action":relations[j]['action']['text'],
+								"object":relations[j]['object']['text'],
+							}];
+						else
+						actions[relations[j]['action']['verb']['text']].push({
+								"action":relations[j]['action']['text'],
+								"object":relations[j]['object']['text'],
+							});
+					}
+				}
+			}
+			$.each(actions,function(key,val){
+				var ul = $("<ul></ul>");
+				for(var i in val)
+					ul.append($("<li></li>").text(val[i]['action']+" "+val[i]['object']));
+				rel.append($("<li></li>").html(ul));
+			});
+			console.log(actions);
+			$( "#dialog" ).html(rel).dialog( "open" );
+		}
+	}
+
+    function getNewsRelation(name){
+		var params = {
+			'name':name,
+			'return':'q.enriched.url.enrichedTitle.relations,q.enriched.url.relations',
+			'start':'now-3d',
+			'end':'now',
+			'criteria':[
+				'q.enriched.url.entities.entity.type=Country',
+				'q.enriched.url.enrichedTitle.relations.relation.subject.entities.entity.text='+name,
+				'q.enriched.url.enrichedTitle.relations.relation.subject.entities.entity.type=Company'],
+			'apikey': getCookie("apiKey")
+		};
+
+		AlchemyNewsQuery(params, processNewsRelation, name);
+	}
+    
 	
 
