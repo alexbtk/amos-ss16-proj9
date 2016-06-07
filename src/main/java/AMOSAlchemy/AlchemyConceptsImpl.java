@@ -19,10 +19,13 @@ import com.ibm.watson.developer_cloud.concept_insights.v2.model.Annotation;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.Annotations;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.ConceptMetadata;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.Graph;
+import com.ibm.watson.developer_cloud.concept_insights.v2.model.Part;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.RequestedFields;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.ScoredConcept;
 import com.ibm.watson.developer_cloud.service.BadRequestException;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.Concepts;
+import com.ibm.watson.developer_cloud.concept_insights.v2.model.Corpus;
+import com.ibm.watson.developer_cloud.concept_insights.v2.model.Document;
 /**
  * Class to use ConceptInsights
  *
@@ -59,6 +62,8 @@ public class AlchemyConceptsImpl {
 		return null;
 	}
 	
+	
+	
 	/**
 	 * Get related products using GraphRelatedConcepts
 	 * 
@@ -88,6 +93,32 @@ public class AlchemyConceptsImpl {
 		System.out.println(related_concepts);
 	    
 		return category;
+	}
+	
+	/**
+	 * Gets related Documents concerning given abstract (description)
+	 * 
+	 * @param abstractText - abstract text to be inputted
+	 * @return related Concepts
+	 */
+	public Concepts getRelatedDocs(String abstractText){
+		
+		Document document = new Document();
+		List<Part> docparts = new ArrayList<Part>();
+		Part part = new Part();
+		part.setData(abstractText);
+		docparts.add(part);
+		
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put(ConceptInsights.LIMIT, 10);
+		params.put(ConceptInsights.LEVEL, 1);
+		params.put(ConceptInsights.CONCEPT_FIELDS, "{}");
+		
+		document.setId("test");
+		
+		
+		return service.getDocumentRelatedConcepts(document, params);
 	}
 	
 
