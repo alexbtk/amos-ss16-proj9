@@ -10,6 +10,7 @@ package AMOSAlchemy;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.ibm.watson.developer_cloud.concept_insights.v2.model.Concepts;
 import com.ibm.watson.developer_cloud.service.BadRequestException;
 
 public interface IAlchemy {
