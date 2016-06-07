@@ -36,15 +36,15 @@
 
 <!-- Google maps -->
 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-    <script src="http://js.api.here.com/v3/3.0/mapsjs-core.js"
+    <script src="https://js.api.here.com/v3/3.0/mapsjs-core.js"
       type="text/javascript" charset="utf-8"></script>
-    <script src="http://js.api.here.com/v3/3.0/mapsjs-service.js"
+    <script src="https://js.api.here.com/v3/3.0/mapsjs-service.js"
       type="text/javascript" charset="utf-8"></script>
 
-    <script src="http://js.api.here.com/v3/3.0/mapsjs-ui.js" 
+    <script src="https://js.api.here.com/v3/3.0/mapsjs-ui.js" 
       type="text/javascript" charset="utf-8"></script>
     <link rel="stylesheet" type="text/css" 
-      href="http://js.api.here.com/v3/3.0/mapsjs-ui.css" />
+      href="https://js.api.here.com/v3/3.0/mapsjs-ui.css" />
       
 
 <!-- Latest compiled and minified Bootstrap CSS -->
