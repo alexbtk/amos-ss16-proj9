@@ -144,8 +144,8 @@ public class HomeController {
 					StringUtils.join(DBpedia.getCompanyCompetitorsName(requests.get("question3a")), ",")+"\"}");
 		}
 		if(requests.containsKey("question3b")){
-			answers.add("{\"title\":\"Company competitors(Alchemy)\",\"content\":\"" + 
-					service.getPossibleCompetitors(requests.get("question3b"))+"\"}");
+			answers.add("{\"title\":\"Company competitors(Alchemy)\",\"content\":" + 
+					service.getPossibleCompetitors(requests.get("question3b"))+"}");
 		}
 		if(requests.containsKey("question4")){
 			answers.add("{\"title\":\"News Sentiment(Alchemy)\",\"content\":\"" + 
