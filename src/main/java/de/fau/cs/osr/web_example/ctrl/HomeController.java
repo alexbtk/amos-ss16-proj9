@@ -132,7 +132,7 @@ public class HomeController {
 		this.service = fac.createAlchemy(apiKey);
 		languageService = fac.createAlchemyLanguage(apiKey);
 		twitterCrawler = new TwitterCrawler(consumerKey, consumerSecret, token, tokenSecret);
-		int weeks = Integer.parseInt(requests.get("timeframe"));
+		int weeks = 1;
 		List answers = new ArrayList();
 		//Todo - catch error: incorrect companyName, noResult
 		if(requests.containsKey("question1")){
@@ -148,6 +148,7 @@ public class HomeController {
 					service.getPossibleCompetitors(requests.get("question3b"))+"\"}");
 		}
 		if(requests.containsKey("question4")){
+			weeks = Integer.parseInt(requests.get("timeframe"));
 			answers.add("{\"title\":\"News Sentiment(Alchemy)\",\"content\":\"" + 
 					(service.getSentimentAnalysisOfNews(requests.get("question4"),"Company", "now-" + (7*weeks) + "d", "now", 20)).replace("\n", "<br />")+"\"}");
 		}
