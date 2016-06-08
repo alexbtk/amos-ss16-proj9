@@ -158,6 +158,18 @@ public class HomeController {
 					"<p>News: " + service.getNumberSentimentAnalysisOfNews(requests.get("question6"),"Company", "now-1d", "now", 20)+ 
 					"</p><p>Twiter:"+avgSentimentValue.toString()+"</p>\"}");
 		}
+		if(requests.containsKey("question7")){
+			Map map = DBpedia.getCompanyLocationCoordonates(requests.get("question7"));
+			Iterator it = map.entrySet().iterator();
+			List location = new ArrayList<String>();
+		    while (it.hasNext()) {
+		        Map.Entry pair = (Map.Entry)it.next();
+		        it.remove(); 
+		        location.add("{\"name\":\""+pair.getKey()+"\",\"point\":\"" + pair.getValue()+"\"}");
+		    }
+			answers.add("{\"title\":\"Company Location\",\"content\":[" + 
+					StringUtils.join(location, ",")+"]}");
+		}
 		if(requests.containsKey("products")){
 			List products = new ArrayList();
 			List<String> DBproducts = DBpedia.getCompanyProducts(requests.get("products"));

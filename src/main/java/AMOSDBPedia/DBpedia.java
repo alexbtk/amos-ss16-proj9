@@ -880,5 +880,61 @@ public class DBpedia {
 		return null;
 	}
 	
+	/**
+	 * Get coordonates of a company
+	 * 
+	 * @param companyName - the name os a company wirtten as in DBpedia references
+	 * 
+	 * @return A map with key - location name, and with value lat-long
+	 */
+	public static Map getCompanyLocationCoordonates(String companyName){
+		List<String> resources = getResourceByName(companyName);
+		if(resources == null){
+			resources = getResourceByLabel(companyName);
+		}else{
+			resources.addAll(getResourceByLabel(companyName));
+		}
+		if(resources.size() == 0)
+			return null;
+		System.out.println(resources.get(0));
+		
+		HashMap<String,String> map = new HashMap<String,String>();
+		
+		String queryString =  "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> " +
+		"PREFIX dbo: <http://dbpedia.org/ontology/> "+
+		"PREFIX prop: <http://dbpedia.org/property/> "+
+		"PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> "+
+		"SELECT  ?lat ?long ?name " +
+        "WHERE { { <"+resources.get(0)+"> prop:location ?city .} "+
+		"UNION { <"+resources.get(0)+"> dbo:locationCity ?city . } "+
+		//" ?city  <http://www.georss.org/georss/point> ?point. "+
+        " ?city rdfs:label ?name. "+
+		"?city geo:long ?long."+
+		" ?city geo:lat ?lat. "+
+		"FILTER(lang(?name) = 'en')"+
+       "}";
+		
+		
+		Query query = QueryFactory.create(queryString);
+		
+		try ( QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query) ) {
+			// Set the DBpedia specific timeout.
+            ((QueryEngineHTTP)qexec).addParam("timeout", "10000") ;
+
+            // Execute.
+            ResultSet rs = qexec.execSelect();
+            while(rs.hasNext()){
+            	
+            	QuerySolution qs = rs.next();
+            	//check for uniqueness
+            	map.put(qs.getLiteral("name").getString(), qs.getLiteral("long").getString()+"&"+qs.getLiteral("lat").getString());
+            }
+		} catch (Exception e) {
+            e.printStackTrace();
+        }
+		
+		return map;
+	}
+	
 	
 }

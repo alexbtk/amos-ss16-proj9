@@ -1,3 +1,10 @@
+<!-- 
+*
+* AMOS-SS16-PROJ9
+*
+* Released under the AGPL license
+* Date: 2016-05-25
+-->
 <!DOCTYPE HTML>
 <!--
 
@@ -27,9 +34,18 @@
 <meta name="description" content="The Project 9">
 <meta name="author" content="Project9">
 
-<!-- <link rel="stylesheet" href="css/mystyle.css?v=1.0">
-	<script type="text/javascript" src="js/jquery-2.2.3.min.js"></script>
-    -->
+<!-- Google maps -->
+<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <script src="https://js.api.here.com/v3/3.0/mapsjs-core.js"
+      type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.0/mapsjs-service.js"
+      type="text/javascript" charset="utf-8"></script>
+
+    <script src="https://js.api.here.com/v3/3.0/mapsjs-ui.js" 
+      type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" 
+      href="https://js.api.here.com/v3/3.0/mapsjs-ui.css" />
+      
 
 <!-- Latest compiled and minified Bootstrap CSS -->
 <link rel="stylesheet"
@@ -91,6 +107,9 @@
 </head>
 
 <body>
+
+
+
 	<div class="container">
 		<div id="login">
 			<legend>Login</legend>
@@ -179,8 +198,12 @@
 						products(DBpedia/Category)?</label><br /> <input type="checkbox"
 						name="question5d" id="question5d" /> <label for="question5d">What
 						are the company competitors products Sentiment(DBpedia/Category)?</label><br />
-					<input type="checkbox" name="question6" id="question6" /> <label
+					    <input type="checkbox" name="question6" id="question6" /> <label
 						for="question6">Twiter vs News Sentiment?</label><br /> 
+						<input type="checkbox" name="question7" id="question7" /> <label
+						for="question7">Company Locations?</label><br /> 
+						<input type="checkbox" name="question8" id="question8" /> <label
+						for="question8">Company Relation?</label><br /> 						
 						<input type="checkbox" name="avgNewsSentimentGraph" id="avgNewsSentimentGraphCheckbox" /> <label for="avgNewsSentimentGraphCheckbox">Average News Sentiment Graph</label><br />
 						<input
 						type="submit" value="Ask" id="submitQuestion" /> <input
