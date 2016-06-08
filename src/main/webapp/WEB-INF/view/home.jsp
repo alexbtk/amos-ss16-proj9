@@ -139,11 +139,17 @@
 				<button id="loginButton">Login</button>
 			</fieldset>
 		</div>
+		<div id="welcome">
+			<h1>Welcome to Cognitive Services!</h1>
+			<h2>Please enter a company name:</h2>
+			<input id="welcomeCompanyInput" class="companyInput" type="text" name="companyName" maxlength="100"/> 
+			<button id="welcomeButton">Go!</button>
+		</div>
 		<div id="content">
 			<form method="GET" action="process" id="principalForm">
 				<fieldset>
 				<legend>Company Name</legend> <br /> <input
-						required id="companyInput" type="text" name="companyName"
+						required id="dashboardCompanyInput" class="companyInput" type="text" name="companyName"
 						maxlength="100" required><br /> 
 					<legend>Timeframe</legend>
 					  <input id="oneWeekButton" type="radio" name="timeframe" value="oneWeek" checked> 1 Week<br/>

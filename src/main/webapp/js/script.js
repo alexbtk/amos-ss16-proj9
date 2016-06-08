@@ -2,9 +2,11 @@ $(document).ready(function(){
 	var tags = [];
 
 	$( "#login" ).hide();
+	$( "#welcome" ).hide();
 	
 	if(getCookie("apiKey") == ""){
 		$( "#content" ).hide();
+		$( "#welcome" ).hide();
 		$( "#login" ).show();
 	}
 		
@@ -30,6 +32,13 @@ $(document).ready(function(){
 		
 		//hide login show container
 		$( "#login" ).fadeOut(500, function(){
+			$( "#welcome" ).fadeIn(500);
+		});
+	});
+	
+	$( "#welcomeButton" ).on("click", function(){
+		$( "#dashboardCompanyInput" ).val($( "#welcomeCompanyInput" ).val());
+		$( "#welcome" ).fadeOut(500, function(){
 			$( "#content" ).fadeIn(500);
 		});
 	});
@@ -57,28 +66,30 @@ $(document).ready(function(){
 			$( "#login" ).fadeIn(500);
 		});
 	});
-	$( "#companyInput" ).autocomplete({
+	$( ".companyInput" ).autocomplete({
       	source: function(request, response) {
         			response(tags);
 				}
 	});
 
-	$( "#companyInput" ).keyup(function() {
-		var name = $( "#companyInput" ).val();
+	$( ".companyInput" ).keyup(function() {
+		var id = "#" + $(this).attr('id');
+		var name = $(id).val();
 		if(name.length > 2){
+			
   			var param = {};
-  			param["Text"] = $( "#companyInput" ).val();
+  			param["Text"] = $(id).val();
   			$.post( "getCompanies",  param).done(function(data){
   				var res = JSON.parse(data);
   				if(res["companies"].length > 0){
   					//alert(res["companies"][1]);
   					tags = res["companies"];
-  					$('#companyInput').autocomplete("option", { source: tags });
-  					$('#companyInput').autocomplete("search", name);
+  					$(id).autocomplete("option", { source: tags });
+  					$(id).autocomplete("search", name);
   				}else{
   					tags = [];
-  					$('#companyInput').autocomplete("option", { source: tags });
-  					$('#companyInput').autocomplete("search", name);
+  					$(id).autocomplete("option", { source: tags });
+  					$(id).autocomplete("search", name);
   				}
   			});
   		}
@@ -153,14 +164,15 @@ $(document).ready(function(){
 							    i++;
 							});
 							div.append($("<div id='tabs-"+i+"'></div>"));
+							obj.html(div.prepend(ul));
 							drawGraph(data, "#tabs-" + i);
 						}
 						else{
 							ul.append($("<li></li>").append($("<a href='#tabs-"+i+"'></a>").append(res[i]['title'])));
 							div.append($("<div id='tabs-"+i+"'></div>").append(res[i]['content']));
+							obj.html(div.prepend(ul));
 						}
 					}
-					obj.html(div.prepend(ul));
 					$( "#tabs" ).tabs();
 				}else if(displayMode == "simple"){
 					div = $("<div id = 'simple'></div>");
@@ -199,7 +211,7 @@ $(document).ready(function(){
 	}
 	
 	$("#submitQuestion").click(function(){
-		companyName = $( "#companyInput" ).val();
+		companyName = $( "#dashboardCompanyInput" ).val();
 		if(companyName == ""){
 			alert("Write company Name");
 			return false;
@@ -239,7 +251,7 @@ $(document).ready(function(){
 	
 	$("#submitAdvancedQuestion").click(function(){
 		
-		companyName = $( "#companyInput" ).val();
+		companyName = $( "#dashboardCompanyInput" ).val();
 		if(companyName == ""){
 			alert("Write company Name");
 			return false;

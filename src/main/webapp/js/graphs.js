@@ -23,7 +23,6 @@ function drawGraph(data, targetDiv){
 	yMap = function(d) { return yScale(yValue(d));}, // data -> display
 	yAxis = d3.svg.axis().scale(yScale).orient("left");
 
-	alert("appending svg to " + targetDiv);
 //	add the graph canvas to the body of the webpage
 	var svg = d3.select(targetDiv).append("svg")
 	.attr("width", width + margin.left + margin.right)
