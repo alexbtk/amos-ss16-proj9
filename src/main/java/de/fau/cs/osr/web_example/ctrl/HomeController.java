@@ -224,4 +224,10 @@ public class HomeController {
 		return "home";
 	}
 	
+	@RequestMapping(value="/template")
+	public String loadAdminLteTemplate(Model m) {
+		
+		return "template";
+	}
+	
 }
