@@ -242,6 +242,13 @@ public class HomeController {
 		
 		return "template";
 	}
+
+	@RequestMapping(value="/demo")
+	public String loadAdminLteDemo(Model m) {
+		
+		return "index";
+
+	}
 	
 	@RequestMapping(value="/locationmap")
 	public String loadLocationMapPage(Model m) {
