@@ -17,14 +17,14 @@
     function displayIndustryCompetitors(host,colapseB,industryName,companiesName){
 	    colapseB.find(".box-title").text(industryName);
 	    for(var i in companiesName)
-	    	colapseB.find(".box-body").append("checkbox1:"+companiesName[i]+'<br/>');    
+	      	colapseB.find(".box-body").append('<input type="checkbox" name="'+companiesName[i]+'" value="'+companiesName[i]+'">'+companiesName[i]+'<br/>');    
 	    host.append(colapseB);
 	}
 
-	var names = ['ion','balon'];
+	var names = ['Apple','Samsung'];
 
-	displayIndustryCompetitors(host,colapseB.clone(),"industry name",names);
-	displayIndustryCompetitors(host,colapseB.clone(),"industry name1",names);
+	displayIndustryCompetitors(host,colapseB.clone(),"Smartphones",names);
+	displayIndustryCompetitors(host,colapseB.clone(),"Hardware",names);
 
 
 });
