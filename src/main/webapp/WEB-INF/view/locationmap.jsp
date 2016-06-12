@@ -435,10 +435,10 @@
 								action="getCompanyLocationMap">
 								<div class="box-body">
 									<div class="form-group">
-										<label for="inputCompanyName" class="col-sm-2 control-label">Companyname</label>
+										<label for="companyName" class="col-sm-2 control-label">Companyname</label>
 
 										<div class="col-sm-10">
-											<input type="text" class="form-control" id="inputCompanyName"
+											<input class="form-control" id="companyName" type="text" name="companyName"
 												placeholder="Apple">
 										</div>
 									</div>
@@ -678,7 +678,38 @@
 	<script>
 		$(function() {
 			$('#world-map').vectorMap({
-				map : 'world_mill'
+				map: 'world_mill',
+			    scaleColors: ['#C8EEFF', '#0071A4'],
+			    normalizeFunction: 'polynomial',
+			    hoverOpacity: 0.7,
+			    hoverColor: false,
+			    markerStyle: {
+			      initial: {
+			        fill: '#F8E23B',
+			        stroke: '#383f47'
+			      }
+			    },
+			    backgroundColor: '#383f47',
+			    markers: [
+<c:choose>
+<c:when test="${fn:length(locations) > 1}">
+	<c:forEach begin="0" end="${fn:length(locations) - 1}"
+		var="index">
+		<c:choose>
+			<c:when
+				test="${index == (fn:length(locations) - 1)}">
+				${locations[index].toString()}
+			</c:when>
+			<c:otherwise>
+			${locations[index].toString()},
+			</c:otherwise>
+		</c:choose>
+	</c:forEach>
+</c:when>
+<c:otherwise>
+</c:otherwise>
+</c:choose>
+			    ]
 			});
 		});
 	</script>

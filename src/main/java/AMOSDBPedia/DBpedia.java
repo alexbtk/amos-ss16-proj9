@@ -927,7 +927,7 @@ public class DBpedia {
             	
             	QuerySolution qs = rs.next();
             	//check for uniqueness
-            	map.put(qs.getLiteral("name").getString(), qs.getLiteral("long").getString()+"&"+qs.getLiteral("lat").getString());
+            	map.put(qs.getLiteral("name").getString(), qs.getLiteral("lat").getString()+", "+qs.getLiteral("long").getString());
             }
 		} catch (Exception e) {
             e.printStackTrace();

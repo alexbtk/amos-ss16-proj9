@@ -219,15 +219,18 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/getCompanyLocationMap", method = RequestMethod.POST)
-	public String getLocationMap(@RequestParam("Text") String companyName, Model m) {
+	public String getLocationMap(@RequestParam String companyName, Model m) {
 		Map map = DBpedia.getCompanyLocationCoordonates(companyName);
 		Iterator it = map.entrySet().iterator();
 		List location = new ArrayList<String>();
 	    while (it.hasNext()) {
 	        Map.Entry pair = (Map.Entry)it.next();
 	        it.remove(); 
-	        location.add("{\"name\":\""+pair.getKey()+"\",\"point\":\"" + pair.getValue()+"\"}");
+	        location.add("{latLng: [" + pair.getValue() + "], name: '" + pair.getKey() + "'}"  );
 	    }
+	    
+   
+	    m.addAttribute("locations", location);
 		return "locationmap";
 	}
 	
