@@ -189,6 +189,22 @@ public class HomeController {
 		        answers.add("{\"name\":\""+pair.getKey()+"\",\"resource\":\"" + pair.getValue()+"\"}");
 		    }
 		}
+		if(requests.containsKey("industriesCompetitors")){
+			HashMap<String,String> map = DBpedia.getCompanyIndustriesNames(requests.get("industriesCompetitors"));
+			Iterator it = map.entrySet().iterator();
+		    while (it.hasNext()) {
+		        Map.Entry pair = (Map.Entry)it.next();
+		        it.remove(); 
+		        HashMap<String,String> mapC = DBpedia.getIndustryCompaniesNames("<"+pair.getValue().toString()+">");
+		        Iterator itC = mapC.entrySet().iterator();
+		        ArrayList<String> comp = new ArrayList<String>();
+		        while (itC.hasNext()) {
+		        	Map.Entry pairC = (Map.Entry)itC.next();
+		        	comp.add("\""+pairC.getKey().toString()+"\"");
+		        }
+		        answers.add("{\"name\":\""+pair.getKey()+"\",\"comp\":[" + StringUtils.join(comp, ",")+"]}");
+		    }
+		}
 		if(requests.containsKey("industryCompanies")){
 			HashMap<String,String> map = DBpedia.getIndustryCompaniesNames(requests.get("industryCompanies"));
 			Iterator it = map.entrySet().iterator();
