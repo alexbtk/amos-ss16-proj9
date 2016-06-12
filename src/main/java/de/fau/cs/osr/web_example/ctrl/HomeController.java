@@ -218,6 +218,19 @@ public class HomeController {
 		return "["+StringUtils.join(answers, ",")+"]";
 	}
 	
+	@RequestMapping(value="/getCompanyLocationMap", method = RequestMethod.POST)
+	public String getLocationMap(@RequestParam("Text") String companyName, Model m) {
+		Map map = DBpedia.getCompanyLocationCoordonates(companyName);
+		Iterator it = map.entrySet().iterator();
+		List location = new ArrayList<String>();
+	    while (it.hasNext()) {
+	        Map.Entry pair = (Map.Entry)it.next();
+	        it.remove(); 
+	        location.add("{\"name\":\""+pair.getKey()+"\",\"point\":\"" + pair.getValue()+"\"}");
+	    }
+		return "locationmap";
+	}
+	
 	@RequestMapping(value="/")
 	public String loadHomePage(Model m) {
 		
@@ -228,6 +241,12 @@ public class HomeController {
 	public String loadAdminLteTemplate(Model m) {
 		
 		return "template";
+	}
+	
+	@RequestMapping(value="/locationmap")
+	public String loadLocationMapPage(Model m) {
+		
+		return "locationmap";
 	}
 	
 }
