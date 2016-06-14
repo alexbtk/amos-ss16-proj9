@@ -1,0 +1,47 @@
+#login div{
+	margin: 0 auto;
+	padding: 15px;
+	width: 359px;
+}
+
+#login{
+	height: 100vh;
+	background-color: rgba(200, 200, 200, 0.8);
+	padding: 30px;
+}
+
+#login div fieldset table tbody tr td{
+	padding: 2px;
+}
+
+#login div fieldset table tbody tr td input{
+	width: 100%;
+}
+
+#welcome{
+	margin: 0 auto;
+	padding: 30px;
+	width: 550px;
+}
+
+#welcome div{
+	padding: 15px;
+}
+
+#welcome div input{
+	width: 90%;
+}
+
+#searchMenu{
+	width: 500px;
+	float: left;
+}
+
+#searchMenu #dashboardCompanyInput{
+	margin-top: 10px;
+	width: 200px;
+}
+
+#searchMenu a{
+	color: white;
+}

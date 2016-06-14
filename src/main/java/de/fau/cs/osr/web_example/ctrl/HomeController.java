@@ -253,7 +253,7 @@ public class HomeController {
 	@RequestMapping(value="/")
 	public String loadHomePage(Model m) {
 		
-		return "home";
+		return "index";
 	}
 	
 	@RequestMapping(value="/template")

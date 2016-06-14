@@ -54,7 +54,14 @@
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/skins/_all-skins.min.css">
+  
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 
+  <script src="${pageContext.request.contextPath}/js/jquery-2.2.3.js"></script>
+  <script src="${pageContext.request.contextPath}/js/jquery-ui.js"></script>
+  <script src="${pageContext.request.contextPath}/js/AMOSAlchemy.js"></script>
+  <script src="${pageContext.request.contextPath}/js/util.js"></script>
+  <script src="${pageContext.request.contextPath}/js/myScript.js"></script>
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -80,16 +87,21 @@
         <span class="sr-only">Toggle navigation</span>
       </a>
 
+	 <div id="searchMenu">
+	      <input id="dashboardCompanyInput" class="companyInput" type="text" name="companyName" maxlength="100">
+		  <a href="#" id="searchButton" class="dropdown-toggle" style="cursor:pointer;" >
+	      	<span class="hidden-xs">Search!</span>
+	      </a>
+	 </div>
+
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
           
-         
-         
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
-            <a href="#" class="dropdown-toggle" onclick="logoutf();" style="cursor:pointer;" >
-              <img src="${pageContext.request.contextPath}/img/user2-160x160.jpg" class="user-image" alt="User Image">
+            <a href="#" id="logoutButton" class="dropdown-toggle" style="cursor:pointer;" >
+              <!-- <img src="${pageContext.request.contextPath}/img/user2-160x160.jpg" class="user-image" alt="User Image">  -->
               <span class="hidden-xs">Log out</span>
             </a>
             
@@ -103,6 +115,66 @@
     </nav>
   </header>
 
+
+<div id="login">
+<div class="box box-primary">
+<legend>Login</legend>
+<fieldset>
+	<table>
+		<tbody>
+			<tr>
+				<td><label for="apiKey">Alchemy API-Key</label></td>
+			</tr>
+			<tr>
+				<td><input id="apiKey" type="text" maxLength=100 /></td>
+			</tr>
+			<tr>
+				<td><label for="twitterConsumerKey">Twitter
+						Consumer Key</label></td>
+				<td><label
+					for="twitterConsumerSecret">Twitter Consumer Secret</label></td>
+				
+				</tr>
+				<tr>
+					<td><input id="twitterConsumerKey" type="text" maxLength=100 /></td>
+					<td><input id="twitterConsumerSecret" type="text"
+						maxLength=100 /></td>
+				</tr>
+				<tr>
+					<td><label for="twitterToken">Twitter
+							Token</label></td>
+					<td><label for="twitterTokenSecret">Twitter
+								Token Secret</label></td>
+				</tr>
+				<tr>
+					<td><input id="twitterToken" type="text" maxLength=100 /></td>
+					<td><input id="twitterTokenSecret" type="text" maxLength=100 /></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<br /> <br />
+		<a href="#" id="loginButton" class="dropdown-toggle" style="cursor:pointer;" >
+              <!-- <img src="${pageContext.request.contextPath}/img/user2-160x160.jpg" class="user-image" alt="User Image">  -->
+              <span class="hidden-xs">Login</span>
+        </a>
+		<!-- <button id="loginButton">Login</button> -->
+	</fieldset>
+	</div>
+</div>
+<div id="welcome">
+	<h1>Welcome to Cognitive Services!</h1>
+	<div class="box box-primary">
+	<h2>Please enter a company name:</h2>
+	<input id="welcomeCompanyInput" class="companyInput" type="text" name="companyName" maxlength="100"/> 
+	<a href="#" id="welcomeButton" class="dropdown-toggle" style="cursor:pointer;" >
+              <span class="hidden-xs">Go!</span>
+    </a>
+	<!-- <button id="welcomeButton">Go!</button> -->
+	</div>
+</div>
+
+<div id="content">
 <!-- Main content -->
     <section class="content">
       <!-- Small boxes (Stat box) -->
@@ -211,11 +283,11 @@
       <!-- /.box -->
 
     </template>
-
+</div>
  
 
 <!-- jQuery 2.2.0 -->
-<script src="${pageContext.request.contextPath}/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!--<script src="${pageContext.request.contextPath}/plugins/jQuery/jQuery-2.2.0.min.js"></script> -->
 <!-- Bootstrap 3.3.6 -->
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
@@ -230,7 +302,6 @@
 <!-- AdminLTE for demo purposes -->
 <script src="${pageContext.request.contextPath}/js/demo.js"></script>
 
-<script src="${pageContext.request.contextPath}/js/myScript.js"></script>
 <!-- JvectorMap for displaying companys locations -->
 	<script
 		src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-2.0.3.min.js"></script>
