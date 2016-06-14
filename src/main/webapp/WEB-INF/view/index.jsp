@@ -5,6 +5,8 @@
 * Released under the AGPL license
 * Date: 2016-06-11
 -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html>
 <html>
@@ -171,7 +173,13 @@
 
      <section class="contentSection" id="competitorsSection"> Competitors content</section>
      <section class="contentSection" id="productsSection"> product content</section>
-     <section class="contentSection" id="companySection"> company content</section>
+     <section class="contentSection" id="companySection">
+          <div class="row">
+     
+     <div id="world-map" style="width: 800px; height: 600px"></div>
+     </div>
+     
+     </section>
      <section class="contentSection" id="twitterSection"> twitter content</section>
       
 
@@ -223,7 +231,49 @@
 <script src="${pageContext.request.contextPath}/js/demo.js"></script>
 
 <script src="${pageContext.request.contextPath}/js/myScript.js"></script>
-
+<!-- JvectorMap for displaying companys locations -->
+	<script
+		src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-2.0.3.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-world-mill.js"></script>
+	<script>
+		$(function() {
+			$('#world-map').vectorMap({
+				map: 'world_mill',
+			    scaleColors: ['#C8EEFF', '#0071A4'],
+			    normalizeFunction: 'polynomial',
+			    hoverOpacity: 0.7,
+			    hoverColor: false,
+			    markerStyle: {
+			      initial: {
+			        fill: '#F8E23B',
+			        stroke: '#383f47'
+			      }
+			    },
+			    backgroundColor: '#383f47',
+			    markers: [
+<c:choose>
+<c:when test="${fn:length(locations) > 1}">
+	<c:forEach begin="0" end="${fn:length(locations) - 1}"
+		var="index">
+		<c:choose>
+			<c:when
+				test="${index == (fn:length(locations) - 1)}">
+				${locations[index].toString()}
+			</c:when>
+			<c:otherwise>
+			${locations[index].toString()},
+			</c:otherwise>
+		</c:choose>
+	</c:forEach>
+</c:when>
+<c:otherwise>
+</c:otherwise>
+</c:choose>
+			    ]
+			});
+		});
+	</script>
 </body>
 
 </html>
