@@ -24,6 +24,11 @@
 	width: 550px;
 }
 
+
+#welcome img{
+	width: 480px;
+}
+
 #welcome div{
 	padding: 15px;
 }

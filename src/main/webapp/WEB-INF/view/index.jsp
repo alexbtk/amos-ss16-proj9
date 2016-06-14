@@ -55,6 +55,7 @@
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/skins/_all-skins.min.css">
   
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/jquery-ui.css">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 
   <script src="${pageContext.request.contextPath}/js/jquery-2.2.3.js"></script>
@@ -163,6 +164,7 @@
 	</div>
 </div>
 <div id="welcome">
+	<img src="${pageContext.request.contextPath}/img/cognitive.JPG" />
 	<h1>Welcome to Cognitive Services!</h1>
 	<div class="box box-primary">
 	<h2>Please enter a company name:</h2>

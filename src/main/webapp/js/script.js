@@ -175,9 +175,29 @@ $(document).ready(function(){
 							drawGraph(data, "#tabs-" + i);
 						}
 						else{
-							ul.append($("<li></li>").append($("<a href='#tabs-"+i+"'></a>").append(res[i]['title'])));
-							div.append($("<div id='tabs-"+i+"'></div>").append(res[i]['content']));
-							obj.html(div.prepend(ul));
+							alert(res[i]['content']);
+							if( Object.prototype.toString.call( res[i]['content'] ) === '[object Array]' ) {
+								ul.append($("<li></li>").append($("<a href='#tabs-"+i+"'></a>").append(res[i]['title'])));
+								div.append($("<div id='tabs-"+i+"'></div>").append(res[i]['content']));
+								obj.html(div.prepend(ul));
+								
+								res[i]['content'].forEach(function(entry){
+									if($("#tabs-"+i+"-"+entry['location'])){
+										$("#tabs-"+i+"-"+entry['location']).append(entry['competitor']);
+									}
+									else{
+										$("#tabs-"+i).append("<button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#tabs-"+i+"-"+entry['location']+"\" />\">+</button>");
+										$("#tabs-"+i).append("Location: " + entry['location']);
+										$("#tabs-"+i).append("<div id=\"#tabs-"+i+"-"+entry['location']+"\" class=\"collapse\"></div>");
+										$("#tabs-"+i+"-"+entry['location']).append(entry['competitor']);
+									}
+								});
+							}
+							else{
+								ul.append($("<li></li>").append($("<a href='#tabs-"+i+"'></a>").append(res[i]['title'])));
+								div.append($("<div id='tabs-"+i+"'></div>").append(res[i]['content']));
+								obj.html(div.prepend(ul));
+							}
 						}
 					}
 					$( "#tabs" ).tabs();
