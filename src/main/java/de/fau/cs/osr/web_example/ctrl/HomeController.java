@@ -189,6 +189,22 @@ public class HomeController {
 		        answers.add("{\"name\":\""+pair.getKey()+"\",\"resource\":\"" + pair.getValue()+"\"}");
 		    }
 		}
+		if(requests.containsKey("industriesCompetitors")){
+			HashMap<String,String> map = DBpedia.getCompanyIndustriesNames(requests.get("industriesCompetitors"));
+			Iterator it = map.entrySet().iterator();
+		    while (it.hasNext()) {
+		        Map.Entry pair = (Map.Entry)it.next();
+		        it.remove(); 
+		        HashMap<String,String> mapC = DBpedia.getIndustryCompaniesNames("<"+pair.getValue().toString()+">");
+		        Iterator itC = mapC.entrySet().iterator();
+		        ArrayList<String> comp = new ArrayList<String>();
+		        while (itC.hasNext()) {
+		        	Map.Entry pairC = (Map.Entry)itC.next();
+		        	comp.add("\""+pairC.getKey().toString()+"\"");
+		        }
+		        answers.add("{\"name\":\""+pair.getKey()+"\",\"comp\":[" + StringUtils.join(comp, ",")+"]}");
+		    }
+		}
 		if(requests.containsKey("industryCompanies")){
 			HashMap<String,String> map = DBpedia.getIndustryCompaniesNames(requests.get("industryCompanies"));
 			Iterator it = map.entrySet().iterator();
@@ -218,10 +234,45 @@ public class HomeController {
 		return "["+StringUtils.join(answers, ",")+"]";
 	}
 	
+	@RequestMapping(value="/getCompanyLocationMap", method = RequestMethod.POST)
+	public String getLocationMap(@RequestParam String companyName, Model m) {
+		Map map = DBpedia.getCompanyLocationCoordonates(companyName);
+		Iterator it = map.entrySet().iterator();
+		List location = new ArrayList<String>();
+	    while (it.hasNext()) {
+	        Map.Entry pair = (Map.Entry)it.next();
+	        it.remove(); 
+	        location.add("{latLng: [" + pair.getValue() + "], name: '" + pair.getKey() + "'}"  );
+	    }
+	    
+   
+	    m.addAttribute("locations", location);
+		return "locationmap";
+	}
+	
 	@RequestMapping(value="/")
 	public String loadHomePage(Model m) {
 		
 		return "home";
+	}
+	
+	@RequestMapping(value="/template")
+	public String loadAdminLteTemplate(Model m) {
+		
+		return "template";
+	}
+
+	@RequestMapping(value="/demo")
+	public String loadAdminLteDemo(Model m) {
+		
+		return "index";
+
+	}
+	
+	@RequestMapping(value="/locationmap")
+	public String loadLocationMapPage(Model m) {
+		
+		return "locationmap";
 	}
 	
 }
