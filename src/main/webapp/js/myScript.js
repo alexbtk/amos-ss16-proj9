@@ -115,37 +115,24 @@
 			alert("TODO: reload content!");
 		});
 
-    var colapseB = $($("#template").html());
-    var host = $('#competitorsSection');
     
-
-    /**
-     * Display competitors into a popup.
-     * 
-     * @param host - the object where we add the popup
-     * @param colapseB - the template of the popup
-     * @param industryName - title of the popup
-     * @param companiesName - array of string
-     */
-    function displayIndustryCompetitors(host,colapseB,industryName,companiesName){
+	
+});
+ 
+ /**
+  * Display competitors into a popup.
+  * 
+  * @param host - the object where we add the popup
+  * @param colapseB - the template of the popup
+  * @param industryName - title of the popup
+  * @param companiesName - array of string
+  */
+ function displayIndustryCompetitors(host,colapseB,industryName,companiesName){
 	    colapseB.find(".box-title").text(industryName);
 	    for(var i in companiesName)
 	      	colapseB.find(".box-body").append('<input type="checkbox" name="'+companiesName[i]+'" value="'+companiesName[i]+'">'+companiesName[i]+'<br/>');    
 	    host.append(colapseB);
-	}
-
-	
-	//Todo: set the value from textbox
-	var companyName = "Apple Inc.";
-	
-	$.post( "qeuryRequest",  {"industriesCompetitors":companyName}).done(function(data){
-		data = JSON.parse(data);
-		host.empty();
-		for(var i in data)
-			displayIndustryCompetitors(host, colapseB.clone(), data[i]['name'], data[i]['comp']);
-	});	
-	
-});
+}
 
  /**
   * Display the section when clicking on the tab.
@@ -155,12 +142,31 @@
  function openSection(id){
  	$('.contentSection').hide();
  	$('#'+id+'Section').show();
+ 	
+ 	if(id == "competitors"){
+
+ 		var companyName = $("#dashboardCompanyInput").val();
+ 		if(companyName == ""){
+ 			alert("No company!!");
+ 			return;
+ 		}
+ 		if($('#'+id+'Section').find("#existCompetitorsIndustry").length > 0){
+ 			if($('#'+id+'Section').find("#existCompetitorsIndustry").attr("class") == companyName)
+ 				return;
+ 		}
+ 		var colapseB = $($("#template").html());
+ 	    var host = $('#competitorsSection');  
+
+		host.html("loading..."); 		
+ 		
+ 		$.post( "qeuryRequest",  {"industriesCompetitors":companyName}).done(function(data){
+ 			data = JSON.parse(data);
+ 			host.empty();
+ 			host.append("<div id='existCompetitorsIndustry' class='"+companyName+"'></div>");
+ 			for(var i in data)
+ 				displayIndustryCompetitors(host, colapseB.clone(), data[i]['name'], data[i]['comp']);
+ 		});	
+ 	}
+ 	
  }
 
- /**
-  * Logout, show the first screen.
-  */
- function logoutf(){
-	//ToDo: go to first screen
- 	alert("logout!");
- }
