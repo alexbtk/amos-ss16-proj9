@@ -330,6 +330,57 @@ public class DBpedia {
 		return companyAbstract;
 	}
 	
+	public static String getResourceLocationCountry(String resource){
+
+		resource = resource.replace("[", "");
+		resource = resource.replace("]", "");
+		resource = "<" + resource + ">";
+
+		String queryString = 	"PREFIX prop: <http://dbpedia.org/property/> " +
+				"SELECT * " +
+				"WHERE { " +
+				resource + " prop:locationCountry ?n . " +
+				"}";
+
+		Query query = QueryFactory.create(queryString);
+
+		try ( QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query) ) {
+			// Set the DBpedia specific timeout.
+			((QueryEngineHTTP)qexec).addParam("timeout", "10000") ;
+
+			// Execute.
+			ResultSet rs = qexec.execSelect();
+			while(rs.hasNext()){
+				QuerySolution qs = rs.next();
+				String res = qs.getLiteral("n").toString();
+				if(res.endsWith("@en")){
+					res = res.replace("@en", "");
+					return res;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	public static String getCompanyLocationCountry(String name){
+
+		List<String> resources = getResourceByName(name);
+		String companyLocationCountry = null;
+
+		//Try resources until company is found
+		for(String r : resources){
+			if(resourceIsCompany(r)){
+				companyLocationCountry = getResourceLocationCountry(r);
+				break;
+			}
+		}
+
+		return companyLocationCountry;
+	}
+	
 	public static String getResourceHomepage(String resource){
 		resource = resource.replace("[", "");
 		resource = resource.replace("]", "");
@@ -936,5 +987,16 @@ public class DBpedia {
 		return map;
 	}
 	
-	
+	public static void main(String args[]){
+		List<String> resources = getResourceByName("Foxconn");
+
+		//Try resources until company is found
+		for(String r : resources){
+			System.out.println(r);
+			if(resourceIsCompany(r)){
+				System.out.println("Is company!");
+			}
+		}
+		System.out.println(getCompanyLocationCountry("Foxconn"));
+	}
 }
