@@ -252,11 +252,49 @@
      <section class="contentSection" id="competitorsSection"> Competitors content</section>
      <section class="contentSection" id="productsSection"> product content</section>
      <section class="contentSection" id="companySection">
-          <div class="row">
-     
-     		<div id="world-map" style="width: 50%; height: 300px; float: left"></div>
-     		
-     </div>
+          <div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">Location Map</h3>
+
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse" data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button type="button" class="btn btn-box-tool"
+								data-widget="remove" data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
+						<div class="box box-info">
+							<div class="box-header with-border">
+								<h3 class="box-title"></h3>
+							</div>
+							<!-- /.box-header -->
+							<!-- form start -->
+							<form class="form-horizontal" method="POST"
+								action="getCompanyLocationMap">
+								<div class="box-body">
+								<div id="world-map" style="width: 600px; height: 400px"></div>
+								</div>
+								<!-- /.box-body -->
+								<div class="box-footer">
+									<button type="submit" class="btn btn-info pull-right">Search</button>
+								</div>
+								<!-- /.box-footer -->
+							</form>
+						</div>
+						
+
+					</div>
+					<!-- /.box-body -->
+
+					<div class="box-footer">Footer</div>
+					<!-- /.box-footer-->
+				</div>
+				<!-- /.box -->
      <a href="${pageContext.request.contextPath}/locationmap">Locationmap!</a>
      <div id="avgNewsSentimentGraph"><canvas id="avgNewsSentimentGraphCanvas"></canvas></div>
      </section>
