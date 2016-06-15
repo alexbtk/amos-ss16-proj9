@@ -26,6 +26,7 @@ import twitter4j.Status;
 
 import com.ibm.watson.developer_cloud.alchemy.v1.model.DocumentSentiment;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -46,6 +47,25 @@ import AMOSAlchemy.IAlchemyFactory;
 
 @Controller
 public class HomeController {
+	
+	private class AvgNewsSentimentCacheEntry{
+		private long timestamp;
+		private String resultString;
+		
+		AvgNewsSentimentCacheEntry(long timestamp, String resultString){
+			this.timestamp = timestamp;
+			this.resultString = resultString;
+		}
+		
+		public long getTimestamp(){
+			return timestamp;
+		}
+		
+		public String getResultString(){
+			return resultString;
+		}
+		
+	}
 
 	IAlchemyFactory fac;
 	IAlchemy service;
@@ -53,10 +73,12 @@ public class HomeController {
 	TwitterCrawler twitterCrawler;
 	TwitterAnalyzer twitterAnalyzer;
 
+	Map<String, AvgNewsSentimentCacheEntry> avgNewsSentimentCache;
 	
 	public HomeController(){
 		fac = IAlchemyFactory.newInstance();
 		twitterAnalyzer = new TwitterAnalyzer();
+		avgNewsSentimentCache = new HashMap<String, AvgNewsSentimentCacheEntry>();
 	}
 
 	@RequestMapping(value="/process")
@@ -133,7 +155,7 @@ public class HomeController {
 		languageService = fac.createAlchemyLanguage(apiKey);
 		twitterCrawler = new TwitterCrawler(consumerKey, consumerSecret, token, tokenSecret);
 		int weeks = 1;
-		List answers = new ArrayList();
+		List<String> answers = new ArrayList<String>();
 		//Todo - catch error: incorrect companyName, noResult
 		if(requests.containsKey("question1")){
 			answers.add("{\"title\":\"Main industry(Alchemy)\",\"content\":\"" + 
@@ -215,19 +237,52 @@ public class HomeController {
 		    }
 		}
 		if(requests.containsKey("avgNewsSentimentGraph")){
-			String resultString = "{\"title\":\"News Sentiment Graph\",\"values\": [";
-			int days = Integer.parseInt(requests.get("avgNewsSentimentGraphWeeks"));
-			if(days > 0){
-				double avgSentiment = this.service.getAvgNewsSentiment(requests.get("avgNewsSentimentGraph"), "Company", "now-7d", "now", 5);
-				resultString += avgSentiment;
+			if(avgNewsSentimentCache.containsKey(requests.get("avgNewsSentimentGraph"))){
 				
-				for(int i = 1; i < days; i++){
-					avgSentiment = this.service.getAvgNewsSentiment(requests.get("avgNewsSentimentGraph"), "Company", "now-" + (7*i) + "d", "now-" + (7*(i-1)) + "d", 5);
-					resultString += ", " + avgSentiment;
+				AvgNewsSentimentCacheEntry e = avgNewsSentimentCache.get(requests.get("avgNewsSentimentGraph"));
+				long diffTime = System.currentTimeMillis() - e.getTimestamp();
+				
+				//if diffTime smaller than one day in milliseconds
+				if(diffTime < 86400000)
+					answers.add(avgNewsSentimentCache.get(requests.get("avgNewsSentimentGraph")).getResultString());
+				//Cache entry too old -- create new entry
+				else{
+					//remove old entry
+					avgNewsSentimentCache.remove(requests.get("avgNewsSentimentGraph"));
+					
+					String resultString = "{\"title\":\"News Sentiment Graph\",\"values\": [";
+					int days = Integer.parseInt(requests.get("avgNewsSentimentGraphWeeks"));
+					if(days > 0){
+						double avgSentiment = this.service.getAvgNewsSentiment(requests.get("avgNewsSentimentGraph"), "Company", "now-7d", "now", 5);
+						resultString += avgSentiment;
+
+						for(int i = 1; i < days; i++){
+							avgSentiment = this.service.getAvgNewsSentiment(requests.get("avgNewsSentimentGraph"), "Company", "now-" + (7*i) + "d", "now-" + (7*(i-1)) + "d", 5);
+							resultString += ", " + avgSentiment;
+						}
+
+						resultString += "]}";
+						answers.add(resultString);
+						avgNewsSentimentCache.put(requests.get("avgNewsSentimentGraph"), new AvgNewsSentimentCacheEntry(System.currentTimeMillis(), resultString));
+					}
 				}
-				
-				resultString += "]}";
-				answers.add(resultString);
+			}
+			else{
+				String resultString = "{\"title\":\"News Sentiment Graph\",\"values\": [";
+				int days = Integer.parseInt(requests.get("avgNewsSentimentGraphWeeks"));
+				if(days > 0){
+					double avgSentiment = this.service.getAvgNewsSentiment(requests.get("avgNewsSentimentGraph"), "Company", "now-7d", "now", 5);
+					resultString += avgSentiment;
+
+					for(int i = 1; i < days; i++){
+						avgSentiment = this.service.getAvgNewsSentiment(requests.get("avgNewsSentimentGraph"), "Company", "now-" + (7*i) + "d", "now-" + (7*(i-1)) + "d", 5);
+						resultString += ", " + avgSentiment;
+					}
+
+					resultString += "]}";
+					answers.add(resultString);
+					avgNewsSentimentCache.put(requests.get("avgNewsSentimentGraph"), new AvgNewsSentimentCacheEntry(System.currentTimeMillis(), resultString));
+				}
 			}
 		}
 		

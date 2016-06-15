@@ -167,6 +167,46 @@
  				displayIndustryCompetitors(host, colapseB.clone(), data[i]['name'], data[i]['comp']);
  		});	
  	}
+ 	else if(id == "company"){
+ 		var companyName = $("#dashboardCompanyInput").val();
+ 		if(companyName == ""){
+ 			alert("No company!!");
+ 			return;
+ 		}
+ 		if($('#'+id+'Section').find("#existAvgNewsSentimentGraph").length > 0){
+ 			if($('#'+id+'Section').find("#existAvgNewsSentimentGraph").attr("class") == companyName)
+ 				return;
+ 		}
+ 		
+ 		var colapseB = $($("#template").html());
+ 	    var host = $('#companySection');  	
+ 		
+ 		$.post( "qeuryRequest",  {"avgNewsSentimentGraph":companyName, "avgNewsSentimentGraphWeeks": "7"}).done(function(data){
+ 			res = JSON.parse(data);
+ 			host.append("<div id='existAvgNewsSentimentGraph' class='"+companyName+"'></div>");
+ 			
+ 			var values = "";
+			var d = [];
+			var d0 = {};
+			d0["data"] = [];
+			var i = 0;
+			res[i]['values'].forEach(function(entry) {
+			    values = values + entry + " ";
+			    d0["data"].push({"x" : (-1*i), "y" : entry});
+			    i++;
+			});
+			d0["label"] = 'Average News Sentiment'
+			d0["strokeColor"] = '#F16220';
+			d0["pointColor"] = '#F16220';
+			d0["pointStrokeColor"] = '#fff';
+			d.push(d0);
+			
+			var options = {};
+			
+			var avgNewsChart = new Chart($("#avgNewsSentimentGraphCanvas")[0].getContext('2d')).Scatter(d, options);
+			
+ 		});	
+ 	}
  	
  }
 

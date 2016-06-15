@@ -60,10 +60,14 @@
 
   <script src="${pageContext.request.contextPath}/js/jquery-2.2.3.js"></script>
   <script src="${pageContext.request.contextPath}/js/jquery-ui.js"></script>
+  <script src="${pageContext.request.contextPath}/plugins/chartjs/Chart.js"></script>
+  <script src="${pageContext.request.contextPath}/plugins/chartjs/Chart.Scatter.js"></script>
+  
   <script src="${pageContext.request.contextPath}/js/AMOSAlchemy.js"></script>
   <script src="${pageContext.request.contextPath}/js/util.js"></script>
   <script src="${pageContext.request.contextPath}/js/myScript.js"></script>
 
+  
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -250,9 +254,11 @@
      <section class="contentSection" id="companySection">
           <div class="row">
      
-     <div id="world-map" style="width: 800px; height: 600px"></div>
+     		<div id="world-map" style="width: 50%; height: 300px; float: left"></div>
+     		
      </div>
-     
+     <a href="${pageContext.request.contextPath}/locationmap">Locationmap!</a>
+     <div id="avgNewsSentimentGraph"><canvas id="avgNewsSentimentGraphCanvas"></canvas></div>
      </section>
      <section class="contentSection" id="twitterSection"> twitter content</section>
       
