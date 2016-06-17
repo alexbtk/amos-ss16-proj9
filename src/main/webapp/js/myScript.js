@@ -215,20 +215,31 @@
  			alert("No company!!");
  			return;
  		}
- 		if($('#'+id+'Section').find("#existCompetitorsIndustry").length > 0){
- 			if($('#'+id+'Section').find("#existCompetitorsIndustry").attr("class") == companyName)
+ 		if($('#'+id+'Section').find("#existsProductCompany").length > 0){
+ 			if($('#'+id+'Section').find("#existsProductCompany").attr("class") == companyName)
  				return;
  		}
+ 		$('#'+id+'Section').append("<div id='existsProductCompany' class='"+companyName+"'></div>");
+ 		
  		var colapseB = $($("#template").html());
- 	    var host = $('#productsSection');  
+ 	    var host = $('#productsSection #companyProducts');  
 
-		host.html("loading..."); 		
+		host.html("loading company products..."); 		
  		
  		$.post( "qeuryRequest",  {"productsCompany":companyName}).done(function(data){
  			data = JSON.parse(data);
  			host.empty();
- 			host.append("<div id='existCompetitorsIndustry' class='"+companyName+"'></div>");
  			displayIndustryCompetitors(host, colapseB.clone(), data[0]['title'], data[0]['content']);
+ 		});
+ 		
+ 	    var hostC = $('#productsSection #competitorsProducts');  	
+ 	    
+ 	    hostC.html("loading Competitors Products..."); 
+ 		
+ 	    $.post( "qeuryRequest",  {"productsCompetitors":companyName}).done(function(data){
+ 			data = JSON.parse(data);
+ 			hostC.empty();
+ 			displayIndustryCompetitors(hostC, colapseB.clone(), data[0]['title'], data[0]['content']);
  		});
  	}
  	

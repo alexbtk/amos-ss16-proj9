@@ -195,11 +195,24 @@ public class HomeController {
 		}
 		if(requests.containsKey("productsCompany")){
 			List products = new ArrayList();
-			List<String> DBproducts = DBpedia.getCompanyProducts(requests.get("products"));
+			List<String> DBproducts = DBpedia.getCompanyProducts(requests.get("productsCompany"));
 			for(String p : DBproducts){
 				products.add("\""+p+"\"");
 			}
 			answers.add("{\"title\":\"Company Products(DBpedia)\",\"content\":[" + 
+					StringUtils.join(products, ",")+"]}");
+		}
+		if(requests.containsKey("productsCompetitors")){
+			List products = new ArrayList();
+			List<String> DBproducts = DBpedia.getCompanyProducts(requests.get("productsCompetitors"));
+			String companyResourse = DBpedia.getResourceByName(requests.get("productsCompetitors")).get(0);
+			for(String p : DBproducts){
+				List<String> Cpr = DBpedia.getProductCompetitorsName(p,companyResourse);
+				if(Cpr != null)
+					for(String pC : Cpr)
+						products.add("\""+pC+"\"");
+			}
+			answers.add("{\"title\":\"Company Competitors Products(DBpedia)\",\"content\":[" + 
 					StringUtils.join(products, ",")+"]}");
 		}
 		if(requests.containsKey("products")){

@@ -251,7 +251,10 @@
      
 
      <section class="contentSection" id="competitorsSection"> Competitors content</section>
-     <section class="contentSection" id="productsSection"> product content</section>
+     <section class="contentSection" id="productsSection"> 
+     	<div id="companyProducts"></div>
+     	<div id="competitorsProducts"></div>
+     </section>
      <section class="contentSection" id="companySection">
           <div class="box">
 					<div class="box-header with-border">
