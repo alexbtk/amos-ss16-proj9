@@ -207,7 +207,7 @@ public class HomeController {
 			List<String> DBproducts = DBpedia.getCompanyProducts(requests.get("productsCompetitors"));
 			String companyResourse = DBpedia.getResourceByName(requests.get("productsCompetitors")).get(0);
 			for(String p : DBproducts){
-				List<String> Cpr = DBpedia.getProductCompetitorsName(p,companyResourse);
+				List<String> Cpr = DBpedia.getProductCompetitorsName(p,"<"+companyResourse+">");
 				if(Cpr != null)
 					for(String pC : Cpr)
 						products.add("\""+pC+"\"");

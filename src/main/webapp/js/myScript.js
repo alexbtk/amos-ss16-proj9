@@ -215,11 +215,11 @@
  			alert("No company!!");
  			return;
  		}
- 		if($('#'+id+'Section').find("#existsProductCompany").length > 0){
- 			if($('#'+id+'Section').find("#existsProductCompany").attr("class") == companyName)
+ 		if($('#productsSection #companyProducts').find("#existsProductCompany").length > 0){
+ 			if($('#productsSection #companyProducts').find("#existsProductCompany").attr("class") == companyName)
  				return;
  		}
- 		$('#'+id+'Section').append("<div id='existsProductCompany' class='"+companyName+"'></div>");
+ 		
  		
  		var colapseB = $($("#template").html());
  	    var host = $('#productsSection #companyProducts');  
@@ -229,6 +229,7 @@
  		$.post( "qeuryRequest",  {"productsCompany":companyName}).done(function(data){
  			data = JSON.parse(data);
  			host.empty();
+ 			host.append("<div id='existsProductCompany' class='"+companyName+"'></div>");
  			displayIndustryCompetitors(host, colapseB.clone(), data[0]['title'], data[0]['content']);
  		});
  		
