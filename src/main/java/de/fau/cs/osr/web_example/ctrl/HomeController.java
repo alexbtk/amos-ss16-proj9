@@ -193,6 +193,15 @@ public class HomeController {
 			answers.add("{\"title\":\"Company Location\",\"content\":[" + 
 					StringUtils.join(location, ",")+"]}");
 		}
+		if(requests.containsKey("productsCompany")){
+			List products = new ArrayList();
+			List<String> DBproducts = DBpedia.getCompanyProducts(requests.get("products"));
+			for(String p : DBproducts){
+				products.add("\""+p+"\"");
+			}
+			answers.add("{\"title\":\"Company Products(DBpedia)\",\"content\":[" + 
+					StringUtils.join(products, ",")+"]}");
+		}
 		if(requests.containsKey("products")){
 			List products = new ArrayList();
 			List<String> DBproducts = DBpedia.getCompanyProducts(requests.get("products"));
@@ -320,7 +329,7 @@ public class HomeController {
 	@RequestMapping(value="/demo")
 	public String loadAdminLteDemo(Model m) {
 		
-		return "index";
+		return "home";
 
 	}
 	

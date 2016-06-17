@@ -206,6 +206,30 @@
 			var avgNewsChart = new Chart($("#avgNewsSentimentGraphCanvas")[0].getContext('2d')).Scatter(d, options);
 			
  		});	
+ 		
+ 		// Add Company Relations
+ 		getNewsRelation(companyName);
+ 	}else if(id == "products"){
+ 		var companyName = $("#dashboardCompanyInput").val();
+ 		if(companyName == ""){
+ 			alert("No company!!");
+ 			return;
+ 		}
+ 		if($('#'+id+'Section').find("#existCompetitorsIndustry").length > 0){
+ 			if($('#'+id+'Section').find("#existCompetitorsIndustry").attr("class") == companyName)
+ 				return;
+ 		}
+ 		var colapseB = $($("#template").html());
+ 	    var host = $('#productsSection');  
+
+		host.html("loading..."); 		
+ 		
+ 		$.post( "qeuryRequest",  {"productsCompany":companyName}).done(function(data){
+ 			data = JSON.parse(data);
+ 			host.empty();
+ 			host.append("<div id='existCompetitorsIndustry' class='"+companyName+"'></div>");
+ 			displayIndustryCompetitors(host, colapseB.clone(), data[0]['title'], data[0]['content']);
+ 		});
  	}
  	
  }
