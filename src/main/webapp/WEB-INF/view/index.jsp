@@ -65,6 +65,7 @@
   
   <script src="${pageContext.request.contextPath}/js/AMOSAlchemy.js"></script>
   <script src="${pageContext.request.contextPath}/js/util.js"></script>
+  <script src="${pageContext.request.contextPath}/js/AMOSAlchemy.js"></script>
   <script src="${pageContext.request.contextPath}/js/myScript.js"></script>
 
   
