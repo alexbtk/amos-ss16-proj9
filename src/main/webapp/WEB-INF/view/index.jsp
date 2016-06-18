@@ -254,6 +254,7 @@
      <section class="contentSection" id="productsSection"> 
      	<div id="companyProducts"></div>
      	<div id="competitorsProducts"></div>
+     	<div id="graphProducts"></div>
      </section>
      <section class="contentSection" id="companySection">
           <div class="box">
