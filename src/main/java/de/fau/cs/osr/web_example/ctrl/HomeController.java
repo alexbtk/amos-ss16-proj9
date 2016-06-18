@@ -307,6 +307,40 @@ public class HomeController {
 				}
 			}
 		}
+		// product Graph sentiment
+		if(requests.containsKey("avgCompanyProducts")){
+			String avgCP = requests.get("avgCompanyProducts");
+			String avgCtP = requests.get("avgCompetitorsProducts");
+			String productsCP = requests.get("productsCP");
+			String productsCtP = requests.get("productsCtP");
+			int days = Integer.parseInt(requests.get("timeFrame"));
+			
+			// Create the key
+			String key = "graph-products|"+StringUtils.join(productsCP,",")+"|"
+					     +StringUtils.join(productsCtP,",")+"|"+avgCP+avgCtP+requests.get("timeFrame");
+			
+			if(avgNewsSentimentCache.containsKey(key) && avgNewsSentimentCache.get(key).getTimestamp() < 86400000){
+				answers.add(avgNewsSentimentCache.get(key).getResultString());
+			}else{
+				if(avgNewsSentimentCache.containsKey(key))
+					avgNewsSentimentCache.remove(key);
+				String resultString = "{\"title\":\"News Sentiment Graph\",\"values\": [";
+				//ArrayList<String> values = new ArrayList<String>();
+				String product = "Iphone";
+				if(productsCP.length() > 0)
+					product = productsCP;
+				for(int i=1;i<=days;++i){
+					double avgSentiment = this.service.getAvgNewsSentiment(product, "O[Product^Technology^OperatingSystem^Facility^FieldTerminology]", "now-" + (7*i) + "d", "now-" + (7*(i-1)) + "d", 5);
+					if(i>1)
+					  resultString += ", " ;
+					resultString += avgSentiment;
+				}
+				resultString += "]}";
+				answers.add(resultString);
+				answers.add("\""+key+"\"");
+				avgNewsSentimentCache.put(key, new AvgNewsSentimentCacheEntry(System.currentTimeMillis(), resultString));
+			}	
+		}
 		
 		return "["+StringUtils.join(answers, ",")+"]";
 	}

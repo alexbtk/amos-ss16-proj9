@@ -240,8 +240,54 @@
  	    $.post( "qeuryRequest",  {"productsCompetitors":companyName}).done(function(data){
  			data = JSON.parse(data);
  			hostC.empty();
+ 			var checkAll = '<input type="checkbox" name="checkAll" value="checkAll" />Check All<br/>';
  			displayIndustryCompetitors(hostC, colapseB.clone(), data[0]['title'], data[0]['content']);
  		});
+ 	    // Graph
+ 	    var hostG = $('#productsSection #graphProducts');
+ 	    
+ 	    hostG.empty().append('<canvas id="productNewsSentimentGraphCanvas"></canvas>');
+ 	    
+ 	    var button = $('<button type="button" class="btn btn-block btn-default">Go</button>');
+ 	    button.click(function(){
+ 	    	var avgCP = 12, avgCtP = 0, productsCP = "", productsCtP = "";
+ 	    	var timeFrame = 3;
+ 	    	$.post( "qeuryRequest",  {
+ 	    		"avgCompanyProducts":avgCP, 
+ 	    		"avgCompetitorsProducts":avgCtP,
+ 	    		"timeFrame":timeFrame,
+ 	    		"productsCP":productsCP,
+ 	    		"productsCtP":productsCtP}).done(function(data){
+	 	 			var res = JSON.parse(data);
+	 	 		
+	 	 			var values = "";
+	 				var d = [];
+	 				for(var j = 0; j<res.length-1;++j){
+		 				var d0 = {},i=0;
+		 				d0["data"] = [];		 				
+		 				res[j]['values'].forEach(function(entry) {
+		 				    values = values + entry + " ";
+		 				    d0["data"].push({"x" : (-1*i), "y" : entry});
+		 				    i++;
+		 				});
+		 				d0["label"] = res[j]['title'];
+		 				d0["strokeColor"] = '#F16220';
+		 				d0["pointColor"] = '#F16220';
+		 				d0["pointStrokeColor"] = '#fff';	 				
+			 				
+		 				d.push(d0);
+	 				}
+	 				
+	 				console.log(res);
+	 				
+	 				var options = {};
+	 				
+	 				var avgNewsChart = new Chart($("#productNewsSentimentGraphCanvas")[0].getContext('2d')).Scatter(d, options);
+	 				
+ 	    		
+ 	    		});
+ 	    });
+ 	   hostG.append(button);
  	}
  	
  }
