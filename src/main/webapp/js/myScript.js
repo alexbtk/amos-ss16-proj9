@@ -230,7 +230,18 @@
  			data = JSON.parse(data);
  			host.empty();
  			host.append("<div id='existsProductCompany' class='"+companyName+"'></div>");
+ 			var checkAll = '<input type="checkbox" name="checkAll" value="checkAll" />Check All<br/>'; 			
  			displayIndustryCompetitors(host, colapseB.clone(), data[0]['title'], data[0]['content']);
+ 			host.find(".box-body").append(checkAll);
+ 			
+ 			host.find(".box-body").find("input[name=checkAll]").change(function(){
+ 				if($(this).is(':checked')){
+ 					host.find(".box-body").find('input:checkbox').attr('checked','checked');
+ 				}else{
+ 					host.find(".box-body").find('input:checkbox').removeAttr('checked');
+ 				}
+ 			});
+ 			
  		});
  		
  	    var hostC = $('#productsSection #competitorsProducts');  	
@@ -242,6 +253,16 @@
  			hostC.empty();
  			var checkAll = '<input type="checkbox" name="checkAll" value="checkAll" />Check All<br/>';
  			displayIndustryCompetitors(hostC, colapseB.clone(), data[0]['title'], data[0]['content']);
+ 			hostC.find(".box-body").append(checkAll);
+ 			
+ 			hostC.find(".box-body").find("input[name=checkAll]").change(function(){
+ 				if($(this).is(':checked')){
+ 					hostC.find(".box-body").find('input:checkbox').attr('checked','checked');
+ 				}else{
+ 					hostC.find(".box-body").find('input:checkbox').removeAttr('checked');
+ 				}
+ 			});
+ 			
  		});
  	    // Graph
  	    var hostG = $('#productsSection #graphProducts');
@@ -250,27 +271,54 @@
  	    
  	    var button = $('<button type="button" class="btn btn-block btn-default">Go</button>');
  	    button.click(function(){
- 	    	var avgCP = 12, avgCtP = 0, productsCP = "", productsCtP = "";
- 	    	var timeFrame = 3;
+ 	    	var avgCP = "0", avgCtP = "0", productsCP = [], productsCtP = [];
+ 	    	var timeFrame = 2;
+ 	    	
+ 	    	host.find(".box-body").find("input[type=checkbox]").each(function(){
+ 	    		if($(this).is(':checked')){
+ 	    			if($(this).attr("name") != "checkAll")
+ 	    				productsCP.push($(this).attr("name"));
+ 	    		}
+ 	    	});
+ 	    	
+ 	    	hostC.find(".box-body").find("input[type=checkbox]").each(function(){
+ 	    		if($(this).is(':checked')){
+ 	    			if($(this).attr("name") != "checkAll")
+ 	    				productsCtP.push($(this).attr("name"));
+ 	    		}
+ 	    	});
+ 	    	
+ 	    	if(hostC.find(".box-body").find("input[name=checkAll]").is(':checked'))
+ 	    		avgCtP = "1";
+ 	    	
+ 	    	if(host.find(".box-body").find("input[name=checkAll]").is(':checked'))
+ 	    		avgCP = "1";
+
+ 	    	/*console.log(avgCP);
+ 	    	console.log(avgCtP);
+ 	    	console.log(productsCP);
+ 	    	console.log(productsCtP);
+ 	    	return;*/
+ 	    	
  	    	$.post( "qeuryRequest",  {
  	    		"avgCompanyProducts":avgCP, 
  	    		"avgCompetitorsProducts":avgCtP,
  	    		"timeFrame":timeFrame,
- 	    		"productsCP":productsCP,
- 	    		"productsCtP":productsCtP}).done(function(data){
+ 	    		"productsCP":productsCP.join(","),
+ 	    		"productsCtP":productsCtP.join(",")}).done(function(data){
 	 	 			var res = JSON.parse(data);
 	 	 		
 	 	 			var values = "";
 	 				var d = [];
-	 				for(var j = 0; j<res.length-1;++j){
+	 				for(var j = 0; j<res[0]["values"].length;++j){
 		 				var d0 = {},i=0;
 		 				d0["data"] = [];		 				
-		 				res[j]['values'].forEach(function(entry) {
+		 				res[0]["values"][j]['values'].forEach(function(entry) {
 		 				    values = values + entry + " ";
 		 				    d0["data"].push({"x" : (-1*i), "y" : entry});
 		 				    i++;
 		 				});
-		 				d0["label"] = res[j]['title'];
+		 				d0["label"] = res[0]["values"][j]['title'];
 		 				d0["strokeColor"] = '#F16220';
 		 				d0["pointColor"] = '#F16220';
 		 				d0["pointStrokeColor"] = '#fff';	 				
