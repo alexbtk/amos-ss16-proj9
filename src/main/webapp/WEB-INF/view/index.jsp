@@ -358,44 +358,6 @@
 		src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-2.0.3.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-world-mill.js"></script>
-	<script>
-		$(function() {
-			$('#world-map').vectorMap({
-				map: 'world_mill',
-			    scaleColors: ['#C8EEFF', '#0071A4'],
-			    normalizeFunction: 'polynomial',
-			    hoverOpacity: 0.7,
-			    hoverColor: false,
-			    markerStyle: {
-			      initial: {
-			        fill: '#F8E23B',
-			        stroke: '#383f47'
-			      }
-			    },
-			    backgroundColor: '#383f47',
-			    markers: [
-<c:choose>
-<c:when test="${fn:length(locations) > 1}">
-	<c:forEach begin="0" end="${fn:length(locations) - 1}"
-		var="index">
-		<c:choose>
-			<c:when
-				test="${index == (fn:length(locations) - 1)}">
-				${locations[index].toString()}
-			</c:when>
-			<c:otherwise>
-			${locations[index].toString()},
-			</c:otherwise>
-		</c:choose>
-	</c:forEach>
-</c:when>
-<c:otherwise>
-</c:otherwise>
-</c:choose>
-			    ]
-			});
-		});
-	</script>
 </body>
 
 </html>

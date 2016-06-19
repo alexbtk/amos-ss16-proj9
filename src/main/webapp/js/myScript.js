@@ -180,6 +180,7 @@
  		
  		var colapseB = $($("#template").html());
  	    var host = $('#companySection');  	
+ 	    host.empty();
  		
  		$.post( "qeuryRequest",  {"avgNewsSentimentGraph":companyName, "avgNewsSentimentGraphWeeks": "7"}).done(function(data){
  			res = JSON.parse(data);
@@ -206,6 +207,28 @@
 			var avgNewsChart = new Chart($("#avgNewsSentimentGraphCanvas")[0].getContext('2d')).Scatter(d, options);
 			
  		});	
+ 		
+ 		// Company locations on map
+ 		$.post( "qeuryRequest",  {"companyLocations":companyName}).done(function(data){
+ 			data = JSON.parse(data);
+ 			host.append("<div id=\"world-map\" style=\"width: 600px; height: 400px\"></div>");
+			
+ 			var vecmap = $('#world-map').vectorMap({
+ 			    map: 'world_mill',
+ 			    scaleColors: ['#C8EEFF', '#0071A4'],
+ 			    normalizeFunction: 'polynomial',
+ 			    hoverOpacity: 0.7,
+ 			    hoverColor: false,
+ 			    markerStyle: {
+ 			      initial: {
+ 			        fill: '#F8E23B',
+ 			        stroke: '#383f47'
+ 			      }
+ 			    },
+ 			    backgroundColor: '#383f47',
+ 			    markers: data,
+ 			  });
+ 		});
  		
  		// Add Company Relations
  		getNewsRelation(companyName);
