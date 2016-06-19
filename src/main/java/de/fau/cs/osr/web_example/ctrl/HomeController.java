@@ -365,6 +365,16 @@ public class HomeController {
 				answers.add("\""+key+"\"");
 				avgNewsSentimentCache.put(key, new AvgNewsSentimentCacheEntry(System.currentTimeMillis(), resultString));
 			}
+			// Company locations (gps coords)
+			if(requests.containsKey("companyLocations")){
+				Map map = DBpedia.getCompanyLocationCoordonates(requests.get("companyLocations"));
+				Iterator it = map.entrySet().iterator();
+			    while (it.hasNext()) {
+			        Map.Entry pair = (Map.Entry)it.next();
+			        it.remove(); 
+			        answers.add("{\"latLng\":\""+pair.getValue()+"\",\"name\":\"" + pair.getKey()+"\"}");
+			    }
+			}
 		}
 		
 		return "["+StringUtils.join(answers, ",")+"]";
