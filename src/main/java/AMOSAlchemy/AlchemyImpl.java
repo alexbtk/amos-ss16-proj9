@@ -10,6 +10,7 @@ package AMOSAlchemy;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -295,5 +296,37 @@ public class AlchemyImpl implements IAlchemy{
 		}
 		return avgSentiment;
 	}
+	
+	/**
+	 * Get the sentiment of an entity over a period of time
+	 * 
+	 * @param entityName - an array with the names of products or companies
+	 * @param entity - the company or product
+	 * @param weeks - number of weeks
+	 * @param limit - the limit of news for a query
+	 */
+	public ArrayList<String> getAvgNewsSentimentPeriod(String[] entityName, String entity, int weeks, int limit)throws BadRequestException{
+		double[] rs = new double[weeks];
+		double k = 0.;
+		for(int j=0;j<entityName.length;++j){
+			double avgSentiment = getAvgNewsSentiment(entityName[j], entity, "now-7d", "now", limit);
+			rs[0] += avgSentiment;
+
+			for(int i = 1; i < weeks; i++){
+				avgSentiment = getAvgNewsSentiment(entityName[j], entity, "now-" + (7*(i+1)) + "d", "now-" + (7*(i)) + "d", limit);
+				rs[i] += avgSentiment;
+			}
+			k=k+1;
+		}
+		ArrayList<String> ra =  new ArrayList<String>();
+		for(int j=0;j<weeks;++j){
+			rs[j] = rs[j]/k;
+			ra.add(String.valueOf(rs[j]));
+			//System.out.println(rs[j]);
+		}
+		
+		return ra;
+	}
+
 
 }

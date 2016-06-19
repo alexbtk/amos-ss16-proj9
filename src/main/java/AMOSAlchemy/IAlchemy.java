@@ -27,4 +27,6 @@ public interface IAlchemy {
 	public double getNumberSentimentAnalysisOfNews(String name, String entity, String startTime, String endTime, int limit)throws BadRequestException;
 	public void setAlchemyConceptsImpl(String username, String password);
 	public double getAvgNewsSentiment(String companyName, String entity, String startTime, String endTime, int limit)throws BadRequestException;
+	public ArrayList<String> getAvgNewsSentimentPeriod(String[] entityName, String entity, int weeks, int limit)throws BadRequestException;
+
 }

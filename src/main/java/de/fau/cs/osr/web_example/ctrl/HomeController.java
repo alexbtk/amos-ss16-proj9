@@ -28,6 +28,7 @@ import com.ibm.watson.developer_cloud.alchemy.v1.model.DocumentSentiment;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -311,35 +312,59 @@ public class HomeController {
 		if(requests.containsKey("avgCompanyProducts")){
 			String avgCP = requests.get("avgCompanyProducts");
 			String avgCtP = requests.get("avgCompetitorsProducts");
-			String productsCP = requests.get("productsCP");
-			String productsCtP = requests.get("productsCtP");
+			String[] productsCP = requests.get("productsCP").split(",");
+			String[] productsCtP = requests.get("productsCtP").split(",");
 			int days = Integer.parseInt(requests.get("timeFrame"));
 			
 			// Create the key
 			String key = "graph-products|"+StringUtils.join(productsCP,",")+"|"
 					     +StringUtils.join(productsCtP,",")+"|"+avgCP+avgCtP+requests.get("timeFrame");
 			
-			if(avgNewsSentimentCache.containsKey(key) && avgNewsSentimentCache.get(key).getTimestamp() < 86400000){
+			if(false && avgNewsSentimentCache.containsKey(key) && avgNewsSentimentCache.get(key).getTimestamp() < 86400000){
 				answers.add(avgNewsSentimentCache.get(key).getResultString());
 			}else{
 				if(avgNewsSentimentCache.containsKey(key))
 					avgNewsSentimentCache.remove(key);
 				String resultString = "{\"title\":\"News Sentiment Graph\",\"values\": [";
-				//ArrayList<String> values = new ArrayList<String>();
-				String product = "Iphone";
-				if(productsCP.length() > 0)
-					product = productsCP;
-				for(int i=1;i<=days;++i){
-					double avgSentiment = this.service.getAvgNewsSentiment(product, "O[Product^Technology^OperatingSystem^Facility^FieldTerminology]", "now-" + (7*i) + "d", "now-" + (7*(i-1)) + "d", 5);
-					if(i>1)
-					  resultString += ", " ;
-					resultString += avgSentiment;
+				ArrayList<String> gt = new ArrayList<String>();
+				
+				if(avgCP.equals("1")){
+					ArrayList<String> rs = this.service.getAvgNewsSentimentPeriod(productsCP, "O[Product^Technology^OperatingSystem^Facility^FieldTerminology]",days,5);
+					String resultString1 = "{\"title\":\"Average News sentiment of company products\",\"values\":[";
+					resultString1 += StringUtils.join(rs, ",")+"]}";
+					gt.add(resultString1);
+				}else{
+					for(int i=0;i<productsCP.length;++i){
+						if(productsCP[i].equals("") || productsCP[i].equals(null))
+							continue;
+						ArrayList<String> rs = this.service.getAvgNewsSentimentPeriod(Arrays.copyOfRange(productsCP,i,i+1), "O[Product^Technology^OperatingSystem^Facility^FieldTerminology]",days,5);
+						String resultString1 = "{\"title\":\""+productsCP[i]+"\",\"values\":[";
+						resultString1 += StringUtils.join(rs, ",")+"]}";
+						gt.add(resultString1);
+					}
 				}
-				resultString += "]}";
+				
+				if(avgCtP.equals("1")){
+					ArrayList<String> rs = this.service.getAvgNewsSentimentPeriod(productsCtP, "O[Product^Technology^OperatingSystem^Facility^FieldTerminology]",days,5);
+					String resultString1 = "{\"title\":\"Average News sentiment of competitors products\",\"values\":[";
+					resultString1 += StringUtils.join(rs, ",")+"]}";
+					gt.add(resultString1);
+				}else{
+					for(int i=0;i<productsCtP.length;++i){
+						if(productsCtP[i].equals("") || productsCtP[i].equals(null))
+							continue;
+						ArrayList<String> rs = this.service.getAvgNewsSentimentPeriod(Arrays.copyOfRange(productsCtP,i,i+1), "O[Product^Technology^OperatingSystem^Facility^FieldTerminology]",days,5);
+						String resultString1 = "{\"title\":\""+productsCtP[i]+"\",\"values\":[";
+						resultString1 += StringUtils.join(rs, ",")+"]}";
+						gt.add(resultString1);
+					}
+				}
+				
+				resultString += StringUtils.join(gt, ",")+"]}";
 				answers.add(resultString);
 				answers.add("\""+key+"\"");
 				avgNewsSentimentCache.put(key, new AvgNewsSentimentCacheEntry(System.currentTimeMillis(), resultString));
-			}	
+			}
 		}
 		
 		return "["+StringUtils.join(answers, ",")+"]";
