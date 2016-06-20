@@ -114,8 +114,7 @@
 		$( "#searchButton" ).click(function(){
 			alert("TODO: reload content!");
 		});
-
-    
+  
 	
 });
  
@@ -362,6 +361,20 @@
  	    		});
  	    });
  	   hostG.append($("<p>Weeks</p>").append(timeTextbox)).append(button);
+ 	}else if (id == "twitter"){
+ 		var companyName = $("#dashboardCompanyInput").val();
+ 		
+ 	// Company average twitter sentiment
+ 		$.post( "qeuryRequest",  {"avgTwitterSentimentPosts":companyName}).done(function(data){
+ 			data = JSON.parse(data);
+ 			//Instantiate a slider
+ 			var mySlider = new Slider("#twitterslider", {
+ 			    id: "twitterslider"
+ 			});
+ 			mySlider.setValue(data["avgSentiment"]);
+ 			
+ 		});
+ 		
  	}
  	
  }

@@ -113,7 +113,7 @@ public class HomeController {
 		m.addAttribute("postsList", posts);
 		m.addAttribute("sentimentlist", map);
 
-		return "home";
+		return "index";
 	}
 
 	@RequestMapping(value = "/getTone", method = RequestMethod.POST)
@@ -423,6 +423,19 @@ public class HomeController {
 				location.add("{\"name\":\"" + pair.getKey() + "\",\"latLng\": [" + pair.getValue() + "]}");
 			}
 			answers.add("{\"markers\":[" + StringUtils.join(location, ",") + "]}");
+		}
+		if (requests.containsKey("avgTwitterSentimentPosts")) {
+			List<Status> posts = twitterCrawler.crawlPosts(requests.get("companyTwitterPosts"));
+			Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForTweets(posts, languageService);
+			HashMap<Long, Double> map = twitterAnalyzer.getSentimentForEachTweet(posts, languageService);
+			
+			List postsToSend = new ArrayList<String>();
+			for (Status post : posts) {
+				postsToSend.add("{\"postId\":\"" + post.getId() + "\",\"sentiment\": \"" + map.get(post.getId()) 
+						+"\",\"postUser\": [" + post.getUser().toString() + "]}");
+			}
+			answers.add("{\"avgSentiment\": \"" + avgSentimentValue.toString() + "\"}");
+			
 		}
 
 		return "[" + StringUtils.join(answers, ",") + "]";
