@@ -274,7 +274,8 @@ public class HomeController {
 					while (itL.hasNext()) {
 						Map.Entry pairL = (Map.Entry) itL.next();
 						itL.remove();
-						location.add("{\"name\":\"" + pairL.getKey() + "\",\"latLng\": [" + pairL.getValue() + "]}");
+						location.add("{\"name\":\"" + pairL.getKey() + "\",\"cName\": \"" + pairC.getKey().toString() 
+						+"\",\"latLng\": [" + pairL.getValue() + "]}");
 					}
 					
 				}
