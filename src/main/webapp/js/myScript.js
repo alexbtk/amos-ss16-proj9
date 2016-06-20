@@ -161,6 +161,7 @@
  		
  		$.post( "qeuryRequest",  {"industriesCompetitors":companyName}).done(function(data){
  			data = JSON.parse(data);
+ 			console.log(data);
  			host.empty();
  			host.append("<div id='existCompetitorsIndustry' class='"+companyName+"'></div>");
  			for(var i in data)
@@ -290,9 +291,10 @@
  	    // Graph
  	    var hostG = $('#productsSection #graphProducts');
  	    
- 	    hostG.empty().append('<canvas id="productNewsSentimentGraphCanvas"></canvas>');
  	    
  	    var button = $('<button type="button" class="btn btn-block btn-default">Go</button>');
+ 	    var timeTextbox = $("<input type='textbox' name='timeFrame'>");
+ 	    
  	    button.click(function(){
  	    	var avgCP = "0", avgCtP = "0", productsCP = [], productsCtP = [];
  	    	var timeFrame = 2;
@@ -316,13 +318,12 @@
  	    	
  	    	if(host.find(".box-body").find("input[name=checkAll]").is(':checked'))
  	    		avgCP = "1";
-
- 	    	/*console.log(avgCP);
- 	    	console.log(avgCtP);
- 	    	console.log(productsCP);
- 	    	console.log(productsCtP);
- 	    	return;*/
+ 	    	 	    	
+ 	    	timeFrame = timeTextbox.val();
  	    	
+ 	    	if(isNaN(timeFrame))
+ 	    		timeFrame = 2; 	    	
+ 	    	 	    		    	
  	    	$.post( "qeuryRequest",  {
  	    		"avgCompanyProducts":avgCP, 
  	    		"avgCompetitorsProducts":avgCtP,
@@ -353,12 +354,14 @@
 	 				
 	 				var options = {};
 	 				
+	 				if($("#productNewsSentimentGraphCanvas").length == 0)
+	 					hostG.append('<canvas style="width: 60%;height: 60%;" id="productNewsSentimentGraphCanvas"></canvas>');	 		 	    
+	 		 	    
 	 				var avgNewsChart = new Chart($("#productNewsSentimentGraphCanvas")[0].getContext('2d')).Scatter(d, options);
-	 				
- 	    		
+	 			 	    		
  	    		});
  	    });
- 	   hostG.append(button);
+ 	   hostG.append($("<p>Weeks</p>").append(timeTextbox)).append(button);
  	}
  	
  }
