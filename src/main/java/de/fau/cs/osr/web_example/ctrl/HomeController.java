@@ -263,11 +263,23 @@ public class HomeController {
 						.getIndustryCompaniesNames("<" + pair.getValue().toString() + ">");
 				Iterator itC = mapC.entrySet().iterator();
 				ArrayList<String> comp = new ArrayList<String>();
+				List location = new ArrayList<String>();
 				while (itC.hasNext()) {
 					Map.Entry pairC = (Map.Entry) itC.next();
 					comp.add("\"" + pairC.getKey().toString() + "\"");
+					
+					Map mapL = DBpedia.getCompanyLocationCoordonates(pairC.getKey().toString());
+					Iterator itL = mapL.entrySet().iterator();
+					
+					while (itL.hasNext()) {
+						Map.Entry pairL = (Map.Entry) itL.next();
+						itL.remove();
+						location.add("{\"name\":\"" + pairL.getKey() + "\",\"latLng\": [" + pairL.getValue() + "]}");
+					}
+					
 				}
-				answers.add("{\"name\":\"" + pair.getKey() + "\",\"comp\":[" + StringUtils.join(comp, ",") + "]}");
+				answers.add("{\"name\":\"" + pair.getKey() + "\",\"comp\":[" + StringUtils.join(comp, ",") + 
+						"],\"markers\":[" + StringUtils.join(location, ",") + "]}");
 			}
 		}
 		if (requests.containsKey("industryCompanies")) {
