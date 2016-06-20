@@ -363,15 +363,22 @@
  	   hostG.append($("<p>Weeks</p>").append(timeTextbox)).append(button);
  	}else if (id == "twitter"){
  		var companyName = $("#dashboardCompanyInput").val();
+ 		if(companyName == ""){
+ 			alert("No company!!");
+ 			return;
+ 		}
  		
  	// Company average twitter sentiment
  		$.post( "qeuryRequest",  {"avgTwitterSentimentPosts":companyName}).done(function(data){
  			data = JSON.parse(data);
+ 			var sentValue = parseFloat(data[0]["avgSentiment"]).toFixed(2);
+ 			
  			//Instantiate a slider
  			var mySlider = new Slider("#twitterslider", {
- 			    id: "twitterslider"
+ 				precision: 2,
+ 			    value: sentValue
  			});
- 			mySlider.setValue(data["avgSentiment"]);
+
  			
  		});
  		

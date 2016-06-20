@@ -363,7 +363,6 @@
 									<br />Average Twitter Posts sentiment value:<br /> <input
 										id="twitterslider" type="text" data-slider-min="-1"
 										data-slider-max="1" data-slider-step="0.1"
-										data-slider-value="0.5"
 										data-slider-enabled="false" />
 
 								</div>
