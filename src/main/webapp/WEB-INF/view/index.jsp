@@ -83,11 +83,11 @@
 	href="${pageContext.request.contextPath}/css/style.css">
 
 <style type="text/css">
-#twitterslider .slider-selection {
+.slider .slider-selection {
 	background: red;
 }
 
-#twitterslider .slider-track-high {
+.slider .slider-track-high {
 	background: green;
 }
 </style>
