@@ -461,8 +461,7 @@ function openSection(id) {
 										var options = {};
 
 										if ($("#productNewsSentimentGraphCanvas").length == 0)
-											hostG
-													.append('<canvas style="width: 60%;height: 60%;" id="productNewsSentimentGraphCanvas"></canvas>');
+											hostG.append('<canvas style="width: 60%;height: 60%;" id="productNewsSentimentGraphCanvas"></canvas>');
 
 										var avgNewsChart = new Chart(
 												$("#productNewsSentimentGraphCanvas")[0]
@@ -485,6 +484,9 @@ function openSection(id) {
 		}).done(function(data) {
 			data = JSON.parse(data);
 			var sentValue = data[0]["avgSentiment"];
+			var negPostsArray = data[0]["negPosts"];
+			var neutPostsArray = data[0]["neutPosts"];
+			var posPostsArray = data[0]["posPosts"];
 
 			// Instantiate a slider
 			var mySlider;
@@ -494,13 +496,27 @@ function openSection(id) {
 				});
 			}
 			mySlider.setValue(Number(sentValue));
+			
+			var negtab = $('#negsent');
+			var neuttab = $('#neutsent');
+			var postab = $('#possent');
+			
+			for ( var i in negPostsArray)
+				negtab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + negPostsArray[i]["postId"] + "\">+</button>Tweet from User " + negPostsArray[i]["postUser"] +"</p><div id=\"" + negPostsArray[i]["postId"] + "\" class=\"collapse\">" + negPostsArray[i]["postText"] + "</div>");	
+				
+			for ( var i in neutPostsArray)
+				neuttab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + neutPostsArray[i]["postId"] + "\">+</button>Tweet from User " + neutPostsArray[i]["postUser"] +"</p><div id=\"" + neutPostsArray[i]["postId"] + "\" class=\"collapse\">" + neutPostsArray[i]["postText"] + "</div>");	
+				
+			for ( var i in posPostsArray)
+				postab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + posPostsArray[i]["postId"] + "\">+</button>Tweet from User " + posPostsArray[i]["postUser"] +"</p><div id=\"" + posPostsArray[i]["postId"] + "\" class=\"collapse\">" + posPostsArray[i]["postText"] + "</div>");	
+				
 		});
 
 	}
 
 }
 /*
- * Checks if a object exists
+ * Checks if object exists
  */
 function isDefined(x) {
 	var undefined;

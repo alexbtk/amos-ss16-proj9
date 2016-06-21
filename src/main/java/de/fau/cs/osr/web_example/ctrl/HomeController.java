@@ -429,12 +429,24 @@ public class HomeController {
 			Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForTweets(posts, languageService);
 			HashMap<Long, Double> map = twitterAnalyzer.getSentimentForEachTweet(posts, languageService);
 			
-			List postsToSend = new ArrayList<String>();
+			List negPostsToSend = new ArrayList<String>();
+			List neutPostsToSend = new ArrayList<String>();
+			List posPostsToSend = new ArrayList<String>();
 			for (Status post : posts) {
-				postsToSend.add("{\"postId\":\"" + post.getId() + "\",\"sentiment\": \"" + map.get(post.getId()) 
-						+"\",\"postUser\": [" + post.getUser().toString() + "]}");
+				Double postSentiment = map.get(post.getId());
+				
+				if (postSentiment != null && postSentiment < 0){
+					negPostsToSend.add("{\"postId\":\"" + post.getId() + "\",\"sentiment\": \"" + postSentiment 
+					+"\",\"postUser\":" + "\"" + post.getUser().getName() +"\",\"postText\":" + "\"" + post.getText() + "\"}");
+				}else if (postSentiment != null && postSentiment <= 0.5 && postSentiment >= 0){
+					neutPostsToSend.add("{\"postId\":\"" + post.getId() + "\",\"sentiment\": \"" + postSentiment 
+							+"\",\"postUser\":" + "\"" + post.getUser().getName() +"\",\"postText\":" + "\"" + post.getText() + "\"}");
+				}else if (postSentiment != null){
+					posPostsToSend.add("{\"postId\":\"" + post.getId() + "\",\"sentiment\": \"" + postSentiment 
+							+"\",\"postUser\":" + "\"" + post.getUser().getName() +"\",\"postText\":" + "\"" + post.getText() + "\"}");
+				}
 			}
-			answers.add("{\"avgSentiment\": \"" + avgSentimentValue.toString() + "\"}");
+			answers.add("{\"avgSentiment\": \"" + avgSentimentValue.toString() + "\",\"negPosts\":[" + StringUtils.join(negPostsToSend, ",") +  "],\"neutPosts\":[" + StringUtils.join(neutPostsToSend, ",") +  "],\"posPosts\":[" + StringUtils.join(posPostsToSend, ",") + "]}");
 			
 		}
 

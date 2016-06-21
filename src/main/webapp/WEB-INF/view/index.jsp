@@ -381,89 +381,14 @@
 							</ul>
 							<div class="tab-content">
 								<div class="tab-pane active" id="negsent">
-									<c:choose>
-										<c:when test="${fn:length(postsList) > 1}">
-											<c:forEach begin="0" end="${fn:length(postsList) - 1}"
-												var="index">
-												<c:choose>
-													<c:when
-														test="${sentimentlist.get(postsList[index].getId()) < 0}">
-														<p>
-															<button type="button" class="btn btn-xs"
-																data-toggle="collapse"
-																data-target="#<c:out value="${postsList[index].getId()}" />">+</button>
-															Tweet from User
-															<c:out value="${postsList[index].getUser().getName()}" />
-														</p>
-														<div id="<c:out value="${postsList[index].getId()}" />"
-															class="collapse">
-															<c:out value="${postsList[index].getText()}" />
-														</div>
-													</c:when>
-													<c:otherwise>
-													</c:otherwise>
-												</c:choose>
-											</c:forEach>
-										</c:when>
-										<c:otherwise>
-										</c:otherwise>
-									</c:choose>
+									
 								</div>
 								<div class="tab-pane" id="neutsent">
-									<c:choose>
-										<c:when test="${fn:length(postsList) > 1}">
-											<c:forEach begin="0" end="${fn:length(postsList) - 1}"
-												var="index">
-												<c:choose>
-													<c:when
-														test="${(sentimentlist.get(postsList[index].getId()) >= 0) and (sentimentlist.get(postsList[index].getId()) <= 0.5)}">
-														<p>
-															<button type="button" class="btn btn-xs"
-																data-toggle="collapse"
-																data-target="#<c:out value="${postsList[index].getId()}" />">+</button>
-															Tweet from User
-															<c:out value="${postsList[index].getUser().getName()}" />
-														</p>
-														<div id="<c:out value="${postsList[index].getId()}" />"
-															class="collapse">
-															<c:out value="${postsList[index].getText()}" />
-														</div>
-													</c:when>
-													<c:otherwise>
-													</c:otherwise>
-												</c:choose>
-											</c:forEach>
-										</c:when>
-										<c:otherwise>
-										</c:otherwise>
-									</c:choose>
+									
 								</div>
 								<div class="tab-pane" id="possent">
-									<c:choose>
-										<c:when test="${fn:length(postsList) > 1}">
-											<c:forEach begin="0" end="${fn:length(postsList) - 1}"
-												var="index">
-												<c:choose>
-													<c:when
-														test="${sentimentlist.get(postsList[index].getId()) > 0.5}">
-														<p>
-															<button type="button" class="btn btn-xs"
-																data-toggle="collapse"
-																data-target="#<c:out value="${postsList[index].getId()}" />">+</button>
-															Tweet from User
-															<c:out value="${postsList[index].getUser().getName()}" />
-														</p>
-														<div id="<c:out value="${postsList[index].getId()}" />"
-															class="collapse">
-															<c:out value="${postsList[index].getText()}" />
-														</div>
-													</c:when>
-												</c:choose>
-											</c:forEach>
-										</c:when>
-										<c:otherwise>
-										</c:otherwise>
-									</c:choose>
+									
+									
 								</div>
 							</div>
 						</div>
