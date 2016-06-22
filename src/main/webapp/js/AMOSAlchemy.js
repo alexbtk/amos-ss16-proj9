@@ -89,11 +89,13 @@
 							actions[relations[j]['action']['verb']['text']] = [{
 								"action":relations[j]['action']['text'],
 								"object":relations[j]['object']['text'],
+								"url" : docs[i]['source']['enriched']['url']['url']
 							}];
 						else
 						actions[relations[j]['action']['verb']['text']].push({
 								"action":relations[j]['action']['text'],
 								"object":relations[j]['object']['text'],
+								"url" : docs[i]['source']['enriched']['url']['url']
 							});
 					}
 				}
@@ -101,18 +103,23 @@
 			$.each(actions,function(key,val){
 				var ul = $("<ul></ul>");
 				for(var i in val)
-					ul.append($("<li></li>").text(val[i]['action']+" "+val[i]['object']));
+					ul.append($("<li></li>").append($("<a href='"+val[i]['url']+"' target='_blank'></a>").text(val[i]['action']+" "+val[i]['object'])));
 				rel.append($("<li></li>").html(ul));
 			});
 			console.log(actions);
-			$( "#dialog" ).html(rel).dialog( "open" );
+			//$( "#dialog" ).html(rel).dialog( "open" );
+			var colapseB = $($("#template").html());
+	 	    var host = $('#companySection');  
+	 	    colapseB.find(".box-title").text("Recent Developments");
+	 	    colapseB.find(".box-body").append(rel);
+	 	    host.append(colapseB);
 		}
 	}
 
     function getNewsRelation(name){
 		var params = {
 			'name':name,
-			'return':'q.enriched.url.enrichedTitle.relations,q.enriched.url.relations',
+			'return':'q.enriched.url.enrichedTitle.relations,q.enriched.url.relations,q.enriched.url.url',
 			'start':'now-3d',
 			'end':'now',
 			'criteria':[

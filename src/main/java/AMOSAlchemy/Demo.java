@@ -7,6 +7,10 @@
 */
 package AMOSAlchemy;
 
+import java.util.Arrays;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.ibm.watson.developer_cloud.service.BadRequestException;
 
 public class Demo {
@@ -19,8 +23,9 @@ public class Demo {
 		AlchemyConceptsImpl alchemyConcepts = new AlchemyConceptsImpl("4998caf2-5f4c-46de-b88f-5f530af7425b", "qfKiK2XDQlxJ");
 
 		try{
-			
-			System.out.println("Related concepts to abstract: " + alchemyConcepts.getRelatedDocs(alchemyConcepts.getAbstract("Microsoft")));
+			String[] d = {"Iphone","Ipad"};
+			System.out.println(StringUtils.join(service.getAvgNewsSentimentPeriod(Arrays.copyOfRange(d,1,2),"O[Product^Technology^OperatingSystem^Facility^FieldTerminology]",2,1),","));
+			//System.out.println("Related concepts to abstract: " + alchemyConcepts.getRelatedDocs(alchemyConcepts.getAbstract("Microsoft")));
 			
 			//System.out.println("Main industry: " + service.getCompanyMainIndustry("Apple"));
 			//System.out.println("Main product: " + service.getCompanyMainProduct("Apple"));
