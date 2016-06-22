@@ -261,7 +261,7 @@ function openSection(id) {
 										d0["pointStrokeColor"] = '#fff';
 										d.push(d0);
 										
-										if(d.length == competitors.length){
+										if(d.length == checkedCompetitors.length){
 											//Draw graph
 											var options = {};
 
