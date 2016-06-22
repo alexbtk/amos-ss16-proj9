@@ -136,6 +136,13 @@ $(document)
 					$("#searchButton").click(function() {
 						alert("TODO: reload content!");
 					});
+					
+					$("#avgNewsSentimentGraphSlider input").change(function(){
+						$("#avgNewsSentimentGraphSlider p").html(
+								"Weeks for News Sentiment Graph: " + 
+								$("#avgNewsSentimentGraphSlider input").val() +
+								" Weeks");
+					});
 
 				});
 
@@ -155,9 +162,9 @@ function displayIndustryCompetitors(host, colapseB, industryName, companiesName)
 	colapseB.find(".box-title").text(industryName);
 	for ( var i in companiesName)
 		colapseB.find(".box-body").append(
-				'<input type="checkbox" name="' + companiesName[i]
+				'<input class="' + host.attr("id") + '_checkbox' + '" type="checkbox" name="' + companiesName[i]
 						+ '" value="' + companiesName[i] + '">'
-						+ companiesName[i] + '<br/>');
+						+ companiesName[i] + '</input>' + '<br/>');
 	host.append(colapseB);
 }
 
@@ -197,9 +204,76 @@ function openSection(id) {
 					host.empty();
 					host.append("<div id='existCompetitorsIndustry' class='"
 							+ companyName + "'></div>");
+					host.append("<div id='competitorBoxes'></div>");
 					for ( var i in data)
-						displayIndustryCompetitors(host, colapseB.clone(),
+						displayIndustryCompetitors($("#competitorBoxes"), colapseB.clone(),
 								data[i]['name'], data[i]['comp']);
+				
+					
+					host.append(
+							"<div id='competitorsSentimentGraphSlider'>" +
+								"<p>Weeks for Competitors Sentiment Graph: 7 Weeks</p>" +
+								"<input type='range' value='7' min='2' max='52'/><br />" +
+							"</div> <div id='competitorsSentimentGraph'> <button>Draw Graph!</button>" +
+							"<canvas id='competitorsSentimentGraphCanvas'></canvas></div>");
+					
+					$("#competitorsSentimentGraphSlider input").change(function(){
+						$("#competitorsSentimentGraphSlider p").html(
+								"Weeks for News Sentiment Graph: " + 
+								$("#competitorsSentimentGraphSlider input").val() +
+								" Weeks");
+					});
+					
+					$("#competitorsSentimentGraph button").click(function(){
+						var colors = ["#fff275", "#ff8c42", "#ff3c38", "#a23e48", "#6c8ead"];
+						var colorIndex = 0;
+						var checkedCompetitors = [];
+						
+						//competitorBoxes_checkbox
+						$( ".competitorBoxes_checkbox" ).each(function( index ) {
+							  if($(this).prop("checked"))
+								  checkedCompetitors.push($(this).val());
+						});
+						
+						var d = [];
+						
+						checkedCompetitors.forEach(function(entry) {
+							$.post("qeuryRequest", {
+								"avgNewsSentimentGraph" : entry,
+								"avgNewsSentimentGraphWeeks" : $("#competitorsSentimentGraphSlider input").val()
+							}).done(
+									function(data) {
+										res = JSON.parse(data);
+
+										var d0 = {};
+										d0["data"] = [];
+										var i = 0;
+										res[i]['values'].forEach(function(e) {
+											d0["data"].push({
+												"x" : (-1 * i),
+												"y" : e
+											});
+											i++;
+										});
+										d0["label"] = entry;
+										d0["strokeColor"] = colors[colorIndex];
+										d0["pointColor"] = colors[colorIndex];
+										d0["pointStrokeColor"] = '#fff';
+										d.push(d0);
+										
+										if(d.length == competitors.length){
+											//Draw graph
+											var options = {};
+
+											var avgNewsChart = new Chart(
+													$("#competitorsSentimentGraphCanvas")[0]
+															.getContext('2d')).Scatter(d, options);
+										}
+									});
+							
+							colorIndex = (colorIndex+1) % 5;
+						});
+					});
 				});
 	} else if (id == "company") {
 		var companyName = $("#dashboardCompanyInput").val();
@@ -219,7 +293,7 @@ function openSection(id) {
 
 		$.post("qeuryRequest", {
 			"avgNewsSentimentGraph" : companyName,
-			"avgNewsSentimentGraphWeeks" : "7"
+			"avgNewsSentimentGraphWeeks" : $("#avgNewsSentimentGraphSlider input").val()
 		}).done(
 				function(data) {
 					res = JSON.parse(data);
@@ -239,7 +313,7 @@ function openSection(id) {
 						});
 						i++;
 					});
-					d0["label"] = 'Average News Sentiment'
+					d0["label"] = 'Average News Sentiment';
 					d0["strokeColor"] = '#F16220';
 					d0["pointColor"] = '#F16220';
 					d0["pointStrokeColor"] = '#fff';

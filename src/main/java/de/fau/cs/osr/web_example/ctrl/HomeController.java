@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -48,6 +49,8 @@ import AMOSAlchemy.IAlchemyFactory;
 
 @Controller
 public class HomeController {
+	
+	private static final long CACHE_TIME = TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS);
 
 	private class AvgNewsSentimentCacheEntry {
 		private long timestamp;
@@ -293,27 +296,27 @@ public class HomeController {
 			}
 		}
 		if (requests.containsKey("avgNewsSentimentGraph")) {
-			if (avgNewsSentimentCache.containsKey(requests.get("avgNewsSentimentGraph"))) {
-
-				AvgNewsSentimentCacheEntry e = avgNewsSentimentCache.get(requests.get("avgNewsSentimentGraph"));
+			int w = Integer.parseInt(requests.get("avgNewsSentimentGraphWeeks"));
+			if (avgNewsSentimentCache.containsKey(requests.get("avgNewsSentimentGraph") + "+" + w + "Weeks")) {
+				AvgNewsSentimentCacheEntry e = avgNewsSentimentCache.get(requests.get("avgNewsSentimentGraph") + "+" + w + "Weeks");
 				long diffTime = System.currentTimeMillis() - e.getTimestamp();
-
-				// if diffTime smaller than one day in milliseconds
-				if (diffTime < 86400000)
-					answers.add(avgNewsSentimentCache.get(requests.get("avgNewsSentimentGraph")).getResultString());
+				
+				// if diffTime smaller than chache time
+				if (diffTime < CACHE_TIME)
+					answers.add(avgNewsSentimentCache.get(requests.get("avgNewsSentimentGraph") + "+" + w + "Weeks").getResultString());
 				// Cache entry too old -- create new entry
 				else {
 					// remove old entry
-					avgNewsSentimentCache.remove(requests.get("avgNewsSentimentGraph"));
+					avgNewsSentimentCache.remove(requests.get("avgNewsSentimentGraph") + "+" + w + "Weeks");
 
 					String resultString = "{\"title\":\"News Sentiment Graph\",\"values\": [";
-					int days = Integer.parseInt(requests.get("avgNewsSentimentGraphWeeks"));
-					if (days > 0) {
+					
+					if (w > 0) {
 						double avgSentiment = this.service.getAvgNewsSentiment(requests.get("avgNewsSentimentGraph"),
 								"Company", "now-7d", "now", 5);
 						resultString += avgSentiment;
 
-						for (int i = 1; i < days; i++) {
+						for (int i = 1; i < w; i++) {
 							avgSentiment = this.service.getAvgNewsSentiment(requests.get("avgNewsSentimentGraph"),
 									"Company", "now-" + (7 * i) + "d", "now-" + (7 * (i - 1)) + "d", 5);
 							resultString += ", " + avgSentiment;
@@ -321,19 +324,18 @@ public class HomeController {
 
 						resultString += "]}";
 						answers.add(resultString);
-						avgNewsSentimentCache.put(requests.get("avgNewsSentimentGraph"),
+						avgNewsSentimentCache.put(requests.get("avgNewsSentimentGraph") + "+" + w + "Weeks",
 								new AvgNewsSentimentCacheEntry(System.currentTimeMillis(), resultString));
 					}
 				}
 			} else {
 				String resultString = "{\"title\":\"News Sentiment Graph\",\"values\": [";
-				int days = Integer.parseInt(requests.get("avgNewsSentimentGraphWeeks"));
-				if (days > 0) {
+				if (w > 0) {
 					double avgSentiment = this.service.getAvgNewsSentiment(requests.get("avgNewsSentimentGraph"),
 							"Company", "now-7d", "now", 5);
 					resultString += avgSentiment;
 
-					for (int i = 1; i < days; i++) {
+					for (int i = 1; i < w; i++) {
 						avgSentiment = this.service.getAvgNewsSentiment(requests.get("avgNewsSentimentGraph"),
 								"Company", "now-" + (7 * i) + "d", "now-" + (7 * (i - 1)) + "d", 5);
 						resultString += ", " + avgSentiment;
@@ -341,7 +343,7 @@ public class HomeController {
 
 					resultString += "]}";
 					answers.add(resultString);
-					avgNewsSentimentCache.put(requests.get("avgNewsSentimentGraph"),
+					avgNewsSentimentCache.put(requests.get("avgNewsSentimentGraph") + "+" + w + "Weeks",
 							new AvgNewsSentimentCacheEntry(System.currentTimeMillis(), resultString));
 				}
 			}

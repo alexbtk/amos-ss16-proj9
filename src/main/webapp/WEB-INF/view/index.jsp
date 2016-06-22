@@ -350,6 +350,7 @@
 				</div>
 				<!-- /.box -->
 				<a href="${pageContext.request.contextPath}/locationmap">Locationmap!</a>
+				<div id="avgNewsSentimentGraphSlider"><p>Weeks for News Sentiment Graph: 7 Weeks</p><input type="range" value="7" min="2" max="52"/><br /></div>
 				<div id="avgNewsSentimentGraph">
 					<canvas id="avgNewsSentimentGraphCanvas"></canvas>
 				</div>
