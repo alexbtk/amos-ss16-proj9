@@ -195,12 +195,15 @@ public class HomeController {
 		}
 		if (requests.containsKey("question6")) {
 			List<Status> posts = twitterCrawler.crawlPosts(requests.get("question6"));
+			Double newsSentiment = service.getNumberSentimentAnalysisOfNews(requests.get("question6"),
+					"Company", "now-1d", "now", 20);
 			Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForTweets(posts, languageService);
 			answers.add(
 					"{\"title\":\"Twiter vs News Sentiment\",\"content\":\""
-							+ "<p>News: " + service.getNumberSentimentAnalysisOfNews(requests.get("question6"),
-									"Company", "now-1d", "now", 20)
-							+ "</p><p>Twiter:" + avgSentimentValue.toString() + "</p>\"}");
+							+ "<p>News: " + newsSentiment 
+							+ "</p><p>Twiter:" + avgSentimentValue.toString() +
+							"</p>\",\"twiter\":" + avgSentimentValue.toString() + 
+							",\"news\":"+newsSentiment.toString()+"}");
 		}
 		if (requests.containsKey("question7")) {
 			Map map = DBpedia.getCompanyLocationCoordonates(requests.get("question7"));
