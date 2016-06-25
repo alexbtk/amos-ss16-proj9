@@ -96,12 +96,17 @@ public class AlchemyImpl implements IAlchemy{
 	@Override
 	public String getPossibleCompetitors(String companyName) throws BadRequestException{
 		
-		ArrayList list = alchemyNews.getPossibibleCompetitorsList(companyName);
-		String possibleCompetitors = "";
-		Iterator<String> itr = list.iterator();
-		while(itr.hasNext()){
-				 possibleCompetitors += "/" + itr.next();
+		List<String> list = alchemyNews.getPossibibleCompetitorsList(companyName);
+		String possibleCompetitors = "[";
+		for(int i = 0; i < list.size(); i++){
+			String s = list.get(i);
+			String location = DBpedia.getCompanyLocationCountry(s);
+			possibleCompetitors += "{\"location\" : \"" + location + "\", \"competitor\" : \"" + s + "\"}";
+			
+			if(i < list.size()-1)
+				possibleCompetitors += ",";
 		}
+		possibleCompetitors += "]";
 		return possibleCompetitors;		
 	}
 	
