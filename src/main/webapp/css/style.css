@@ -61,7 +61,7 @@
 	height: 100%;
 }
 
-#avgNewsSentimentGraphSlider{
+#avgNewsSentimentGraphSlider,#avgNewsSentimentGraphSliderProduct{
 	width: 300px;
 }
 

@@ -459,8 +459,12 @@ function openSection(id) {
 		var hostG = $('#productsSection #graphProducts');
 
 		var button = $('<button type="button" class="btn btn-block btn-default">Go</button>');
-		var timeTextbox = $("<input type='textbox' name='timeFrame'>");
-
+		var slider = $('<div id="avgNewsSentimentGraphSliderProduct"><p>Weeks for News Sentiment Graph: 7 Weeks</p><input type="range" value="7" min="2" max="52"/><br /></div>');
+		slider.find("input").change(function(){
+			$(this).parent().find('p').html("Weeks for News Sentiment Graph: "+
+					$(this).val()+" weeks");
+		});
+		
 		button
 				.click(function() {
 					var avgCP = "0", avgCtP = "0", productsCP = [], productsCtP = [];
@@ -490,7 +494,8 @@ function openSection(id) {
 							':checked'))
 						avgCP = "1";
 
-					timeFrame = timeTextbox.val();
+					timeFrame = slider.find("input").val();
+					
 
 					if (isNaN(timeFrame))
 						timeFrame = 2;
@@ -544,7 +549,7 @@ function openSection(id) {
 
 									});
 				});
-		hostG.append($("<p>Weeks</p>").append(timeTextbox)).append(button);
+		hostG.append(slider).append(button);
 	} else if (id == "twitter") {
 		var companyName = $("#dashboardCompanyInput").val();
 		if (companyName == "") {
