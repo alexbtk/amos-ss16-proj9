@@ -424,6 +424,46 @@
 			<!-- /.box-footer-->
 		</div>
 		<!-- /.box --> </template>
+		<template id="boxSentimentReview">
+		<div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Bordered Table</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table class="table table-bordered" id="sentimentQuery">
+                <tr>
+                  <th style="width: 10px">#</th>
+                  <th>Category</th>
+                  <th>Importance</th>
+                  <th style="width: 40px">Result</th>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" name="twitter"></td>
+                  <td>Twitter sentiment</td>
+                  <td>
+                    <input id="twiterSlider" data-slider-id='red' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="10" data-slider-value="100" class="slider"/>
+                  </td>
+                  <td rowspan="2">
+                    <input id="sentimentResult" type="text" value="" class="slider form-control" data-slider-min="-2" data-slider-max="2" data-slider-step="0.1" data-slider-value="0" data-slider-orientation="vertical" data-slider-selection="before" data-slider-tooltip="show" data-slider-id="green">
+                  </td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" name="news"></td>
+                  <td>News sentiment</td>
+                  <td>
+                    <input id="newsSlider" data-slider-id='blue' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="10" data-slider-value="100" class="slider"/>
+                  </td>
+                  
+                </tr>
+              
+              </table>
+            </div>
+            <!-- /.box-body -->
+            <button type="button" id="boxSentimentReviewmakeQuery" class="btn btn-block btn-primary">Calculate</button>
+          </div>
+          <!-- /.box -->
+		</template>
 	</div>
 
 

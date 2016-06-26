@@ -6,6 +6,8 @@
  * Date: 2016-06-11
  */
 
+
+
 $(document)
 		.ready(
 				function() {
@@ -143,6 +145,7 @@ $(document)
 								$("#avgNewsSentimentGraphSlider input").val() +
 								" Weeks");
 					});
+					
 
 				});
 
@@ -290,6 +293,39 @@ function openSection(id) {
 		var colapseB = $($("#template").html());
 		var host = $('#companySection');
 		host.empty();
+		
+		//boxSentimentReview
+		var sentimentReview = $("#boxSentimentReview").html();
+		
+		host.append(sentimentReview);
+		$('.slider').slider();
+	    
+	    $("#sentimentQuery").find("input[type=checkbox]").each(function(){
+	      $(this).change(function(){
+	        if($(this).is(":checked")){
+	          $(this).parent().next().next().find("input").slider('setValue', 100);
+	         }else{
+	          $(this).parent().next().next().find("input").slider('setValue', 0);
+	         }
+	      })
+	    }) ;
+	    $("#boxSentimentReviewmakeQuery").click(function(){
+	    	var twitter = parseInt($("#sentimentQuery").find("#twiterSlider").val());
+	    	var news = parseInt($("#sentimentQuery").find("#newsSlider").val());
+	    	$.post("qeuryRequest", {
+				"question6" : companyName,
+			}).done(
+					function(data) {
+						var res = JSON.parse(data);						
+						console.log(res);
+						var valT = res[0]['twiter'];
+						var valN = res[0]['news'];
+						var reSe = 2.;
+						reSe = (valT*twitter)/100. + (valN*news)/100;
+						$('#sentimentResult').slider('setValue', reSe);
+					});
+	    });
+	    
 
 		$.post("qeuryRequest", {
 			"avgNewsSentimentGraph" : companyName,
