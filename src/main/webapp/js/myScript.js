@@ -208,10 +208,46 @@ function openSection(id) {
 					host.append("<div id='existCompetitorsIndustry' class='"
 							+ companyName + "'></div>");
 					host.append("<div id='competitorBoxes'></div>");
-					for ( var i in data)
+					var marckersC = [];
+					for ( var i in data){
 						displayIndustryCompetitors($("#competitorBoxes"), colapseB.clone(),
 								data[i]['name'], data[i]['comp']);
-				
+						for(var j in data[i]['markers'])
+							marckersC.push({latLng: data[i]['markers'][j]['latLng'], name: data[i]['markers'][j]['cName'] });
+					}
+					console.log(marckersC);
+					host.append('<div id="world-map-markers-competitors" style="height: 325px;"></div>');
+					$('#world-map-markers-competitors').vectorMap({
+					    map: 'world_mill_en',
+					    normalizeFunction: 'polynomial',
+					    hoverOpacity: 0.7,
+					    hoverColor: false,
+					    backgroundColor: 'transparent',
+					    regionStyle: {
+					      initial: {
+					        fill: 'rgba(210, 214, 222, 1)',
+					        "fill-opacity": 1,
+					        stroke: 'none',
+					        "stroke-width": 0,
+					        "stroke-opacity": 1
+					      },
+					      hover: {
+					        "fill-opacity": 0.7,
+					        cursor: 'pointer'
+					      },
+					      selected: {
+					        fill: 'yellow'
+					      },
+					      selectedHover: {}
+					    },
+					    markerStyle: {
+					      initial: {
+					        fill: '#00a65a',
+					        stroke: '#111'
+					      }
+					    },
+					    markers: marckersC
+					  });
 					
 					host.append(
 							"<div id='competitorsSentimentGraphSlider'>" +
