@@ -8,4 +8,6 @@
 # facebook4j		| Apache License v2.0	| https://github.com/roundrop/facebook4j              #
 # jquery | MIT license | https://jquery.org/license/ #
 # bootstrap | MIT license | https://github.com/twbs/bootstrap/blob/master/LICENSE #
-# bootstrap slider | MIT license | https://github.com/seiyria/bootstrap-slider/blob/master/LICENSE.md
+# bootstrap slider | MIT license | https://github.com/seiyria/bootstrap-slider/blob/master/LICENSE.md #
+# okio | Apache License 2.0 | https://github.com/square/okio/blob/master/LICENSE.txt #
+# okhttp | Apache License 2.0 | https://github.com/square/okhttp/blob/master/LICENSE.txt #
