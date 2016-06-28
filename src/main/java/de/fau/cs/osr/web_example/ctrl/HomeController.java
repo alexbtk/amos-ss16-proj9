@@ -434,7 +434,7 @@ public class HomeController {
 			answers.add("{\"markers\":[" + StringUtils.join(location, ",") + "]}");
 		}
 		if (requests.containsKey("avgTwitterSentimentPosts")) {
-			List<Status> posts = twitterCrawler.crawlPosts(requests.get("companyTwitterPosts"));
+			List<Status> posts = twitterCrawler.crawlPosts(requests.get("avgTwitterSentimentPosts"));
 			Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForTweets(posts, languageService);
 			HashMap<Long, Double> map = twitterAnalyzer.getSentimentForEachTweet(posts, languageService);
 			
@@ -459,11 +459,11 @@ public class HomeController {
 			
 		}
 		if (requests.containsKey("avgTwitterBluemixSentimentPosts")) {
-			List<TwitterBluemixPost> posts = twitterBluemixCrawler.crawlPosts(requests.get("companyTwitterPosts"), "1", "10");
+			List<TwitterBluemixPost> posts = twitterBluemixCrawler.crawlPosts(requests.get("avgTwitterBluemixSentimentPosts"), "1", "10");
 			
 			
 			Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForBluemixTweets(posts, languageService);
-			HashMap<Long, Double> map = twitterAnalyzer.getSentimentForEachBluemixTweet(posts, languageService);
+			HashMap<String, Double> map = twitterAnalyzer.getSentimentForEachBluemixTweet(posts, languageService);
 			
 			List negPostsToSend = new ArrayList<String>();
 			List neutPostsToSend = new ArrayList<String>();

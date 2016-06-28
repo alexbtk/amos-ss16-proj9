@@ -603,6 +603,10 @@ function openSection(id) {
 			var neutPostsArray = data[0]["neutPosts"];
 			var posPostsArray = data[0]["posPosts"];
 
+			//destroy old slider
+			var oldSlider = $('#twitterAnswer .slider');
+			oldSlider.empty();
+			
 			// Instantiate a slider
 			var mySlider;
 			if (!isDefined(mySlider)) {
@@ -615,6 +619,10 @@ function openSection(id) {
 			var negtab = $('#negsent');
 			var neuttab = $('#neutsent');
 			var postab = $('#possent');
+			
+			negtab.empty();
+			neuttab.empty();
+			postab.empty();
 			
 			for ( var i in negPostsArray)
 				negtab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + negPostsArray[i]["postId"] + "\">+</button>Tweet from User " + negPostsArray[i]["postUser"] +"</p><div id=\"" + negPostsArray[i]["postId"] + "\" class=\"collapse\">" + negPostsArray[i]["postText"] + "</div>");	

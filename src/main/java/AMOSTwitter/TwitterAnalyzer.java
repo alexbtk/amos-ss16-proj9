@@ -92,9 +92,9 @@ public class TwitterAnalyzer {
 		return map;
 	}
 	
-	public HashMap<Long, Double> getSentimentForEachBluemixTweet(List<TwitterBluemixPost> tweets, IAlchemyLanguage languageService){
+	public HashMap<String, Double> getSentimentForEachBluemixTweet(List<TwitterBluemixPost> tweets, IAlchemyLanguage languageService){
 		DocumentSentiment sentiment;
-		HashMap<Long, Double> map = new HashMap<Long, Double>();
+		HashMap<String, Double> map = new HashMap<String, Double>();
 		for (TwitterBluemixPost tweet: tweets){
 			try {
 				sentiment = languageService.getSentimentForText(tweet.postContent);

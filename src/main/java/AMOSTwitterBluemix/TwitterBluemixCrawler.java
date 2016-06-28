@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -47,12 +48,14 @@ public class TwitterBluemixCrawler {
 	 */
 	public List<TwitterBluemixPost> crawlPosts(String companyName, String startRecord, String numberOfRecords) {
 		OkHttpClient client = new OkHttpClient();
+		String credential = Credentials.basic(userName, password);
+		
 		JSONObject jsonResult = null;
 		JSONArray postsArray = null;
 		ArrayList<TwitterBluemixPost> posts = new ArrayList<TwitterBluemixPost>();
 		
 		try {
-			Request request = new Request.Builder().url("https://" + userName + ":" + password + "@cdeservice.mybluemix.net:443/api/v1/messages/search?q=" + companyName + "&from=" + startRecord + "&size=" + numberOfRecords).build();
+			Request request = new Request.Builder().header("Authorization", credential).url("https://" + userName + ":" + password + "@cdeservice.mybluemix.net:443/api/v1/messages/search?q=" + companyName + "&from=" + startRecord + "&size=" + numberOfRecords).build();
 			Response response = client.newCall(request).execute();
 			String responseString = response.body().string();
 			
@@ -66,11 +69,18 @@ public class TwitterBluemixCrawler {
 				JSONObject jsonPost = (JSONObject)postsArray.get(i);
 				JSONObject cde = (JSONObject)jsonPost.get("cde");
 				JSONObject cdeContent = (JSONObject)cde.get("content");
+				if (cdeContent != null){
 				JSONObject cdeContentSentiment = (JSONObject)cdeContent.get("sentiment");
 				bluemixPost.sentiment = cdeContentSentiment.get("polarity").toString();
+				}
+				
+				JSONObject cdeInternal = (JSONObject)jsonPost.get("cdeInternal");
+				JSONArray cdeInternalTracks = (JSONArray)cdeInternal.get("tracks");
+				JSONObject track = (JSONObject)cdeInternalTracks.get(0);
+				bluemixPost.id = track.get("id").toString();
 				
 				JSONObject message = (JSONObject)jsonPost.get("message");
-				bluemixPost.postContent = message.get("body").toString();
+				bluemixPost.postContent = message.get("body").toString().trim().replace("\n", "").replace("\r", "").replace("\"", "");
 				
 				JSONObject actor = (JSONObject)message.get("actor");
 				bluemixPost.displayName = actor.get("displayName").toString();
