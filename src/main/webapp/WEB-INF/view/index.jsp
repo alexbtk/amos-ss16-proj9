@@ -478,10 +478,12 @@
 	<script src="${pageContext.request.contextPath}/js/app.min.js"></script>
 	<!-- AdminLTE for demo purposes -->
 	<script src="${pageContext.request.contextPath}/js/demo.js"></script>
+	
+	<!-- jvectormap -->
+<script src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
 
 	<!-- JvectorMap for displaying companys locations -->
-	<script
-		src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-2.0.3.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-world-mill.js"></script>
 </body>
