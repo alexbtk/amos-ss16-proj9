@@ -11,3 +11,4 @@
 # bootstrap slider | MIT license | https://github.com/seiyria/bootstrap-slider/blob/master/LICENSE.md #
 # okio | Apache License 2.0 | https://github.com/square/okio/blob/master/LICENSE.txt #
 # okhttp | Apache License 2.0 | https://github.com/square/okhttp/blob/master/LICENSE.txt #
+# json-simple | Apache License 2.0 | https://github.com/fangyidong/json-simple/blob/master/LICENSE.txt
