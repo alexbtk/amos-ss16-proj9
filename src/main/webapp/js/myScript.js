@@ -358,6 +358,8 @@ function openSection(id) {
 						var valN = res[0]['news'];
 						var reSe = 2.;
 						reSe = (valT*twitter)/100. + (valN*news)/100;
+						if(valT != 0 && valN != 0)
+							reSe /= 2.0;
 						$('#sentimentResult').slider('setValue', reSe);
 					});
 	    });

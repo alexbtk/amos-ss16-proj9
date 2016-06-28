@@ -84,7 +84,7 @@
 			for(var i in docs){
 				var relations = docs[i]['source']['enriched']['url']['enrichedTitle']['relations'];
 				for(var j in relations){
-					if(relations[j]['subject']['text'] == name){
+					if((name.toLowerCase()).indexOf((relations[j]['subject']['text'].toLowerCase()))!=-1){
 						if(typeof actions[relations[j]['action']['verb']['text']] == 'undefined')
 							actions[relations[j]['action']['verb']['text']] = [{
 								"action":relations[j]['action']['text'],
@@ -123,8 +123,8 @@
 			'start':'now-3d',
 			'end':'now',
 			'criteria':[
-				'q.enriched.url.entities.entity.type=Country',
-				'q.enriched.url.enrichedTitle.relations.relation.subject.entities.entity.text='+name,
+			//	'q.enriched.url.entities.entity.type=Country',
+				'q.enriched.url.enrichedTitle.relations.relation.subject.entities.entity.text=O['+name.trim()+"^"+name.trim().replace(" ", "^")+"]",
 				'q.enriched.url.enrichedTitle.relations.relation.subject.entities.entity.type=Company'],
 			'apikey': getCookie("apiKey")
 		};
