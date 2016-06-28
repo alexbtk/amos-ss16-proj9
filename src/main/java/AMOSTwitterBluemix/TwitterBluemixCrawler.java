@@ -31,8 +31,10 @@ public class TwitterBluemixCrawler {
 	private String password = "e9knQDBqcE";
 
 	public TwitterBluemixCrawler(String userName, String password) {
+		if (userName != null && password != null){
 		this.userName = userName;
 		this.password = password;
+		}
 	}
 
 	/**
@@ -45,7 +47,9 @@ public class TwitterBluemixCrawler {
 	 */
 	public List<TwitterBluemixPost> crawlPosts(String companyName, String startRecord, String numberOfRecords) {
 		OkHttpClient client = new OkHttpClient();
-		JSONArray jsonArray = null;
+		JSONObject jsonResult = null;
+		JSONArray postsArray = null;
+		ArrayList<TwitterBluemixPost> posts = new ArrayList<TwitterBluemixPost>();
 		
 		try {
 			Request request = new Request.Builder().url("https://" + userName + ":" + password + "@cdeservice.mybluemix.net:443/api/v1/messages/search?q=" + companyName + "&from=" + startRecord + "&size=" + numberOfRecords).build();
@@ -54,8 +58,28 @@ public class TwitterBluemixCrawler {
 			
 			JSONParser parser = new JSONParser();
 			Object obj = parser.parse(responseString);
-			jsonArray = (JSONArray)obj;
-			return jsonArray;
+			jsonResult = (JSONObject)obj;
+			postsArray = (JSONArray)jsonResult.get("tweets");
+			
+			for (int i = 0; i < postsArray.size(); i++){
+				TwitterBluemixPost bluemixPost = new TwitterBluemixPost();
+				JSONObject jsonPost = (JSONObject)postsArray.get(i);
+				JSONObject cde = (JSONObject)jsonPost.get("cde");
+				JSONObject cdeContent = (JSONObject)cde.get("content");
+				JSONObject cdeContentSentiment = (JSONObject)cdeContent.get("sentiment");
+				bluemixPost.sentiment = cdeContentSentiment.get("polarity").toString();
+				
+				JSONObject message = (JSONObject)jsonPost.get("message");
+				bluemixPost.postContent = message.get("body").toString();
+				
+				JSONObject actor = (JSONObject)message.get("actor");
+				bluemixPost.displayName = actor.get("displayName").toString();
+				
+				posts.add(bluemixPost);
+			}
+		
+			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -63,7 +87,7 @@ public class TwitterBluemixCrawler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return jsonArray;
+		return posts;
 
 	}
 

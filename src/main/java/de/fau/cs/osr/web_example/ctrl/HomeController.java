@@ -22,6 +22,8 @@ import AMOSDBPedia.DBpedia;
 import AMOSFacebook.FacebookCrawler;
 import AMOSTwitter.TwitterAnalyzer;
 import AMOSTwitter.TwitterCrawler;
+import AMOSTwitterBluemix.TwitterBluemixCrawler;
+import AMOSTwitterBluemix.TwitterBluemixPost;
 import twitter4j.Status;
 
 import com.ibm.watson.developer_cloud.alchemy.v1.model.DocumentSentiment;
@@ -76,6 +78,7 @@ public class HomeController {
 	IAlchemyLanguage languageService;
 	TwitterCrawler twitterCrawler;
 	TwitterAnalyzer twitterAnalyzer;
+	TwitterBluemixCrawler twitterBluemixCrawler;
 
 	Map<String, AvgNewsSentimentCacheEntry> avgNewsSentimentCache;
 
@@ -83,6 +86,7 @@ public class HomeController {
 		fac = IAlchemyFactory.newInstance();
 		twitterAnalyzer = new TwitterAnalyzer();
 		avgNewsSentimentCache = new HashMap<String, AvgNewsSentimentCacheEntry>();
+		twitterBluemixCrawler = new TwitterBluemixCrawler(null, null);
 	}
 
 	@RequestMapping(value = "/process")
@@ -449,6 +453,33 @@ public class HomeController {
 				}else if (postSentiment != null){
 					posPostsToSend.add("{\"postId\":\"" + post.getId() + "\",\"sentiment\": \"" + postSentiment 
 							+"\",\"postUser\":" + "\"" + post.getUser().getName() +"\",\"postText\":" + "\"" + post.getText() + "\"}");
+				}
+			}
+			answers.add("{\"avgSentiment\": \"" + avgSentimentValue.toString() + "\",\"negPosts\":[" + StringUtils.join(negPostsToSend, ",") +  "],\"neutPosts\":[" + StringUtils.join(neutPostsToSend, ",") +  "],\"posPosts\":[" + StringUtils.join(posPostsToSend, ",") + "]}");
+			
+		}
+		if (requests.containsKey("avgTwitterBluemixSentimentPosts")) {
+			List<TwitterBluemixPost> posts = twitterBluemixCrawler.crawlPosts(requests.get("companyTwitterPosts"), "1", "10");
+			
+			
+			Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForBluemixTweets(posts, languageService);
+			HashMap<Long, Double> map = twitterAnalyzer.getSentimentForEachBluemixTweet(posts, languageService);
+			
+			List negPostsToSend = new ArrayList<String>();
+			List neutPostsToSend = new ArrayList<String>();
+			List posPostsToSend = new ArrayList<String>();
+			for (TwitterBluemixPost post : posts) {
+				Double postSentiment = map.get(post.id);
+				
+				if (postSentiment != null && postSentiment < 0){
+					negPostsToSend.add("{\"postId\":\"" + post.id + "\",\"sentiment\": \"" + postSentiment 
+					+"\",\"postUser\":" + "\"" + post.displayName +"\",\"postText\":" + "\"" + post.postContent + "\"}");
+				}else if (postSentiment != null && postSentiment <= 0.5 && postSentiment >= 0){
+					neutPostsToSend.add("{\"postId\":\"" + post.id + "\",\"sentiment\": \"" + postSentiment 
+							+"\",\"postUser\":" + "\"" + post.displayName +"\",\"postText\":" + "\"" + post.postContent + "\"}");
+				}else if (postSentiment != null){
+					posPostsToSend.add("{\"postId\":\"" + post.id + "\",\"sentiment\": \"" + postSentiment 
+							+"\",\"postUser\":" + "\"" + post.displayName +"\",\"postText\":" + "\"" + post.postContent + "\"}");
 				}
 			}
 			answers.add("{\"avgSentiment\": \"" + avgSentimentValue.toString() + "\",\"negPosts\":[" + StringUtils.join(negPostsToSend, ",") +  "],\"neutPosts\":[" + StringUtils.join(neutPostsToSend, ",") +  "],\"posPosts\":[" + StringUtils.join(posPostsToSend, ",") + "]}");

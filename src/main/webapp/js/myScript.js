@@ -595,7 +595,7 @@ function openSection(id) {
 
 		// Company average twitter sentiment
 		$.post("qeuryRequest", {
-			"avgTwitterSentimentPosts" : companyName
+			"avgTwitterBluemixSentimentPosts" : companyName
 		}).done(function(data) {
 			data = JSON.parse(data);
 			var sentValue = data[0]["avgSentiment"];

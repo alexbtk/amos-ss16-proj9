@@ -14,6 +14,7 @@ import java.util.List;
 import com.ibm.watson.developer_cloud.alchemy.v1.model.DocumentSentiment;
 
 import AMOSAlchemy.IAlchemyLanguage;
+import AMOSTwitterBluemix.TwitterBluemixPost;
 import twitter4j.Status;
 
 /**
@@ -54,6 +55,28 @@ public class TwitterAnalyzer {
 		return sumSentiment / (sentimentValues.size());
 	}
 	
+	public double getAverageSentimetForBluemixTweets(List<TwitterBluemixPost> tweets, IAlchemyLanguage languageService) {
+		DocumentSentiment sentiment;
+		List<Double> sentimentValues = new ArrayList<Double>();
+		Double sumSentiment = 0.0;
+		for (TwitterBluemixPost tweet : tweets) {
+			try {
+				sentiment = languageService.getSentimentForText(tweet.postContent);
+				sentimentValues.add(sentiment.getSentiment().getScore().doubleValue());
+			} catch (Exception e) {
+				// Exception handling is for pussies
+			}
+		}
+		System.out.println(sentimentValues.size());
+
+		for (Double value : sentimentValues) {
+			sumSentiment = sumSentiment + value;
+		}
+
+		return sumSentiment / (sentimentValues.size());
+	}
+	
+	
 	public HashMap<Long, Double> getSentimentForEachTweet(List<Status> tweets, IAlchemyLanguage languageService){
 		DocumentSentiment sentiment;
 		HashMap<Long, Double> map = new HashMap<Long, Double>();
@@ -61,6 +84,21 @@ public class TwitterAnalyzer {
 			try {
 				sentiment = languageService.getSentimentForText(tweet.getText());
 				map.put(tweet.getId(), sentiment.getSentiment().getScore().doubleValue());
+			} catch (Exception e) {
+				// Exception handling is for pussies
+			}
+		}
+		
+		return map;
+	}
+	
+	public HashMap<Long, Double> getSentimentForEachBluemixTweet(List<TwitterBluemixPost> tweets, IAlchemyLanguage languageService){
+		DocumentSentiment sentiment;
+		HashMap<Long, Double> map = new HashMap<Long, Double>();
+		for (TwitterBluemixPost tweet: tweets){
+			try {
+				sentiment = languageService.getSentimentForText(tweet.postContent);
+				map.put(tweet.id, sentiment.getSentiment().getScore().doubleValue());
 			} catch (Exception e) {
 				// Exception handling is for pussies
 			}
