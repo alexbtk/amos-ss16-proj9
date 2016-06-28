@@ -605,7 +605,7 @@ function openSection(id) {
 
 			//destroy old slider
 			var oldSlider = $('#twitterAnswer .slider');
-			oldSlider.empty();
+			oldSlider.remove();
 			
 			// Instantiate a slider
 			var mySlider;

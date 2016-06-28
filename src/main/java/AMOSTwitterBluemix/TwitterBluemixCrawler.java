@@ -74,13 +74,11 @@ public class TwitterBluemixCrawler {
 				bluemixPost.sentiment = cdeContentSentiment.get("polarity").toString();
 				}
 				
-				JSONObject cdeInternal = (JSONObject)jsonPost.get("cdeInternal");
-				JSONArray cdeInternalTracks = (JSONArray)cdeInternal.get("tracks");
-				JSONObject track = (JSONObject)cdeInternalTracks.get(0);
-				bluemixPost.id = track.get("id").toString();
+				
 				
 				JSONObject message = (JSONObject)jsonPost.get("message");
 				bluemixPost.postContent = message.get("body").toString().trim().replace("\n", "").replace("\r", "").replace("\"", "");
+				bluemixPost.id = message.get("id").toString().substring(message.get("id").toString().lastIndexOf(":") + 1);
 				
 				JSONObject actor = (JSONObject)message.get("actor");
 				bluemixPost.displayName = actor.get("displayName").toString();
