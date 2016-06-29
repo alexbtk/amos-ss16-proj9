@@ -373,15 +373,15 @@ function openSection(id) {
 			alert("No company!!");
 			return;
 		}
-		if ($('#' + id + 'Section').find("#existAvgNewsSentimentGraph").length > 0) {
-			if ($('#' + id + 'Section').find("#existAvgNewsSentimentGraph")
+		if ($('#' + id + 'Section').find("#existCompanyQuery").length > 0) {
+			if ($('#' + id + 'Section').find("#existCompanyQuery")
 					.attr("class") == companyName)
 				return;
 		}
-
 		var colapseB = $($("#template").html());
 		var host = $('#companySection');
-		host.empty();
+		host.empty().append("<div id='existCompanyQuery' class='"+companyName+"'></div>");
+		
 		
 		//boxSentimentReview
 		var sentimentReview = $("#boxSentimentReview").html();
