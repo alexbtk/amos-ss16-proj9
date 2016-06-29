@@ -166,9 +166,7 @@ $(document)
 						}).done(
 								function(data) {
 									res = JSON.parse(data);
-									host.append("<div id='existAvgNewsSentimentGraph' class='"
-											+ companyName + "'></div>");
-
+									
 									var values = "";
 									var d = [];
 									var d0 = {};
@@ -430,6 +428,7 @@ function openSection(id) {
 				.done(
 						function(data) {
 							data = JSON.parse(data);
+							console.log(data);
 							if($('#world-map').length == 0)
 							host
 									.append("<div id=\"world-map\" style=\"width: 600px; height: 400px\"></div>");
@@ -447,7 +446,7 @@ function openSection(id) {
 									}
 								},
 								backgroundColor : '#383f47',
-								markers : data,
+								markers : data[0]["markers"],
 							});
 						});
 
