@@ -217,6 +217,12 @@
 			</a>
 			<!-- <button id="welcomeButton">Go!</button> -->
 		</div>
+		<div id="advancedOptions">
+		 	<a href="#" class="dropdown-toggle" style="cursor: pointer;">
+				<span class="hidden-xs">Advanced Options</span>
+		 	</a>
+		 	<div class="box box-default"><p>Default Timeframe: 7 Weeks</p><input type="range" value="7" min="2" max="52"/><br /></div>
+		</div>
 	</div>
 
 	<div id="content">
@@ -301,8 +307,14 @@
 			<section class="contentSection" id="competitorsSection">
 				Competitors content</section>
 			<section class="contentSection" id="productsSection">
-				<div id="companyProducts"></div>
-				<div id="competitorsProducts"></div>
+				<div id="productTabs">
+					<ul>
+						<li><a href="#companyProducts">Company Products</a></li>
+						<li><a href="#competitorsProducts">Competitors' Products</a></li>
+					</ul>
+					<div id="companyProducts"></div>
+					<div id="competitorsProducts"></div>
+				</div>
 				<div id="graphProducts"></div>
 			</section>
 			<section class="contentSection" id="companySection">
@@ -350,7 +362,10 @@
 				</div>
 				<!-- /.box -->
 				<a href="${pageContext.request.contextPath}/locationmap">Locationmap!</a>
-				<div id="avgNewsSentimentGraphSlider"><p>Weeks for News Sentiment Graph: 7 Weeks</p><input type="range" value="7" min="2" max="52"/><br /></div>
+				<div id="avgNewsSentimentGraphSlider">
+					<p>Weeks for News Sentiment Graph: 7 Weeks</p><input type="range" value="7" min="2" max="52"/><br />
+					<button>Draw Graph!</button>
+				</div>
 				<div id="avgNewsSentimentGraph">
 					<canvas id="avgNewsSentimentGraphCanvas"></canvas>
 				</div>

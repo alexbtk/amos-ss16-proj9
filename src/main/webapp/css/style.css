@@ -78,3 +78,8 @@
 #competitorsSentimentGraphSlider{
 	width: 300px;
 }
+
+#advancedOptions div{
+	display: none;
+	width: 100%;
+}
