@@ -369,6 +369,7 @@
 				<div id="avgNewsSentimentGraph">
 					<canvas id="avgNewsSentimentGraphCanvas"></canvas>
 				</div>
+				<div id="recentDevelopments" ></div>
 			</section>
 			<section class="contentSection" id="twitterSection">
 				<div class="row">

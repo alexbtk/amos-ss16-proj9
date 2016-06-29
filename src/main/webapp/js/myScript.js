@@ -198,7 +198,7 @@ $(document)
 					});
 					
 					$("#productTabs").tabs();
-
+					$(".contentSection").hide();
 				});
 
 /**
@@ -381,42 +381,46 @@ function openSection(id) {
 		}
 		var colapseB = $($("#template").html());
 		var host = $('#companySection');
-		host.empty().append("<div id='existCompanyQuery' class='"+companyName+"'></div>");
-		
+		if($('#' + id + 'Section').find("#existCompanyQuery").length == 0)
+			host.append("<div id='existCompanyQuery' class='"+companyName+"'></div>");
+		else $('#' + id + 'Section').find("#existCompanyQuery").attr("class",companyName);
 		
 		//boxSentimentReview
 		var sentimentReview = $("#boxSentimentReview").html();
 		
-		host.append(sentimentReview);
-		$('.slider').slider();
-	    
-	    $("#sentimentQuery").find("input[type=checkbox]").each(function(){
-	      $(this).change(function(){
-	        if($(this).is(":checked")){
-	          $(this).parent().next().next().find("input").slider('setValue', 100);
-	         }else{
-	          $(this).parent().next().next().find("input").slider('setValue', 0);
-	         }
-	      })
-	    }) ;
-	    $("#boxSentimentReviewmakeQuery").click(function(){
-	    	var twitter = parseInt($("#sentimentQuery").find("#twiterSlider").val());
-	    	var news = parseInt($("#sentimentQuery").find("#newsSlider").val());
-	    	$.post("qeuryRequest", {
-				"question6" : companyName,
-			}).done(
-					function(data) {
-						var res = JSON.parse(data);						
-						console.log(res);
-						var valT = res[0]['twiter'];
-						var valN = res[0]['news'];
-						var reSe = 2.;
-						reSe = (valT*twitter)/100. + (valN*news)/100;
-						if(valT != 0 && valN != 0)
-							reSe /= 2.0;
-						$('#sentimentResult').slider('setValue', reSe);
-					});
-	    });
+		if($("#sentimentQuery").length == 0){
+			host.append(sentimentReview);
+			$('.slider').slider();
+		    
+		    $("#sentimentQuery").find("input[type=checkbox]").each(function(){
+		      $(this).change(function(){
+		        if($(this).is(":checked")){
+		          $(this).parent().next().next().find("input").slider('setValue', 100);
+		         }else{
+		          $(this).parent().next().next().find("input").slider('setValue', 0);
+		         }
+		      })
+		    }) ;
+		    $("#boxSentimentReviewmakeQuery").click(function(){
+		    	var twitter = parseInt($("#sentimentQuery").find("#twiterSlider").val());
+		    	var news = parseInt($("#sentimentQuery").find("#newsSlider").val());
+		    	$.post("qeuryRequest", {
+					"question6" : companyName,
+				}).done(
+						function(data) {
+							var res = JSON.parse(data);						
+							console.log(res);
+							var valT = res[0]['twiter'];
+							var valN = res[0]['news'];
+							var reSe = 2.;
+							reSe = (valT*twitter)/100. + (valN*news)/100;
+							if(valT != 0 && valN != 0)
+								reSe /= 2.0;
+							$('#sentimentResult').slider('setValue', reSe);
+						});
+		    });
+		}
+		
 
 		// Company locations on map
 		$
@@ -426,6 +430,7 @@ function openSection(id) {
 				.done(
 						function(data) {
 							data = JSON.parse(data);
+							if($('#world-map').length == 0)
 							host
 									.append("<div id=\"world-map\" style=\"width: 600px; height: 400px\"></div>");
 
