@@ -69,6 +69,7 @@ $(document)
 								$("#dashboardCompanyInput").val(
 										$("#welcomeCompanyInput").val());
 								$("#avgNewsSentimentGraphSlider input").val($("#advancedOptions div input").val());
+								$("#avgNewsSentimentGraphSlider input").change();
 								$("#welcome").fadeOut(500, function() {
 									$('.contentSection').hide();
 									$('#companySection').show();
@@ -550,10 +551,12 @@ function openSection(id) {
 
 		var button = $('<button type="button" class="btn btn-block btn-default">Go</button>');
 		var slider = $('<div id="avgNewsSentimentGraphSliderProduct"><p>Weeks for News Sentiment Graph: 7 Weeks</p><input type="range" value="7" min="2" max="52"/><br /></div>');
+		slider.find("input").val($("#advancedOptions div input").val());
 		slider.find("input").change(function(){
 			$(this).parent().find('p').html("Weeks for News Sentiment Graph: "+
 					$(this).val()+" weeks");
 		});
+		slider.find("input").change();
 		
 		button
 				.click(function() {
