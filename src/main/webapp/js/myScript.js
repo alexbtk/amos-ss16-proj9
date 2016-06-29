@@ -639,7 +639,7 @@ function openSection(id) {
 
 									});
 				});
-		hostG.append(slider).append(button);
+		hostG.empty().append(slider).append(button);
 	} else if (id == "twitter") {
 		var companyName = $("#dashboardCompanyInput").val();
 		if (companyName == "") {
