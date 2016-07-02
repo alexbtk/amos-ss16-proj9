@@ -361,6 +361,23 @@
 					<!-- /.box-footer-->
 				</div>
 				<!-- /.box -->
+				
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">Sentiment Graph</h3>						
+					</div>
+					<div class="box-body">
+						<div id="avgNewsSentimentGraphComparation">
+							<canvas id="avgNewsSentimentGraphCanvasComparationC"></canvas>
+						</div>
+					</div>
+					<!-- /.box-body -->
+
+					<div class="box-footer"></div>
+					<!-- /.box-footer-->
+				</div>
+				<!-- /.box -->
+				
 				<a href="${pageContext.request.contextPath}/locationmap">Locationmap!</a>
 				<div id="avgNewsSentimentGraphSlider">
 					<p>Weeks for News Sentiment Graph: 7 Weeks</p><input type="range" value="7" min="2" max="52"/><br />
@@ -455,8 +472,11 @@
                   <th style="width: 40px">Result</th>
                 </tr>
                 <tr>
-                  <td><input type="checkbox" name="twitter"></td>
-                  <td>Twitter sentiment</td>
+                  <td><input type="checkbox"  name="twitter"></td>
+                  <td> 
+                  	<p>Twitter sentiment</p>
+                   	<span id="twitterValues"></span>
+                  </td>
                   <td>
                     <input id="twiterSlider" data-slider-id='red' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="10" data-slider-value="100" class="slider"/>
                   </td>
@@ -466,7 +486,10 @@
                 </tr>
                 <tr>
                   <td><input type="checkbox" name="news"></td>
-                  <td>News sentiment</td>
+                  <td>
+                  	<p>News sentiment</p>
+                  	<span id="newsValues"></span>
+                  </td>
                   <td>
                     <input id="newsSlider" data-slider-id='blue' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="10" data-slider-value="100" class="slider"/>
                   </td>
