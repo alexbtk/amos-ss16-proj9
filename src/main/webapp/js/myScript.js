@@ -757,7 +757,36 @@ function openSection(id) {
 				neuttab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + neutPostsArray[i]["postId"] + "\">+</button>Tweet from User " + neutPostsArray[i]["postUser"] +"</p><div id=\"" + neutPostsArray[i]["postId"] + "\" class=\"collapse\">" + neutPostsArray[i]["postText"] + "</div>");	
 				
 			for ( var i in posPostsArray)
-				postab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + posPostsArray[i]["postId"] + "\">+</button>Tweet from User " + posPostsArray[i]["postUser"] +"</p><div id=\"" + posPostsArray[i]["postId"] + "\" class=\"collapse\">" + posPostsArray[i]["postText"] + "</div>");	
+				postab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + posPostsArray[i]["postId"] + "\">+</button>Tweet from User " + posPostsArray[i]["postUser"] +"</p><div id=\"" + posPostsArray[i]["postId"] + "\" class=\"collapse\">" + posPostsArray[i]["postText"] + "</div>");
+			window.onLoad=function(){
+			var twitterChart = $('#twitterChart');
+			var twitterChartdata = {
+				    labels: [
+				        "Red",
+				        "Blue",
+				        "Yellow"
+				    ],
+				    datasets: [
+				        {
+				            data: [300, 50, 100],
+				            backgroundColor: [
+				                "#FF6384",
+				                "#36A2EB",
+				                "#FFCE56"
+				            ],
+				            hoverBackgroundColor: [
+				                "#FF6384",
+				                "#36A2EB",
+				                "#FFCE56"
+				            ]
+				        }]
+				};
+			
+			var twitterPieChart = new Chart(twitterChart,{
+			    type: 'pie',
+			    data: twitterChartdata
+			});
+			};
 				
 		});
 

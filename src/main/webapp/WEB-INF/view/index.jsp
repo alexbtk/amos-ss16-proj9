@@ -218,10 +218,13 @@
 			<!-- <button id="welcomeButton">Go!</button> -->
 		</div>
 		<div id="advancedOptions">
-		 	<a href="#" class="dropdown-toggle" style="cursor: pointer;">
-				<span class="hidden-xs">Advanced Options</span>
-		 	</a>
-		 	<div class="box box-default"><p>Default Timeframe: 7 Weeks</p><input type="range" value="7" min="2" max="52"/><br /></div>
+			<a href="#" class="dropdown-toggle" style="cursor: pointer;"> <span
+				class="hidden-xs">Advanced Options</span>
+			</a>
+			<div class="box box-default">
+				<p>Default Timeframe: 7 Weeks</p>
+				<input type="range" value="7" min="2" max="52" /><br />
+			</div>
 		</div>
 	</div>
 
@@ -361,10 +364,10 @@
 					<!-- /.box-footer-->
 				</div>
 				<!-- /.box -->
-				
+
 				<div class="box">
 					<div class="box-header with-border">
-						<h3 class="box-title">Sentiment Graph</h3>						
+						<h3 class="box-title">Sentiment Graph</h3>
 					</div>
 					<div class="box-body">
 						<div id="avgNewsSentimentGraphComparation">
@@ -377,20 +380,21 @@
 					<!-- /.box-footer-->
 				</div>
 				<!-- /.box -->
-				
+
 				<a href="${pageContext.request.contextPath}/locationmap">Locationmap!</a>
 				<div id="avgNewsSentimentGraphSlider">
-					<p>Weeks for News Sentiment Graph: 7 Weeks</p><input type="range" value="7" min="2" max="52"/><br />
+					<p>Weeks for News Sentiment Graph: 7 Weeks</p>
+					<input type="range" value="7" min="2" max="52" /><br />
 					<button>Draw Graph!</button>
 				</div>
 				<div id="avgNewsSentimentGraph">
 					<canvas id="avgNewsSentimentGraphCanvas"></canvas>
 				</div>
-				<div id="recentDevelopments" ></div>
+				<div id="recentDevelopments"></div>
 			</section>
 			<section class="contentSection" id="twitterSection">
 				<div class="row">
-					<div class="col-lg-6">
+					<div class="col-lg-6 col-md-6">
 						<form method="POST" action="getSentiment">
 							<fieldset>
 								<div id="twitterAnswer">
@@ -403,7 +407,9 @@
 
 							</fieldset>
 						</form>
-						<br><br><br>
+						<br>
+						<br>
+						<br>
 						<div class="tabbable">
 							<ul class="nav nav-tabs">
 								<li class="active"><a href="#negsent" data-toggle="tab">Negative
@@ -414,19 +420,22 @@
 										Sentiment</a></li>
 							</ul>
 							<div class="tab-content">
-								<div class="tab-pane active" id="negsent">
-									
-								</div>
-								<div class="tab-pane" id="neutsent">
-									
-								</div>
-								<div class="tab-pane" id="possent">
-									
-									
-								</div>
+								<div class="tab-pane active" id="negsent"></div>
+								<div class="tab-pane" id="neutsent"></div>
+								<div class="tab-pane" id="possent"></div>
 							</div>
 						</div>
 
+					</div>
+					<div class="col-lg-6 col-md-6">
+						<div class="row">
+							<div class="col-lg-6 col-md-6">
+							<canvas class="active" id="twitterChart" width="400" height="400"></canvas>
+							</div>
+							<div class="col-lg-6 col-md-6">
+							<canvas id="newsChart" width="400" height="400"></canvas>
+							</div>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -459,50 +468,50 @@
 		<!-- /.box --> </template>
 		<template id="boxSentimentReview">
 		<div class="box">
-            <div class="box-header with-border">
-              <h3 class="box-title">Bordered Table</h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <table class="table table-bordered" id="sentimentQuery">
-                <tr>
-                  <th style="width: 10px">#</th>
-                  <th>Category</th>
-                  <th>Importance</th>
-                  <th style="width: 40px">Result</th>
-                </tr>
-                <tr>
-                  <td><input type="checkbox"  name="twitter"></td>
-                  <td> 
-                  	<p>Twitter sentiment</p>
-                   	<span id="twitterValues"></span>
-                  </td>
-                  <td>
-                    <input id="twiterSlider" data-slider-id='red' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="10" data-slider-value="100" class="slider"/>
-                  </td>
-                  <td rowspan="2">
-                    <input id="sentimentResult" type="text" value="" class="slider form-control" data-slider-min="-2" data-slider-max="2" data-slider-step="0.01" data-slider-value="0" data-slider-orientation="vertical" data-slider-selection="before" data-slider-tooltip="show" data-slider-id="green">
-                  </td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" name="news"></td>
-                  <td>
-                  	<p>News sentiment</p>
-                  	<span id="newsValues"></span>
-                  </td>
-                  <td>
-                    <input id="newsSlider" data-slider-id='blue' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="10" data-slider-value="100" class="slider"/>
-                  </td>
-                  
-                </tr>
-              
-              </table>
-            </div>
-            <!-- /.box-body -->
-            <button type="button" id="boxSentimentReviewmakeQuery" class="btn btn-block btn-primary">Calculate</button>
-          </div>
-          <!-- /.box -->
-		</template>
+			<div class="box-header with-border">
+				<h3 class="box-title">Bordered Table</h3>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body">
+				<table class="table table-bordered" id="sentimentQuery">
+					<tr>
+						<th style="width: 10px">#</th>
+						<th>Category</th>
+						<th>Importance</th>
+						<th style="width: 40px">Result</th>
+					</tr>
+					<tr>
+						<td><input type="checkbox" name="twitter"></td>
+						<td>
+							<p>Twitter sentiment</p> <span id="twitterValues"></span>
+						</td>
+						<td><input id="twiterSlider" data-slider-id='red' type="text"
+							data-slider-min="0" data-slider-max="100" data-slider-step="10"
+							data-slider-value="100" class="slider" /></td>
+						<td rowspan="2"><input id="sentimentResult" type="text"
+							value="" class="slider form-control" data-slider-min="-2"
+							data-slider-max="2" data-slider-step="0.01" data-slider-value="0"
+							data-slider-orientation="vertical" data-slider-selection="before"
+							data-slider-tooltip="show" data-slider-id="green"></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" name="news"></td>
+						<td>
+							<p>News sentiment</p> <span id="newsValues"></span>
+						</td>
+						<td><input id="newsSlider" data-slider-id='blue' type="text"
+							data-slider-min="0" data-slider-max="100" data-slider-step="10"
+							data-slider-value="100" class="slider" /></td>
+
+					</tr>
+
+				</table>
+			</div>
+			<!-- /.box-body -->
+			<button type="button" id="boxSentimentReviewmakeQuery"
+				class="btn btn-block btn-primary">Calculate</button>
+		</div>
+		<!-- /.box --> </template>
 	</div>
 
 
@@ -517,10 +526,12 @@
 	<script src="${pageContext.request.contextPath}/js/app.min.js"></script>
 	<!-- AdminLTE for demo purposes -->
 	<script src="${pageContext.request.contextPath}/js/demo.js"></script>
-	
+
 	<!-- jvectormap -->
-<script src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
 
 	<!-- JvectorMap for displaying companys locations -->
 	<script
