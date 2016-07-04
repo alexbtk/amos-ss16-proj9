@@ -32,6 +32,7 @@ public class Demo {
 		System.out.println(DBpedia.getProductCompetitorsName("IPhone","<http://dbpedia.org/resource/Apple_Inc.>"));
 	
 		System.out.println(DBpedia.getCompanyLocationCoordonates("Apple Inc."));
+		System.out.println(DBpedia.getCompetitorsFromProducts("Apple Inc."));
 		
 	}
 	

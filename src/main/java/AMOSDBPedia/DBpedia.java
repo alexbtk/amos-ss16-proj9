@@ -21,6 +21,7 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.Syntax;
 import org.apache.jena.sparql.engine.http.QueryEngineHTTP;
 
 public class DBpedia {
@@ -987,6 +988,106 @@ public class DBpedia {
 		return map;
 	}
 	
+	/**
+	 * Get 5 Competitors using product categories and employees number
+	 * 
+	 * @param companyName - company name
+	 * @return list of competitors name
+	 */
+	public static List<String> getCompetitorsFromProducts(String companyName){
+		List<String> resources = getResourceByName(companyName);
+		if(resources == null){
+			resources = getResourceByLabel(companyName);
+		}else{
+			resources.addAll(getResourceByLabel(companyName));
+		}
+		if(resources.size() == 0)
+			return null;
+		System.out.println(resources.get(0));
+		String resource = "<" + resources.get(0) + ">";
+		String prefixes = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+        
+				"PREFIX type: <http://dbpedia.org/class/yago/>"+
+				"PREFIX dbpedia-owl: <http://dbpedia.org/ontology/> " +
+				"PREFIX owl: <http://www.w3.org/2002/07/owl#>" +
+				"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>" +
+				"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>" +
+				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" +
+				"PREFIX foaf: <http://xmlns.com/foaf/0.1/>" +
+				"PREFIX dc: <http://purl.org/dc/elements/1.1/>" +
+				"PREFIX : <http://dbpedia.org/resource/>" +
+				"PREFIX dbpedia2: <http://dbpedia.org/property/>" +
+				"PREFIX dbpedia: <http://dbpedia.org/>" +
+				"PREFIX skos: <http://www.w3.org/2004/02/skos/core#>" +
+				"PREFIX prop: <http://dbpedia.org/property/>";
+		
+		String queryString =  " PREFIX dbpedia-owl: <http://dbpedia.org/ontology/> "+
+  "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "+
+  "SELECT DISTINCT ?company "+//, COUNT(DISTINCT ?cat1) AS ?nrcatPR, COUNT(DISTINCT ?cat11) AS ?nrcatSE, COUNT(DISTINCT ?cat12) AS ?nrcatDEV "+ 
+  "WHERE { "+
+	  resource +"  dbpedia-owl:industry ?industry. "+
+	  "?company  dbpedia-owl:industry ?industry ; rdf:type <http://dbpedia.org/ontology/Company>. "+    
+	
+	  "OPTIONAL{ "+
+		  "?company dbpedia-owl:numberOfEmployees ?numEmC. "+
+		  resource +" dbpedia-owl:numberOfEmployees ?numEmMC. "+
+		  "FILTER( "+
+			  "(?numEmMC > 100000 && ?numEmC > 100000) || "+
+			  "(?numEmMC < 100000 && ?numEmMC > 50000 && ?numEmC > 50000 && ?numEmC < 100000) || "+
+			  "(?numEmMC < 50000 && ?numEmC < 50000) "+
+		  ") "+
+	  "} "+
+	          
+	  "OPTIONAL{ "+
+		  "?company dbpedia-owl:product ?prod1. "+
+		  resource + "dbpedia-owl:product ?prod2. "+
+		  "?prod1 <http://purl.org/dc/terms/subject> ?cat1. "+
+		  "?prod2 <http://purl.org/dc/terms/subject> ?cat1. "+
+	  "} "+
+	      
+	  "OPTIONAL{ "+
+		  "?company dbpedia-owl:service ?prod11. "+
+		  resource+" dbpedia-owl:service ?prod21. "+
+		  "?prod11 <http://purl.org/dc/terms/subject> ?cat11. "+
+		  "?prod21 <http://purl.org/dc/terms/subject> ?cat11. "+
+	  "} "+
+	  "OPTIONAL{ "+
+		  "?prod12 dbpedia-owl:developer  ?company. "+
+		  "?prod22 dbpedia-owl:developer  "+resource+". "+
+		  "?prod12 <http://purl.org/dc/terms/subject> ?cat12. "+
+		  "?prod22 <http://purl.org/dc/terms/subject> ?cat12. "+
+	  "}"+
+	
+	  "FILTER NOT EXISTS{  ?owner dbpedia-owl:service ?company. FILTER(?owner = "+resource+" ) } "+
+	  "FILTER NOT EXISTS{  ?parentC dbpedia-owl:parentCompany ?company. FILTER(?parentC = "+resource+")} "+
+	  "FILTER NOT EXISTS{  ?parentCC dbpedia-owl:parentCompany "+resource+". FILTER(?parentCC = ?company) } "+
+	
+	   
+	  "FILTER (?company != "+resource+
+	  		" && ?prod1!=?prod2 "+
+	  ") "+
+  "} ORDER BY DESC(?numEmC) DESC(?nrcatDEV) DESC(?nrcatPR) DESC(?nrcatSE) LIMIT 5";
+		
+		Query query = QueryFactory.create(queryString,Syntax.syntaxARQ);
+		List<String> competitors = new ArrayList<String>();
+		
+		try ( QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query) ) {
+			// Set the DBpedia specific timeout.
+            ((QueryEngineHTTP)qexec).addParam("timeout", "10000") ;
+
+            // Execute.
+            ResultSet rs = qexec.execSelect();
+            while(rs.hasNext()){
+            	QuerySolution qs = rs.next();
+            	String res = qs.getResource("company").toString();            	
+	            competitors.add(getResourceName(res));            	
+            }
+		} catch (Exception e) {
+            e.printStackTrace();
+        }
+		
+		return competitors;
+	}
+	
 	public static void main(String args[]){
 		List<String> resources = getResourceByName("Foxconn");
 
@@ -1000,3 +1101,5 @@ public class DBpedia {
 		System.out.println(getCompanyLocationCountry("Foxconn"));
 	}
 }
+
+
