@@ -6,7 +6,9 @@
  * Date: 2016-06-11
  */
 
-
+var colorsGraph= ['#F16220', 'black', 'blue', 'fuchsia', 'gray', 'green', 
+			'lime', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 
+			'silver', 'teal',  'yellow'];
 
 $(document)
 		.ready(
@@ -193,10 +195,11 @@ $(document)
 													.getContext('2d')).Scatter(d, options);
 
 								});
-					});
-					
+					});		
+				
+					// hide the content
 					$("#productTabs").tabs();
-
+					$(".contentSection").hide();
 				});
 
 /**
@@ -372,49 +375,114 @@ function openSection(id) {
 			alert("No company!!");
 			return;
 		}
-		if ($('#' + id + 'Section').find("#existAvgNewsSentimentGraph").length > 0) {
-			if ($('#' + id + 'Section').find("#existAvgNewsSentimentGraph")
+		if ($('#' + id + 'Section').find("#existCompanyQuery").length > 0) {
+			if ($('#' + id + 'Section').find("#existCompanyQuery")
 					.attr("class") == companyName)
 				return;
 		}
-
+		
+		// news graph sentiment> company vs competitors
+		var toCompare = ["Apple Inc.", "Microsoft Corporation"];
+		var d = [];
+		for(var ii in toCompare){
+			$.post("qeuryRequest", {
+				"avgNewsSentimentGraph" : toCompare[ii],
+				"avgNewsSentimentGraphWeeks" : $("#advancedOptions div input").val()
+			}).done(
+					function(data) {
+						res = JSON.parse(data);
+						var values = "";
+						
+						var d0 = {};
+						d0["data"] = [];
+						var i = 0;
+						res[i]['values'].forEach(function(entry) {
+							values = values + entry + " ";
+							d0["data"].push({
+								"x" : (-1 * i),
+								"y" : entry
+							});
+							i++;
+						});
+						var idColor = d.length;
+						if(d.length >= colorsGraph.length) 
+							idColor = 0;
+						d0["label"] = toCompare[d.length];									
+						d0["strokeColor"] = colorsGraph[idColor];
+						d0["pointColor"] = colorsGraph[idColor];
+						d0["pointStrokeColor"] = colorsGraph[idColor];
+						d.push(d0);				
+						
+						if(d.length == toCompare.length){
+							var options = {};
+							var avgNewsChart = new Chart(
+									$("#avgNewsSentimentGraphCanvasComparationC")[0]
+											.getContext('2d')).Scatter(d, options);
+						}
+					});
+		};
+		
+		
 		var colapseB = $($("#template").html());
 		var host = $('#companySection');
-		host.empty();
+		if($('#' + id + 'Section').find("#existCompanyQuery").length == 0)
+			host.append("<div id='existCompanyQuery' class='"+companyName+"'></div>");
+		else $('#' + id + 'Section').find("#existCompanyQuery").attr("class",companyName);
 		
 		//boxSentimentReview
 		var sentimentReview = $("#boxSentimentReview").html();
 		
-		host.append(sentimentReview);
-		$('.slider').slider();
-	    
-	    $("#sentimentQuery").find("input[type=checkbox]").each(function(){
-	      $(this).change(function(){
-	        if($(this).is(":checked")){
-	          $(this).parent().next().next().find("input").slider('setValue', 100);
-	         }else{
-	          $(this).parent().next().next().find("input").slider('setValue', 0);
-	         }
-	      })
-	    }) ;
-	    $("#boxSentimentReviewmakeQuery").click(function(){
-	    	var twitter = parseInt($("#sentimentQuery").find("#twiterSlider").val());
-	    	var news = parseInt($("#sentimentQuery").find("#newsSlider").val());
-	    	$.post("qeuryRequest", {
-				"question6" : companyName,
-			}).done(
+		if($("#sentimentQuery").length == 0){
+			host.append(sentimentReview);
+			$('.slider').slider();
+		    
+		    $("#sentimentQuery").find("input[type=checkbox]").each(function(){
+		      $(this).change(function(){
+		        if($(this).is(":checked")){
+		          $(this).parent().next().next().find("input").slider('setValue', 100);
+		         }else{
+		          $(this).parent().next().next().find("input").slider('setValue', 0);
+		         }
+		      })
+		    }) ;	    
+		    		
+		    
+		    $("#boxSentimentReviewmakeQuery").click(function(){
+		    	var twitter = parseFloat($("#sentimentQuery").find("#twiterSlider").val());
+		    	var news = parseFloat($("#sentimentQuery").find("#newsSlider").val());
+							
+				var valT = parseFloat($("#sentimentQuery #twitterValues").text()) + 4.;
+				var valN = parseFloat($("#sentimentQuery #newsValues").text()) + 4.;
+				var reSe = 2.;
+				reSe = (valT*twitter)/100. + (valN*news)/100.;
+				
+				if($("#sentimentQuery").find("#twiterSlider").val() != "0" && $("#sentimentQuery").find("#newsSlider").val() != "0")
+					reSe /= 2.0;
+				$('#sentimentResult').slider('setValue', reSe-4.);
+			
+		    });
+		    
+		    
+		}
+		
+		$.post("qeuryRequest", {
+			"question6" : companyName,
+		}).done(
 					function(data) {
-						var res = JSON.parse(data);						
+						var res = JSON.parse(data);		
 						console.log(res);
 						var valT = res[0]['twiter'];
 						var valN = res[0]['news'];
-						var reSe = 2.;
-						reSe = (valT*twitter)/100. + (valN*news)/100;
-						if(valT != 0 && valN != 0)
-							reSe /= 2.0;
-						$('#sentimentResult').slider('setValue', reSe);
-					});
+						$("#sentimentQuery #newsValues").text(valN);
+						$("#sentimentQuery #twitterValues").text(valT);
+					
 	    });
+		
+		$("#sentimentQuery").find("input[type=checkbox]").each(function(){
+		      $(this).attr("checked","checked");
+		});
+		
+		$("#boxSentimentReviewmakeQuery").click();
 
 		// Company locations on map
 		$
@@ -424,6 +492,8 @@ function openSection(id) {
 				.done(
 						function(data) {
 							data = JSON.parse(data);
+							console.log(data);
+							if($('#world-map').length == 0)
 							host
 									.append("<div id=\"world-map\" style=\"width: 600px; height: 400px\"></div>");
 
@@ -440,12 +510,13 @@ function openSection(id) {
 									}
 								},
 								backgroundColor : '#383f47',
-								markers : data,
+								markers : data[0]["markers"],
 							});
 						});
 
 		// Add Company Relations
-		getNewsRelation(companyName);
+		getNewsRelation(companyName);		
+		
 	} else if (id == "products") {
 		var companyName = $("#dashboardCompanyInput").val();
 		if (companyName == "") {
@@ -686,7 +757,36 @@ function openSection(id) {
 				neuttab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + neutPostsArray[i]["postId"] + "\">+</button>Tweet from User " + neutPostsArray[i]["postUser"] +"</p><div id=\"" + neutPostsArray[i]["postId"] + "\" class=\"collapse\">" + neutPostsArray[i]["postText"] + "</div>");	
 				
 			for ( var i in posPostsArray)
-				postab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + posPostsArray[i]["postId"] + "\">+</button>Tweet from User " + posPostsArray[i]["postUser"] +"</p><div id=\"" + posPostsArray[i]["postId"] + "\" class=\"collapse\">" + posPostsArray[i]["postText"] + "</div>");	
+				postab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + posPostsArray[i]["postId"] + "\">+</button>Tweet from User " + posPostsArray[i]["postUser"] +"</p><div id=\"" + posPostsArray[i]["postId"] + "\" class=\"collapse\">" + posPostsArray[i]["postText"] + "</div>");
+			window.onLoad=function(){
+			var twitterChart = $('#twitterChart');
+			var twitterChartdata = {
+				    labels: [
+				        "Red",
+				        "Blue",
+				        "Yellow"
+				    ],
+				    datasets: [
+				        {
+				            data: [300, 50, 100],
+				            backgroundColor: [
+				                "#FF6384",
+				                "#36A2EB",
+				                "#FFCE56"
+				            ],
+				            hoverBackgroundColor: [
+				                "#FF6384",
+				                "#36A2EB",
+				                "#FFCE56"
+				            ]
+				        }]
+				};
+			
+			var twitterPieChart = new Chart(twitterChart,{
+			    type: 'pie',
+			    data: twitterChartdata
+			});
+			};
 				
 		});
 

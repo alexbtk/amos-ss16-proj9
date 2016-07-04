@@ -107,12 +107,11 @@
 				rel.append($("<li></li>").html(ul));
 			});
 			console.log(actions);
-			//$( "#dialog" ).html(rel).dialog( "open" );
 			var colapseB = $($("#template").html());
-	 	    var host = $('#companySection');  
+	 	    var host = $('#companySection #recentDevelopments');  
 	 	    colapseB.find(".box-title").text("Recent Developments");
 	 	    colapseB.find(".box-body").append(rel);
-	 	    host.append(colapseB);
+	 	    host.empty().append(colapseB);
 		}
 	}
 
