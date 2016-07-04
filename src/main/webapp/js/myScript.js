@@ -822,6 +822,45 @@ function openSection(id) {
 		    });
 			
 		});
+		
+		$.post("qeuryRequest", {
+			"question4" : companyName,
+			"timeframe" : 2
+		}).done(
+					function(data) {
+						var res = JSON.parse(data);		
+						var newsSentimentCountString = res[0]['content'];
+						var numberPattern = /\d+/g;
+						var numbers = newsSentimentCountString.match(numberPattern);
+						alert(numbers[0]);
+						alert(numbers[1]);
+						var plot2 = $.jqplot('newsChart', [[['negative news',numbers[0]],['positive news',numbers[1]]]], {
+							grid: {
+					            drawBorder: false, 
+					            drawGridlines: false,
+					            background: '#ffffff',
+					            shadow:false
+					        },
+							gridPadding: {top:0, bottom:38, left:0, right:0},
+							
+					        seriesDefaults:{
+					            renderer:$.jqplot.PieRenderer,
+					            seriesColors: ["#e50202", "#04ff08"],
+					            trendline:{ show:false }, 
+					            rendererOptions: { padding: 8, showDataLabels: true }
+					        },
+					        legend:{
+					            show:true, 
+					            placement: 'outside', 
+					            rendererOptions: {
+					                numberRows: 2
+					            }, 
+					            location:'s',
+					            marginTop: '15px'
+					        }       
+					    });
+					
+	    });
 				
 		
 		};

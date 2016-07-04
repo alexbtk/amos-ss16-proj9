@@ -238,7 +238,8 @@ public class AlchemyImpl implements IAlchemy{
 					
 				}
 			}
-		return "Positive articles: "+poz.toString()+"\n"+positive+" Negative Articles: "+neg.toString()+"\n"+negative;
+		//return "Positive articles: "+poz.toString()+"\n"+positive+" Negative Articles: "+neg.toString()+"\n"+negative;
+		return "Positive articles: "+poz.toString()+" Negative Articles: "+neg.toString();
 	}
 	
 	/**

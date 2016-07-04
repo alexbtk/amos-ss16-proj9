@@ -442,7 +442,7 @@
 							<div id="twitterChart" style="height:400px;width:400px;"></div>
 							</div>
 							<div class="col-lg-6 col-md-6">
-							<canvas id="newsChart" width="400" height="400"></canvas>
+							<div id="newsChart" style="height:400px;width:400px;"></div>
 							</div>
 						</div>
 					</div>
