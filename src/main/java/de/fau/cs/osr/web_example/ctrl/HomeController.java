@@ -473,13 +473,13 @@ public class HomeController {
 				
 				if (postSentiment != null && postSentiment < 0){
 					negPostsToSend.add("{\"postId\":\"" + post.id + "\",\"sentiment\": \"" + postSentiment 
-					+"\",\"postUser\":" + "\"" + post.displayName +"\",\"postText\":" + "\"" + post.postContent + "\"}");
+					+"\",\"postUser\":" + "\"" + post.displayName +"\",\"postText\":" + "\"" + post.postContent + "\",\"postRetweeted\":" + "\"" + post.retweetCount + "\"}");
 				}else if (postSentiment != null && postSentiment <= 0.5 && postSentiment >= 0){
 					neutPostsToSend.add("{\"postId\":\"" + post.id + "\",\"sentiment\": \"" + postSentiment 
-							+"\",\"postUser\":" + "\"" + post.displayName +"\",\"postText\":" + "\"" + post.postContent + "\"}");
+							+"\",\"postUser\":" + "\"" + post.displayName +"\",\"postText\":" + "\"" + post.postContent + "\",\"postRetweeted\":" + "\"" + post.retweetCount + "\"}");
 				}else if (postSentiment != null){
 					posPostsToSend.add("{\"postId\":\"" + post.id + "\",\"sentiment\": \"" + postSentiment 
-							+"\",\"postUser\":" + "\"" + post.displayName +"\",\"postText\":" + "\"" + post.postContent + "\"}");
+							+"\",\"postUser\":" + "\"" + post.displayName +"\",\"postText\":" + "\"" + post.postContent + "\",\"postRetweeted\":" + "\"" + post.retweetCount + "\"}");
 				}
 			}
 			answers.add("{\"avgSentiment\": \"" + avgSentimentValue.toString() + "\",\"negPosts\":[" + StringUtils.join(negPostsToSend, ",") +  "],\"neutPosts\":[" + StringUtils.join(neutPostsToSend, ",") +  "],\"posPosts\":[" + StringUtils.join(posPostsToSend, ",") + "]}");

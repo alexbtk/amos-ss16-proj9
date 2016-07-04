@@ -781,17 +781,39 @@ function openSection(id) {
 			var neuttab = $('#neutsent');
 			var postab = $('#possent');
 			
+			var negRetweetOver100 = $('#negOver100');
+			var negRetweetUnder100 = $('#negUnder100');
+			var negRetweetUnder10 = $('#negUnder10');
+			
+			var posRetweetOver100 =  $('#posOver100');
+			var posRetweetUnder100 = $('#posUnder100');
+			var posRetweetUnder10 = $('#posUnder10');
+			
+			var neutRetweetOver100 =  $('#neutOver100');
+			var neutRetweetUnder100 = $('#neutUnder100');
+			var neutRetweetUnder10 = $('#neutUnder10');
+			
 			negtab.empty();
 			neuttab.empty();
 			postab.empty();
 			
 			for ( var i in negPostsArray)
-				negtab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + negPostsArray[i]["postId"] + "\">+</button>Tweet from User " + negPostsArray[i]["postUser"] +"</p><div id=\"" + negPostsArray[i]["postId"] + "\" class=\"collapse\">" + negPostsArray[i]["postText"] + "</div>");	
+				var retweetCount = negPostsArray[i]["postRetweeted"];
+				if (Number(retweetCount) > 100){
+					negRetweetOver100.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + negPostsArray[i]["postId"] + "\">+</button>Tweet from User " + negPostsArray[i]["postUser"] +"</p><div id=\"" + negPostsArray[i]["postId"] + "\" class=\"collapse\">" + negPostsArray[i]["postText"] + "</div>");
+				} else if (Number(retweetCount) <= 100 && Number(retweetCount) > 10){
+					negRetweetUnder100.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + negPostsArray[i]["postId"] + "\">+</button>Tweet from User " + negPostsArray[i]["postUser"] +"</p><div id=\"" + negPostsArray[i]["postId"] + "\" class=\"collapse\">" + negPostsArray[i]["postText"] + "</div>");
+				}else {
+					negRetweetUnder10.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + negPostsArray[i]["postId"] + "\">+</button>Tweet from User " + negPostsArray[i]["postUser"] +"</p><div id=\"" + negPostsArray[i]["postId"] + "\" class=\"collapse\">" + negPostsArray[i]["postText"] + "</div>");
+				}
+				//negtab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + negPostsArray[i]["postId"] + "\">+</button>Tweet from User " + negPostsArray[i]["postUser"] +"</p><div id=\"" + negPostsArray[i]["postId"] + "\" class=\"collapse\">" + negPostsArray[i]["postText"] + "</div>");	
 				
 			for ( var i in neutPostsArray)
+				var retweetCount = neutPostsArray[i]["postRetweeted"];
 				neuttab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + neutPostsArray[i]["postId"] + "\">+</button>Tweet from User " + neutPostsArray[i]["postUser"] +"</p><div id=\"" + neutPostsArray[i]["postId"] + "\" class=\"collapse\">" + neutPostsArray[i]["postText"] + "</div>");	
 				
 			for ( var i in posPostsArray)
+				var retweetCount = posPostsArray[i]["postRetweeted"];
 				postab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + posPostsArray[i]["postId"] + "\">+</button>Tweet from User " + posPostsArray[i]["postUser"] +"</p><div id=\"" + posPostsArray[i]["postId"] + "\" class=\"collapse\">" + posPostsArray[i]["postText"] + "</div>");
 			
 			$.jqplot.config.enablePlugins = true;

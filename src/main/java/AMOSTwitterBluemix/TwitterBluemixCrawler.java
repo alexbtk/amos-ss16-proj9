@@ -83,6 +83,8 @@ public class TwitterBluemixCrawler {
 				JSONObject actor = (JSONObject)message.get("actor");
 				bluemixPost.displayName = actor.get("displayName").toString();
 				
+				bluemixPost.retweetCount = message.get("retweetCount").toString();
+				
 				posts.add(bluemixPost);
 			}
 		
