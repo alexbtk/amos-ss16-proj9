@@ -1022,7 +1022,7 @@ public class DBpedia {
 		
 		String queryString =  " PREFIX dbpedia-owl: <http://dbpedia.org/ontology/> "+
   "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "+
-  "SELECT DISTINCT ?company "+//, COUNT(DISTINCT ?cat1) AS ?nrcatPR, COUNT(DISTINCT ?cat11) AS ?nrcatSE, COUNT(DISTINCT ?cat12) AS ?nrcatDEV "+ 
+  "SELECT DISTINCT ?company (SUM(DISTINCT ?numEmC) as ?empl) (COUNT(DISTINCT ?cat1) AS ?nrcatPR) (COUNT(DISTINCT ?cat11) AS ?nrcatSE) (COUNT(DISTINCT ?cat12) AS ?nrcatDEV) "+ 
   "WHERE { "+
 	  resource +"  dbpedia-owl:industry ?industry. "+
 	  "?company  dbpedia-owl:industry ?industry ; rdf:type <http://dbpedia.org/ontology/Company>. "+    
@@ -1065,7 +1065,7 @@ public class DBpedia {
 	  "FILTER (?company != "+resource+
 	  		" && ?prod1!=?prod2 "+
 	  ") "+
-  "} ORDER BY DESC(?numEmC) DESC(?nrcatDEV) DESC(?nrcatPR) DESC(?nrcatSE) LIMIT 5";
+  "} GROUP BY ?company  ORDER BY DESC(?empl) DESC(?nrcatDEV) DESC(?nrcatPR) DESC(?nrcatSE) LIMIT 5";
 		
 		Query query = QueryFactory.create(queryString,Syntax.syntaxARQ);
 		List<String> competitors = new ArrayList<String>();
