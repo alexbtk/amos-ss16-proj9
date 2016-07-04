@@ -718,6 +718,41 @@ function openSection(id) {
 			alert("No company!!");
 			return;
 		}
+		//document.addEventListener("DOMContentLoaded", domReady);
+		//function domReady(){
+			
+			
+			/*
+			var twitterChart = document.getElementById("newsChart");
+			var twitterChartdata = {
+				    labels: [
+				        "Red",
+				        "Blue",
+				        "Yellow"
+				    ],
+				    datasets: [
+				        {
+				            data: [300, 50, 100],
+				            backgroundColor: [
+				                "#FF6384",
+				                "#36A2EB",
+				                "#FFCE56"
+				            ],
+				            hoverBackgroundColor: [
+				                "#FF6384",
+				                "#36A2EB",
+				                "#FFCE56"
+				            ]
+				        }]
+				};
+			var twitterPieChart = new Chart(twitterChart,{
+			    type: 'pie',
+			    data: twitterChartdata
+			});
+			*/
+		//};
+		
+		
 
 		// Company average twitter sentiment
 		$.post("qeuryRequest", {
@@ -758,41 +793,42 @@ function openSection(id) {
 				
 			for ( var i in posPostsArray)
 				postab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + posPostsArray[i]["postId"] + "\">+</button>Tweet from User " + posPostsArray[i]["postUser"] +"</p><div id=\"" + posPostsArray[i]["postId"] + "\" class=\"collapse\">" + posPostsArray[i]["postText"] + "</div>");
-			window.onLoad=function(){
-			var twitterChart = $('#twitterChart');
-			var twitterChartdata = {
-				    labels: [
-				        "Red",
-				        "Blue",
-				        "Yellow"
-				    ],
-				    datasets: [
-				        {
-				            data: [300, 50, 100],
-				            backgroundColor: [
-				                "#FF6384",
-				                "#36A2EB",
-				                "#FFCE56"
-				            ],
-				            hoverBackgroundColor: [
-				                "#FF6384",
-				                "#36A2EB",
-				                "#FFCE56"
-				            ]
-				        }]
-				};
 			
-			var twitterPieChart = new Chart(twitterChart,{
-			    type: 'pie',
-			    data: twitterChartdata
-			});
-			};
+			$.jqplot.config.enablePlugins = true;
+			var plot1 = $.jqplot('twitterChart', [[['negative sentiments',negPostsArray.length],['neutral sentiments',neutPostsArray.length],['positive sentiments',posPostsArray.length]]], {
+				grid: {
+		            drawBorder: false, 
+		            drawGridlines: false,
+		            background: '#ffffff',
+		            shadow:false
+		        },
+				gridPadding: {top:0, bottom:38, left:0, right:0},
 				
+		        seriesDefaults:{
+		            renderer:$.jqplot.PieRenderer,
+		            seriesColors: ["#e50202", "#eefd00", "#04ff08"],
+		            trendline:{ show:false }, 
+		            rendererOptions: { padding: 8, showDataLabels: true }
+		        },
+		        legend:{
+		            show:true, 
+		            placement: 'outside', 
+		            rendererOptions: {
+		                numberRows: 2
+		            }, 
+		            location:'s',
+		            marginTop: '15px'
+		        }       
+		    });
+			
 		});
+				
+		
+		};
 
 	}
 
-}
+
 /*
  * Checks if object exists
  */

@@ -79,6 +79,8 @@
 
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/jquery-ui.css">
+	<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/plugins/jqplot/jquery.jqplot.min.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/style.css">
 
@@ -106,10 +108,16 @@
 <script
 	src="${pageContext.request.contextPath}/plugins/chartjs/Chart.Scatter.js"></script>
 
+<script
+	src="${pageContext.request.contextPath}/plugins/jqplot/jquery.jqplot.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/plugins/jqplot/jqplot.pieRenderer.js"></script>
+		
 <script src="${pageContext.request.contextPath}/js/AMOSAlchemy.js"></script>
 <script src="${pageContext.request.contextPath}/js/util.js"></script>
 <script src="${pageContext.request.contextPath}/js/AMOSAlchemy.js"></script>
-<script src="${pageContext.request.contextPath}/js/myScript.js"></script>
+
+
 
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -425,12 +433,13 @@
 								<div class="tab-pane" id="possent"></div>
 							</div>
 						</div>
+						
 
 					</div>
 					<div class="col-lg-6 col-md-6">
 						<div class="row">
 							<div class="col-lg-6 col-md-6">
-							<canvas class="active" id="twitterChart" width="400" height="400"></canvas>
+							<div id="twitterChart" style="height:400px;width:400px;"></div>
 							</div>
 							<div class="col-lg-6 col-md-6">
 							<canvas id="newsChart" width="400" height="400"></canvas>
@@ -536,6 +545,7 @@
 	<!-- JvectorMap for displaying companys locations -->
 	<script
 		src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-world-mill.js"></script>
+		<script src="${pageContext.request.contextPath}/js/myScript.js"></script>
 </body>
 
 </html>
