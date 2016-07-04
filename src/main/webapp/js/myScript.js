@@ -166,9 +166,7 @@ $(document)
 						}).done(
 								function(data) {
 									res = JSON.parse(data);
-									host.append("<div id='existAvgNewsSentimentGraph' class='"
-											+ companyName + "'></div>");
-
+									
 									var values = "";
 									var d = [];
 									var d0 = {};
