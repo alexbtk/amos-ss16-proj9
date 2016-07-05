@@ -189,6 +189,10 @@ public class HomeController {
 			answers.add("{\"title\":\"Company competitors(DBpedia)\",\"content\":\""
 					+ StringUtils.join(DBpedia.getCompanyCompetitorsName(requests.get("question3a")), ",") + "\"}");
 		}
+		if (requests.containsKey("productEmployeesCompetitors")) {
+			answers.add("[\""
+					+ StringUtils.join(DBpedia.getCompetitorsFromProducts(requests.get("productEmployeesCompetitors")), "\",\"") + "\"]");
+		}
 		if (requests.containsKey("question3b")) {
 			answers.add("{\"title\":\"Company competitors(Alchemy)\",\"content\":"
 					+ service.getPossibleCompetitors(requests.get("question3b")) + "}");

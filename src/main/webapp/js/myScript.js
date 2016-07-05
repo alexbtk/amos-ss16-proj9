@@ -382,46 +382,54 @@ function openSection(id) {
 		}
 		
 		// news graph sentiment> company vs competitors
-		var toCompare = ["Apple Inc.", "Microsoft Corporation"];
-		var d = [];
-		for(var ii in toCompare){
-			$.post("qeuryRequest", {
-				"avgNewsSentimentGraph" : toCompare[ii],
-				"avgNewsSentimentGraphWeeks" : $("#advancedOptions div input").val()
-			}).done(
-					function(data) {
-						res = JSON.parse(data);
-						var values = "";
-						
-						var d0 = {};
-						d0["data"] = [];
-						var i = 0;
-						res[i]['values'].forEach(function(entry) {
-							values = values + entry + " ";
-							d0["data"].push({
-								"x" : (-1 * i),
-								"y" : entry
-							});
-							i++;
-						});
-						var idColor = d.length;
-						if(d.length >= colorsGraph.length) 
-							idColor = 0;
-						d0["label"] = toCompare[d.length];									
-						d0["strokeColor"] = colorsGraph[idColor];
-						d0["pointColor"] = colorsGraph[idColor];
-						d0["pointStrokeColor"] = colorsGraph[idColor];
-						d.push(d0);				
-						
-						if(d.length == toCompare.length){
-							var options = {};
-							var avgNewsChart = new Chart(
-									$("#avgNewsSentimentGraphCanvasComparationC")[0]
-											.getContext('2d')).Scatter(d, options);
-						}
-					});
-		};
 		
+		$.post("qeuryRequest", {
+				"productEmployeesCompetitors" : companyName,
+		}).done(
+					function(data) {
+						res = JSON.parse(data);						
+						var toCompare = [companyName];
+						for(var ii = 0;ii<2 && ii < res[0].length;++ii)
+							toCompare.push(res[0][ii]);
+						var d = [];
+						for(var ii in toCompare){
+							$.post("qeuryRequest", {
+								"avgNewsSentimentGraph" : toCompare[ii],
+								"avgNewsSentimentGraphWeeks" : $("#advancedOptions div input").val()
+							}).done(
+									function(data) {
+										res = JSON.parse(data);
+										var values = "";
+										
+										var d0 = {};
+										d0["data"] = [];
+										var i = 0;
+										res[i]['values'].forEach(function(entry) {
+											values = values + entry + " ";
+											d0["data"].push({
+												"x" : (-1 * i),
+												"y" : entry
+											});
+											i++;
+										});
+										var idColor = d.length;
+										if(d.length >= colorsGraph.length) 
+											idColor = 0;
+										d0["label"] = toCompare[d.length];									
+										d0["strokeColor"] = colorsGraph[idColor];
+										d0["pointColor"] = colorsGraph[idColor];
+										d0["pointStrokeColor"] = colorsGraph[idColor];
+										d.push(d0);				
+										
+										if(d.length == toCompare.length){
+											var options = {};
+											var avgNewsChartC = new Chart(
+													$("#avgNewsSentimentGraphCanvasComparationC")[0]
+															.getContext('2d')).Scatter(d, options);
+										}
+									});
+						};
+				});
 		
 		var colapseB = $($("#template").html());
 		var host = $('#companySection');

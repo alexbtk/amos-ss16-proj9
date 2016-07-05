@@ -1042,6 +1042,7 @@ public class DBpedia {
 		  resource + "dbpedia-owl:product ?prod2. "+
 		  "?prod1 <http://purl.org/dc/terms/subject> ?cat1. "+
 		  "?prod2 <http://purl.org/dc/terms/subject> ?cat1. "+
+		  "FILTER(?prod2!=?prod1)"+
 	  "} "+
 	      
 	  "OPTIONAL{ "+
@@ -1049,12 +1050,14 @@ public class DBpedia {
 		  resource+" dbpedia-owl:service ?prod21. "+
 		  "?prod11 <http://purl.org/dc/terms/subject> ?cat11. "+
 		  "?prod21 <http://purl.org/dc/terms/subject> ?cat11. "+
+		  "FILTER(?prod21!=?prod11)"+
 	  "} "+
 	  "OPTIONAL{ "+
 		  "?prod12 dbpedia-owl:developer  ?company. "+
 		  "?prod22 dbpedia-owl:developer  "+resource+". "+
 		  "?prod12 <http://purl.org/dc/terms/subject> ?cat12. "+
 		  "?prod22 <http://purl.org/dc/terms/subject> ?cat12. "+
+		  "FILTER(?prod22!=?prod12)"+
 	  "}"+
 	
 	  "FILTER NOT EXISTS{  ?owner dbpedia-owl:service ?company. FILTER(?owner = "+resource+" ) } "+
@@ -1063,9 +1066,8 @@ public class DBpedia {
 	
 	   
 	  "FILTER (?company != "+resource+
-	  		" && ?prod1!=?prod2 "+
 	  ") "+
-  "} GROUP BY ?company  ORDER BY DESC(?empl) DESC(?nrcatDEV) DESC(?nrcatPR) DESC(?nrcatSE) LIMIT 5";
+  "} GROUP BY ?company  ORDER BY DESC(?nrcatDEV) DESC(?empl)  DESC(?nrcatPR) DESC(?nrcatSE) LIMIT 5";
 		
 		Query query = QueryFactory.create(queryString,Syntax.syntaxARQ);
 		List<String> competitors = new ArrayList<String>();
