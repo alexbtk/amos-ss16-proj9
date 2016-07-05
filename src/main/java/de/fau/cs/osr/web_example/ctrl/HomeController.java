@@ -237,17 +237,17 @@ public class HomeController {
 					"{\"title\":\"Company Products(DBpedia)\",\"content\":[" + StringUtils.join(products, ",") + "]}");
 		}
 		if (requests.containsKey("productsCompetitors")) {
-			List products = new ArrayList();
-			List<String> DBproducts = DBpedia.getCompanyProducts(requests.get("productsCompetitors"));
+			List products = DBpedia.getCompetitorsProducts(requests.get("productsCompetitors"));
+			/*List<String> DBproducts = DBpedia.getCompanyProducts(requests.get("productsCompetitors"));
 			String companyResourse = DBpedia.getResourceByName(requests.get("productsCompetitors")).get(0);
 			for (String p : DBproducts) {
 				List<String> Cpr = DBpedia.getProductCompetitorsName(p, "<" + companyResourse + ">");
 				if (Cpr != null)
 					for (String pC : Cpr)
 						products.add("\"" + pC + "\"");
-			}
-			answers.add("{\"title\":\"Company Competitors Products(DBpedia)\",\"content\":["
-					+ StringUtils.join(products, ",") + "]}");
+			}*/
+			answers.add("{\"title\":\"Company Competitors Products(DBpedia)\",\"content\":[\""
+					+ StringUtils.join(products, "\",\"") + "\"]}");
 		}
 		if (requests.containsKey("products")) {
 			List products = new ArrayList();

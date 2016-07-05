@@ -932,6 +932,60 @@ public class DBpedia {
 		return null;
 	}
 	
+	
+	public static List<String> getCompetitorsProducts(String companyName){
+		List<String> resources = getResourceByName(companyName);
+		if(resources == null){
+			resources = getResourceByLabel(companyName);
+		}else{
+			resources.addAll(getResourceByLabel(companyName));
+		}
+		if(resources.size() == 0)
+			return null;
+		System.out.println(resources.get(0));
+		String resource = "<" + resources.get(0) + ">";
+		
+		String queryString =  " PREFIX dbpedia-owl: <http://dbpedia.org/ontology/> "+
+  "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "+
+  "SELECT DISTINCT ?prod2 (COUNT(DISTINCT ?cat1) as ?nrcatPR)  "+ 
+  "WHERE { "+
+	  resource +"  dbpedia-owl:product ?prod1. "+
+	  "?prod1 <http://purl.org/dc/terms/subject> ?cat1. "+   
+	  "?prod2 <http://purl.org/dc/terms/subject> ?cat1. "+   
+	  "?company dbpedia-owl:product ?prod2. "+    
+	
+	 
+	  "FILTER NOT EXISTS{  ?owner dbpedia-owl:service ?company. FILTER(?owner = "+resource+" ) } "+
+	  "FILTER NOT EXISTS{  ?parentC dbpedia-owl:parentCompany ?company. FILTER(?parentC = "+resource+")} "+
+	  "FILTER NOT EXISTS{  ?parentCC dbpedia-owl:parentCompany "+resource+". FILTER(?parentCC = ?company) } "+
+	  "FILTER NOT EXISTS{  ?owner dbpedia-owl:product ?prod2. FILTER(?owner = "+resource+" ) } "+
+	
+	   
+	  "FILTER (?company != "+resource+
+	  " && ?prod1!=?prod2 ) "+
+  "} GROUP BY ?prod2  ORDER BY DESC(?nrcatPR) LIMIT 10";
+		
+		Query query = QueryFactory.create(queryString,Syntax.syntaxARQ);
+		List<String> competitors = new ArrayList<String>();
+		
+		try ( QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query) ) {
+			// Set the DBpedia specific timeout.
+            ((QueryEngineHTTP)qexec).addParam("timeout", "10000") ;
+
+            // Execute.
+            ResultSet rs = qexec.execSelect();
+            while(rs.hasNext()){
+            	QuerySolution qs = rs.next();
+            	String res = qs.getResource("prod2").toString();            	
+	            competitors.add(getResourceName(res));            	
+            }
+		} catch (Exception e) {
+            e.printStackTrace();
+        }
+		
+		return competitors;
+	}
+	
 	/**
 	 * Get coordonates of a company
 	 * 
