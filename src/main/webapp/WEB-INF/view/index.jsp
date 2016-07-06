@@ -182,6 +182,18 @@
 							<td><input id="apiKey" type="text" maxLength=100 /></td>
 						</tr>
 						<tr>
+							<td><label for="twitterUsername">Twitter Username</label></td>
+						</tr>
+						<tr>
+							<td><input id="twitterUsername" type="text" maxLength=100 /></td>
+						</tr>
+						<tr>
+							<td><label for="twitterPassword">Twitter Password</label></td>
+						</tr>
+						<tr>
+							<td><input id="twitterPassword" type="text" maxLength=100 /></td>
+						</tr>
+						<!-- <tr>
 							<td><label for="twitterConsumerKey">Twitter Consumer
 									Key</label></td>
 							<td><label for="twitterConsumerSecret">Twitter
@@ -201,7 +213,7 @@
 						<tr>
 							<td><input id="twitterToken" type="text" maxLength=100 /></td>
 							<td><input id="twitterTokenSecret" type="text" maxLength=100 /></td>
-						</tr>
+						</tr> -->
 					</tbody>
 				</table>
 

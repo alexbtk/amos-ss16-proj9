@@ -28,7 +28,9 @@ $(document)
 
 					// Set credetials in login field
 					$("#apiKey").val(getCookie("apiKey"));
-					$("#toneAnalyzerUsername").val(
+					$("#twitterUsername").val(getCookie("twitterUsername"));
+					$("#twitterPassword").val(getCookie("twitterPassword"));
+					/*$("#toneAnalyzerUsername").val(
 							getCookie("toneAnalyzerUsername"));
 					$("#toneAnalyzerPassword").val(
 							getCookie("toneAnalyzerPassword"));
@@ -38,14 +40,16 @@ $(document)
 							getCookie("twitterConsumerSecret"));
 					$("#twitterToken").val(getCookie("twitterToken"));
 					$("#twitterTokenSecret").val(
-							getCookie("twitterTokenSecret"));
+							getCookie("twitterTokenSecret"));*/
 
 					$("#loginButton").on(
 							"click",
 							function() {
 								// set cookies
 								setCookie("apiKey", $("#apiKey").val(), 1);
-								setCookie("toneAnalyzerUsername", $(
+								setCookie("twitterUsername", $("#twitterUsername").val(), 1);
+								setCookie("twitterPassword", $("#twitterPassword").val(), 1);
+								/*setCookie("toneAnalyzerUsername", $(
 										"#toneAnalyzerUsername").val(), 1);
 								setCookie("toneAnalyzerPassword", $(
 										"#toneAnalyzerPassword").val(), 1);
@@ -56,7 +60,7 @@ $(document)
 								setCookie("twitterToken", $("#twitterToken")
 										.val(), 1);
 								setCookie("twitterTokenSecret", $(
-										"#twitterTokenSecret").val(), 1);
+										"#twitterTokenSecret").val(), 1);*/
 
 								// hide login show container
 								$("#login").fadeOut(500, function() {
@@ -93,15 +97,18 @@ $(document)
 							 * $("#twitterConsumerSecret").val("");
 							 * $("#twitterToken").val("");
 							 * $("#twitterTokenSecret").val("");
-							 * 
-							 * //Remove credentials setCookie("apiKey", "", 1);
-							 * setCookie("toneAnalyzerUsername", "", 1);
-							 * setCookie("toneAnalyzerPassword", "", 1);
-							 * setCookie("twitterConsumerKey", "", 1);
-							 * setCookie("twitterConsumerSecret", "", 1);
-							 * setCookie("twitterToken", "", 1);
-							 * setCookie("twitterTokenSecret", "", 1);
 							 */
+							 //Remove credentials 
+							 setCookie("apiKey", " ", 1);
+							 setCookie("twitterUsername", " ", 1);
+							 setCookie("twitterPassword", " ", 1);
+							 /*setCookie("toneAnalyzerUsername", "", 1);
+							 setCookie("toneAnalyzerPassword", "", 1);
+							 setCookie("twitterConsumerKey", "", 1);
+							 setCookie("twitterConsumerSecret", "", 1);
+							 setCookie("twitterToken", "", 1);
+							 setCookie("twitterTokenSecret", "", 1);*/
+							 
 
 							$("#login").fadeIn(500);
 						});

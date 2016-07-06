@@ -171,13 +171,11 @@ public class HomeController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/qeuryRequest", method = RequestMethod.POST)
-	public String queryResponse(@RequestParam Map<String, String> requests, @CookieValue("apiKey") String apiKey,
-			@CookieValue("twitterConsumerKey") String consumerKey,
-			@CookieValue("twitterConsumerSecret") String consumerSecret, @CookieValue("twitterToken") String token,
-			@CookieValue("twitterTokenSecret") String tokenSecret, Model m) {
+	public String queryResponse(@RequestParam Map<String, String> requests, @CookieValue("apiKey") String apiKey, @CookieValue("twitterUsername") String twitterUsername, @CookieValue("twitterPassword") String twitterPassword ,Model m) {
 		this.service = fac.createAlchemy(apiKey);
 		languageService = fac.createAlchemyLanguage(apiKey);
-		twitterCrawler = new TwitterCrawler(consumerKey, consumerSecret, token, tokenSecret);
+		twitterBluemixCrawler = new TwitterBluemixCrawler(twitterUsername, twitterPassword);
+		//twitterCrawler = new TwitterCrawler(consumerKey, consumerSecret, token, tokenSecret);
 		int weeks = 1;
 		List<String> answers = new ArrayList<String>();
 		// Todo - catch error: incorrect companyName, noResult
