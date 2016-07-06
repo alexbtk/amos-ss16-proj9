@@ -884,8 +884,8 @@ function openSection(id) {
 						var newsSentimentCountString = res[0]['content'];
 						var numberPattern = /\d+/g;
 						var numbers = newsSentimentCountString.match(numberPattern);
-						alert(numbers[0]);
-						alert(numbers[1]);
+						//alert(numbers[0]);
+						//alert(numbers[1]);
 						var plot2 = $.jqplot('newsChart', [[['negative news',numbers[0]],['positive news',numbers[1]]]], {
 							grid: {
 					            drawBorder: false, 
