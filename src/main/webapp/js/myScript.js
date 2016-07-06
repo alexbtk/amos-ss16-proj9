@@ -382,46 +382,54 @@ function openSection(id) {
 		}
 		
 		// news graph sentiment> company vs competitors
-		var toCompare = ["Apple Inc.", "Microsoft Corporation"];
-		var d = [];
-		for(var ii in toCompare){
-			$.post("qeuryRequest", {
-				"avgNewsSentimentGraph" : toCompare[ii],
-				"avgNewsSentimentGraphWeeks" : $("#advancedOptions div input").val()
-			}).done(
-					function(data) {
-						res = JSON.parse(data);
-						var values = "";
-						
-						var d0 = {};
-						d0["data"] = [];
-						var i = 0;
-						res[i]['values'].forEach(function(entry) {
-							values = values + entry + " ";
-							d0["data"].push({
-								"x" : (-1 * i),
-								"y" : entry
-							});
-							i++;
-						});
-						var idColor = d.length;
-						if(d.length >= colorsGraph.length) 
-							idColor = 0;
-						d0["label"] = toCompare[d.length];									
-						d0["strokeColor"] = colorsGraph[idColor];
-						d0["pointColor"] = colorsGraph[idColor];
-						d0["pointStrokeColor"] = colorsGraph[idColor];
-						d.push(d0);				
-						
-						if(d.length == toCompare.length){
-							var options = {};
-							var avgNewsChart = new Chart(
-									$("#avgNewsSentimentGraphCanvasComparationC")[0]
-											.getContext('2d')).Scatter(d, options);
-						}
-					});
-		};
 		
+		$.post("qeuryRequest", {
+				"productEmployeesCompetitors" : companyName,
+		}).done(
+					function(data) {
+						res = JSON.parse(data);						
+						var toCompare = [companyName];
+						for(var ii = 0;ii<2 && ii < res[0].length;++ii)
+							toCompare.push(res[0][ii]);
+						var d = [];
+						for(var ii in toCompare){
+							$.post("qeuryRequest", {
+								"avgNewsSentimentGraph" : toCompare[ii],
+								"avgNewsSentimentGraphWeeks" : $("#advancedOptions div input").val()
+							}).done(
+									function(data) {
+										res = JSON.parse(data);
+										var values = "";
+										
+										var d0 = {};
+										d0["data"] = [];
+										var i = 0;
+										res[i]['values'].forEach(function(entry) {
+											values = values + entry + " ";
+											d0["data"].push({
+												"x" : (-1 * i),
+												"y" : entry
+											});
+											i++;
+										});
+										var idColor = d.length;
+										if(d.length >= colorsGraph.length) 
+											idColor = 0;
+										d0["label"] = toCompare[d.length];									
+										d0["strokeColor"] = colorsGraph[idColor];
+										d0["pointColor"] = colorsGraph[idColor];
+										d0["pointStrokeColor"] = colorsGraph[idColor];
+										d.push(d0);				
+										
+										if(d.length == toCompare.length){
+											var options = {};
+											var avgNewsChartC = new Chart(
+													$("#avgNewsSentimentGraphCanvasComparationC")[0]
+															.getContext('2d')).Scatter(d, options);
+										}
+									});
+						};
+				});
 		
 		var colapseB = $($("#template").html());
 		var host = $('#companySection');
@@ -718,6 +726,41 @@ function openSection(id) {
 			alert("No company!!");
 			return;
 		}
+		//document.addEventListener("DOMContentLoaded", domReady);
+		//function domReady(){
+			
+			
+			/*
+			var twitterChart = document.getElementById("newsChart");
+			var twitterChartdata = {
+				    labels: [
+				        "Red",
+				        "Blue",
+				        "Yellow"
+				    ],
+				    datasets: [
+				        {
+				            data: [300, 50, 100],
+				            backgroundColor: [
+				                "#FF6384",
+				                "#36A2EB",
+				                "#FFCE56"
+				            ],
+				            hoverBackgroundColor: [
+				                "#FF6384",
+				                "#36A2EB",
+				                "#FFCE56"
+				            ]
+				        }]
+				};
+			var twitterPieChart = new Chart(twitterChart,{
+			    type: 'pie',
+			    data: twitterChartdata
+			});
+			*/
+		//};
+		
+		
 
 		// Company average twitter sentiment
 		$.post("qeuryRequest", {
@@ -746,53 +789,115 @@ function openSection(id) {
 			var neuttab = $('#neutsent');
 			var postab = $('#possent');
 			
+			var negRetweetOver100 = $('#negOver100');
+			var negRetweetUnder100 = $('#negUnder100');
+			var negRetweetUnder10 = $('#negUnder10');
+			
+			var posRetweetOver100 =  $('#posOver100');
+			var posRetweetUnder100 = $('#posUnder100');
+			var posRetweetUnder10 = $('#posUnder10');
+			
+			var neutRetweetOver100 =  $('#neutOver100');
+			var neutRetweetUnder100 = $('#neutUnder100');
+			var neutRetweetUnder10 = $('#neutUnder10');
+			
 			negtab.empty();
 			neuttab.empty();
 			postab.empty();
 			
 			for ( var i in negPostsArray)
-				negtab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + negPostsArray[i]["postId"] + "\">+</button>Tweet from User " + negPostsArray[i]["postUser"] +"</p><div id=\"" + negPostsArray[i]["postId"] + "\" class=\"collapse\">" + negPostsArray[i]["postText"] + "</div>");	
+				var retweetCount = negPostsArray[i]["postRetweeted"];
+				if (Number(retweetCount) > 100){
+					negRetweetOver100.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + negPostsArray[i]["postId"] + "\">+</button>Tweet from User " + negPostsArray[i]["postUser"] +"</p><div id=\"" + negPostsArray[i]["postId"] + "\" class=\"collapse\">" + negPostsArray[i]["postText"] + "</div>");
+				} else if (Number(retweetCount) <= 100 && Number(retweetCount) > 10){
+					negRetweetUnder100.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + negPostsArray[i]["postId"] + "\">+</button>Tweet from User " + negPostsArray[i]["postUser"] +"</p><div id=\"" + negPostsArray[i]["postId"] + "\" class=\"collapse\">" + negPostsArray[i]["postText"] + "</div>");
+				}else {
+					negRetweetUnder10.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + negPostsArray[i]["postId"] + "\">+</button>Tweet from User " + negPostsArray[i]["postUser"] +"</p><div id=\"" + negPostsArray[i]["postId"] + "\" class=\"collapse\">" + negPostsArray[i]["postText"] + "</div>");
+				}
+				//negtab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + negPostsArray[i]["postId"] + "\">+</button>Tweet from User " + negPostsArray[i]["postUser"] +"</p><div id=\"" + negPostsArray[i]["postId"] + "\" class=\"collapse\">" + negPostsArray[i]["postText"] + "</div>");	
 				
 			for ( var i in neutPostsArray)
+				var retweetCount = neutPostsArray[i]["postRetweeted"];
 				neuttab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + neutPostsArray[i]["postId"] + "\">+</button>Tweet from User " + neutPostsArray[i]["postUser"] +"</p><div id=\"" + neutPostsArray[i]["postId"] + "\" class=\"collapse\">" + neutPostsArray[i]["postText"] + "</div>");	
 				
 			for ( var i in posPostsArray)
+				var retweetCount = posPostsArray[i]["postRetweeted"];
 				postab.append("<p><button type=\"button\" class=\"btn btn-xs\" data-toggle=\"collapse\" data-target=\"#" + posPostsArray[i]["postId"] + "\">+</button>Tweet from User " + posPostsArray[i]["postUser"] +"</p><div id=\"" + posPostsArray[i]["postId"] + "\" class=\"collapse\">" + posPostsArray[i]["postText"] + "</div>");
-			window.onLoad=function(){
-			var twitterChart = $('#twitterChart');
-			var twitterChartdata = {
-				    labels: [
-				        "Red",
-				        "Blue",
-				        "Yellow"
-				    ],
-				    datasets: [
-				        {
-				            data: [300, 50, 100],
-				            backgroundColor: [
-				                "#FF6384",
-				                "#36A2EB",
-				                "#FFCE56"
-				            ],
-				            hoverBackgroundColor: [
-				                "#FF6384",
-				                "#36A2EB",
-				                "#FFCE56"
-				            ]
-				        }]
-				};
 			
-			var twitterPieChart = new Chart(twitterChart,{
-			    type: 'pie',
-			    data: twitterChartdata
-			});
-			};
+			$.jqplot.config.enablePlugins = true;
+			var plot1 = $.jqplot('twitterChart', [[['negative sentiments',negPostsArray.length],['neutral sentiments',neutPostsArray.length],['positive sentiments',posPostsArray.length]]], {
+				grid: {
+		            drawBorder: false, 
+		            drawGridlines: false,
+		            background: '#ffffff',
+		            shadow:false
+		        },
+				gridPadding: {top:0, bottom:38, left:0, right:0},
 				
+		        seriesDefaults:{
+		            renderer:$.jqplot.PieRenderer,
+		            seriesColors: ["#e50202", "#eefd00", "#04ff08"],
+		            trendline:{ show:false }, 
+		            rendererOptions: { padding: 8, showDataLabels: true }
+		        },
+		        legend:{
+		            show:true, 
+		            placement: 'outside', 
+		            rendererOptions: {
+		                numberRows: 2
+		            }, 
+		            location:'s',
+		            marginTop: '15px'
+		        }       
+		    });
+			
 		});
+		
+		$.post("qeuryRequest", {
+			"question4" : companyName,
+			"timeframe" : 2
+		}).done(
+					function(data) {
+						var res = JSON.parse(data);		
+						var newsSentimentCountString = res[0]['content'];
+						var numberPattern = /\d+/g;
+						var numbers = newsSentimentCountString.match(numberPattern);
+						alert(numbers[0]);
+						alert(numbers[1]);
+						var plot2 = $.jqplot('newsChart', [[['negative news',numbers[0]],['positive news',numbers[1]]]], {
+							grid: {
+					            drawBorder: false, 
+					            drawGridlines: false,
+					            background: '#ffffff',
+					            shadow:false
+					        },
+							gridPadding: {top:0, bottom:38, left:0, right:0},
+							
+					        seriesDefaults:{
+					            renderer:$.jqplot.PieRenderer,
+					            seriesColors: ["#e50202", "#04ff08"],
+					            trendline:{ show:false }, 
+					            rendererOptions: { padding: 8, showDataLabels: true }
+					        },
+					        legend:{
+					            show:true, 
+					            placement: 'outside', 
+					            rendererOptions: {
+					                numberRows: 2
+					            }, 
+					            location:'s',
+					            marginTop: '15px'
+					        }       
+					    });
+					
+	    });
+				
+		
+		};
 
 	}
 
-}
+
 /*
  * Checks if object exists
  */

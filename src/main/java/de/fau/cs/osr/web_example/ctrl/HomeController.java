@@ -189,6 +189,10 @@ public class HomeController {
 			answers.add("{\"title\":\"Company competitors(DBpedia)\",\"content\":\""
 					+ StringUtils.join(DBpedia.getCompanyCompetitorsName(requests.get("question3a")), ",") + "\"}");
 		}
+		if (requests.containsKey("productEmployeesCompetitors")) {
+			answers.add("[\""
+					+ StringUtils.join(DBpedia.getCompetitorsFromProducts(requests.get("productEmployeesCompetitors")), "\",\"") + "\"]");
+		}
 		if (requests.containsKey("question3b")) {
 			answers.add("{\"title\":\"Company competitors(Alchemy)\",\"content\":"
 					+ service.getPossibleCompetitors(requests.get("question3b")) + "}");
@@ -233,17 +237,17 @@ public class HomeController {
 					"{\"title\":\"Company Products(DBpedia)\",\"content\":[" + StringUtils.join(products, ",") + "]}");
 		}
 		if (requests.containsKey("productsCompetitors")) {
-			List products = new ArrayList();
-			List<String> DBproducts = DBpedia.getCompanyProducts(requests.get("productsCompetitors"));
+			List products = DBpedia.getCompetitorsProducts(requests.get("productsCompetitors"));
+			/*List<String> DBproducts = DBpedia.getCompanyProducts(requests.get("productsCompetitors"));
 			String companyResourse = DBpedia.getResourceByName(requests.get("productsCompetitors")).get(0);
 			for (String p : DBproducts) {
 				List<String> Cpr = DBpedia.getProductCompetitorsName(p, "<" + companyResourse + ">");
 				if (Cpr != null)
 					for (String pC : Cpr)
 						products.add("\"" + pC + "\"");
-			}
-			answers.add("{\"title\":\"Company Competitors Products(DBpedia)\",\"content\":["
-					+ StringUtils.join(products, ",") + "]}");
+			}*/
+			answers.add("{\"title\":\"Company Competitors Products(DBpedia)\",\"content\":[\""
+					+ StringUtils.join(products, "\",\"") + "\"]}");
 		}
 		if (requests.containsKey("products")) {
 			List products = new ArrayList();
@@ -473,13 +477,13 @@ public class HomeController {
 				
 				if (postSentiment != null && postSentiment < 0){
 					negPostsToSend.add("{\"postId\":\"" + post.id + "\",\"sentiment\": \"" + postSentiment 
-					+"\",\"postUser\":" + "\"" + post.displayName +"\",\"postText\":" + "\"" + post.postContent + "\"}");
+					+"\",\"postUser\":" + "\"" + post.displayName +"\",\"postText\":" + "\"" + post.postContent + "\",\"postRetweeted\":" + "\"" + post.retweetCount + "\"}");
 				}else if (postSentiment != null && postSentiment <= 0.5 && postSentiment >= 0){
 					neutPostsToSend.add("{\"postId\":\"" + post.id + "\",\"sentiment\": \"" + postSentiment 
-							+"\",\"postUser\":" + "\"" + post.displayName +"\",\"postText\":" + "\"" + post.postContent + "\"}");
+							+"\",\"postUser\":" + "\"" + post.displayName +"\",\"postText\":" + "\"" + post.postContent + "\",\"postRetweeted\":" + "\"" + post.retweetCount + "\"}");
 				}else if (postSentiment != null){
 					posPostsToSend.add("{\"postId\":\"" + post.id + "\",\"sentiment\": \"" + postSentiment 
-							+"\",\"postUser\":" + "\"" + post.displayName +"\",\"postText\":" + "\"" + post.postContent + "\"}");
+							+"\",\"postUser\":" + "\"" + post.displayName +"\",\"postText\":" + "\"" + post.postContent + "\",\"postRetweeted\":" + "\"" + post.retweetCount + "\"}");
 				}
 			}
 			answers.add("{\"avgSentiment\": \"" + avgSentimentValue.toString() + "\",\"negPosts\":[" + StringUtils.join(negPostsToSend, ",") +  "],\"neutPosts\":[" + StringUtils.join(neutPostsToSend, ",") +  "],\"posPosts\":[" + StringUtils.join(posPostsToSend, ",") + "]}");

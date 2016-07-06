@@ -80,6 +80,8 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/jquery-ui.css">
 <link rel="stylesheet"
+	href="${pageContext.request.contextPath}/plugins/jqplot/jquery.jqplot.min.css">
+<link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/style.css">
 
 <style type="text/css">
@@ -106,10 +108,16 @@
 <script
 	src="${pageContext.request.contextPath}/plugins/chartjs/Chart.Scatter.js"></script>
 
+<script
+	src="${pageContext.request.contextPath}/plugins/jqplot/jquery.jqplot.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/plugins/jqplot/jqplot.pieRenderer.js"></script>
+
 <script src="${pageContext.request.contextPath}/js/AMOSAlchemy.js"></script>
 <script src="${pageContext.request.contextPath}/js/util.js"></script>
 <script src="${pageContext.request.contextPath}/js/AMOSAlchemy.js"></script>
-<script src="${pageContext.request.contextPath}/js/myScript.js"></script>
+
+
 
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -407,9 +415,7 @@
 
 							</fieldset>
 						</form>
-						<br>
-						<br>
-						<br>
+						<br> <br> <br>
 						<div class="tabbable">
 							<ul class="nav nav-tabs">
 								<li class="active"><a href="#negsent" data-toggle="tab">Negative
@@ -420,20 +426,43 @@
 										Sentiment</a></li>
 							</ul>
 							<div class="tab-content">
-								<div class="tab-pane active" id="negsent"></div>
+								<div class="tab-pane active" id="negsent">
+									<p>
+										<button type="button" class="btn btn-xs"
+											data-toggle="collapse" data-target="#negOver100"
+											aria-expanded="true">+</button>
+										Tweets with over 100 retweets
+									</p>
+									<div id="negOver100" class="collapse"></div>
+									<p>
+										<button type="button" class="btn btn-xs"
+											data-toggle="collapse" data-target="#negUnder100"
+											aria-expanded="true">+</button>
+										Tweets with more than 10 but less than 100 retweets
+									</p>
+									<div id="negUnder100" class="collapse"></div>
+									<p>
+										<button type="button" class="btn btn-xs"
+											data-toggle="collapse" data-target="#negUnder10"
+											aria-expanded="true">+</button>
+										Tweets with less than 10 retweets
+									</p>
+									<div id="negUnder10" class="collapse"></div>
+								</div>
 								<div class="tab-pane" id="neutsent"></div>
 								<div class="tab-pane" id="possent"></div>
 							</div>
 						</div>
 
+
 					</div>
 					<div class="col-lg-6 col-md-6">
 						<div class="row">
 							<div class="col-lg-6 col-md-6">
-							<canvas class="active" id="twitterChart" width="400" height="400"></canvas>
+								<div id="twitterChart" style="height: 400px; width: 400px;"></div>
 							</div>
 							<div class="col-lg-6 col-md-6">
-							<canvas id="newsChart" width="400" height="400"></canvas>
+								<div id="newsChart" style="height: 400px; width: 400px;"></div>
 							</div>
 						</div>
 					</div>
@@ -536,6 +565,7 @@
 	<!-- JvectorMap for displaying companys locations -->
 	<script
 		src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-world-mill.js"></script>
+	<script src="${pageContext.request.contextPath}/js/myScript.js"></script>
 </body>
 
 </html>
