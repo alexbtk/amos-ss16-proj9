@@ -67,6 +67,14 @@ $(document)
 									$("#logoutButton").fadeIn(500);
 									$("#welcome").fadeIn(500);
 								});
+								
+								//reload content after logout
+								if($('#productsSection #companyProducts').find("#existsProductCompany").length > 0)
+									$('#productsSection #companyProducts').find("#existsProductCompany").remove();
+								if($('#competitorsSection').find("#existCompetitorsIndustry").length > 0)
+									$('#competitorsSection').find("#existCompetitorsIndustry").remove();
+								if($('#companySection').find("#existCompanyQuery").length>0)
+									$('#companySection').find("#existCompanyQuery").remove();
 							});
 
 					$("#welcomeButton").on(
@@ -249,7 +257,7 @@ function openSection(id) {
 			return;
 		}
 		if ($('#' + id + 'Section').find("#existCompetitorsIndustry").length > 0) {
-			if ($('#' + id + 'Section').find("#existCompetitorsIndustry").attr(
+			if ($('#competitorsSection').find("#existCompetitorsIndustry").attr(
 					"class") == companyName)
 				return;
 		}
@@ -383,7 +391,7 @@ function openSection(id) {
 			return;
 		}
 		if ($('#' + id + 'Section').find("#existCompanyQuery").length > 0) {
-			if ($('#' + id + 'Section').find("#existCompanyQuery")
+			if ($('#companySection').find("#existCompanyQuery")
 					.attr("class") == companyName)
 				return;
 		}
@@ -507,9 +515,7 @@ function openSection(id) {
 						function(data) {
 							data = JSON.parse(data);
 							console.log(data);
-							if($('#world-map').length == 0)
-							host
-									.append("<div id=\"world-map\" style=\"width: 600px; height: 400px\"></div>");
+							$("#mapforcompany").empty().append("<div id=\"world-map\" style=\"width: 600px; height: 400px\"></div>");
 
 							var vecmap = $('#world-map').vectorMap({
 								map : 'world_mill',

@@ -350,10 +350,6 @@
 								data-widget="collapse" data-toggle="tooltip" title="Collapse">
 								<i class="fa fa-minus"></i>
 							</button>
-							<button type="button" class="btn btn-box-tool"
-								data-widget="remove" data-toggle="tooltip" title="Remove">
-								<i class="fa fa-times"></i>
-							</button>
 						</div>
 					</div>
 					<div class="box-body">
@@ -362,25 +358,22 @@
 								<h3 class="box-title"></h3>
 							</div>
 							<!-- /.box-header -->
-							<!-- form start -->
-							<form class="form-horizontal" method="POST"
-								action="getCompanyLocationMap">
-								<div class="box-body">
+								<div class="box-body" id="mapforcompany">
 									<div id="world-map" style="width: 600px; height: 400px"></div>
 								</div>
 								<!-- /.box-body -->
 								<div class="box-footer">
-									<button type="submit" class="btn btn-info pull-right">Search</button>
+									
 								</div>
 								<!-- /.box-footer -->
-							</form>
+							
 						</div>
 
 
 					</div>
 					<!-- /.box-body -->
 
-					<div class="box-footer">Footer</div>
+					<div class="box-footer"></div>
 					<!-- /.box-footer-->
 				</div>
 				<!-- /.box -->
