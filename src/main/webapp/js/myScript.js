@@ -147,7 +147,7 @@ $(document)
 					});
 
 					$("#searchButton").click(function() {
-						alert("TODO: reload content!");
+						$("#companyMoreitem").click();
 					});
 					
 					$("#avgNewsSentimentGraphSlider input").change(function(){
@@ -469,14 +469,13 @@ function openSection(id) {
 				var valT = parseFloat($("#sentimentQuery #twitterValues").text()) + 4.;
 				var valN = parseFloat($("#sentimentQuery #newsValues").text()) + 4.;
 				var reSe = 2.;
-				reSe = (valT*twitter)/100. + (valN*news)/100.;
+				reSe = ((valT*twitter)/100.) + ((valN*news)/100.);	
 				
 				if($("#sentimentQuery").find("#twiterSlider").val() != "0" && $("#sentimentQuery").find("#newsSlider").val() != "0")
 					reSe /= 2.0;
-				$('#sentimentResult').slider('setValue', reSe-4.);
+				$('#sentimentResult').slider('setValue', (reSe-4.));
 			
-		    });
-		    
+		    });		    
 		    
 		}
 		
