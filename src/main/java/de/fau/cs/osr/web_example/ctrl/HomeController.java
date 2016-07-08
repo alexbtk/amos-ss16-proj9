@@ -81,12 +81,15 @@ public class HomeController {
 	TwitterBluemixCrawler twitterBluemixCrawler;
 
 	Map<String, AvgNewsSentimentCacheEntry> avgNewsSentimentCache;
+	
+	AMOSCache.AMOSCache cache;
 
 	public HomeController() {
 		fac = IAlchemyFactory.newInstance();
 		twitterAnalyzer = new TwitterAnalyzer();
 		avgNewsSentimentCache = new HashMap<String, AvgNewsSentimentCacheEntry>();
 		twitterBluemixCrawler = new TwitterBluemixCrawler(null, null);
+		cache = AMOSCache.AMOSCache.getInstance();
 	}
 
 	@RequestMapping(value = "/process")
@@ -379,7 +382,7 @@ public class HomeController {
 				ArrayList<String> gt = new ArrayList<String>();
 
 				if (avgCP.equals("1")) {
-					ArrayList<String> rs = this.service.getAvgNewsSentimentPeriod(productsCP,
+					List<String> rs = this.service.getAvgNewsSentimentPeriod(productsCP,
 							"O[Product^Technology^OperatingSystem^Facility^FieldTerminology]", days, 5);
 					String resultString1 = "{\"title\":\"Average News sentiment of company products\",\"values\":[";
 					resultString1 += StringUtils.join(rs, ",") + "]}";
@@ -388,7 +391,7 @@ public class HomeController {
 					for (int i = 0; i < productsCP.length; ++i) {
 						if (productsCP[i].equals("") || productsCP[i].equals(null))
 							continue;
-						ArrayList<String> rs = this.service.getAvgNewsSentimentPeriod(
+						List<String> rs = this.service.getAvgNewsSentimentPeriod(
 								Arrays.copyOfRange(productsCP, i, i + 1),
 								"O[Product^Technology^OperatingSystem^Facility^FieldTerminology]", days, 5);
 						String resultString1 = "{\"title\":\"" + productsCP[i] + "\",\"values\":[";
@@ -398,7 +401,7 @@ public class HomeController {
 				}
 
 				if (avgCtP.equals("1")) {
-					ArrayList<String> rs = this.service.getAvgNewsSentimentPeriod(productsCtP,
+					List<String> rs = this.service.getAvgNewsSentimentPeriod(productsCtP,
 							"O[Product^Technology^OperatingSystem^Facility^FieldTerminology]", days, 5);
 					String resultString1 = "{\"title\":\"Average News sentiment of competitors products\",\"values\":[";
 					resultString1 += StringUtils.join(rs, ",") + "]}";
@@ -407,7 +410,7 @@ public class HomeController {
 					for (int i = 0; i < productsCtP.length; ++i) {
 						if (productsCtP[i].equals("") || productsCtP[i].equals(null))
 							continue;
-						ArrayList<String> rs = this.service.getAvgNewsSentimentPeriod(
+						List<String> rs = this.service.getAvgNewsSentimentPeriod(
 								Arrays.copyOfRange(productsCtP, i, i + 1),
 								"O[Product^Technology^OperatingSystem^Facility^FieldTerminology]", days, 5);
 						String resultString1 = "{\"title\":\"" + productsCtP[i] + "\",\"values\":[";
@@ -530,5 +533,34 @@ public class HomeController {
 
 		return "locationmap";
 	}
+	
+	@RequestMapping(value = "/getCache")
+	public String getCache(Model m){
 
+		String cache = this.cache.toString();
+		System.out.println("Cache is: " + cache);
+		if(cache.length() < 2)
+			m.addAttribute("cache", "No cache available");
+		else
+			m.addAttribute("cache", "<span>" + cache + "</span>");
+		return "getCache";
+	}
+	
+	@RequestMapping(value = "/setCache")
+	public String setCache(Model m){
+		System.out.println("set cache called!");
+		return "setCache";
+	}
+
+	@RequestMapping(value = "/submitCache", method = RequestMethod.POST)
+	public String submitCache(@RequestParam String cache, Model m){
+		if(cache != null){
+			System.out.println("SubmitCache called!");
+			this.cache.setCache(cache);
+
+			m.addAttribute("cache", this.cache.toString());
+		}
+		
+		return "getCache";
+	}
 }

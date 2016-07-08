@@ -24,9 +24,19 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.Syntax;
 import org.apache.jena.sparql.engine.http.QueryEngineHTTP;
 
+import AMOSCache.AMOSCache;
+
 public class DBpedia {
 	
+	public static AMOSCache cache = AMOSCache.getInstance();
+	
 	public static List<String> getResourceByLabel(String label){
+		
+		Object r = cache.getCurrentMethodCache(label);
+		if(r != null){
+			return (List<String>) r;
+		}
+		
 		String queryString = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> " +
 							 "PREFIX dbpedia-owl: <http://dbpedia.org/ontology/> " + 
 							 "SELECT $n " +
@@ -48,6 +58,7 @@ public class DBpedia {
             		result.add(res);
             }
             
+            cache.putCurrentMethodCache(label, result);
             return result;
 		} catch (Exception e) {
             e.printStackTrace();
@@ -57,6 +68,11 @@ public class DBpedia {
 	}
 	
 	public static String getResourceLabel(String resource){
+		Object r = cache.getCurrentMethodCache(resource);
+		if(r != null){
+			return (String) r;
+		}
+		
 		resource = resource.replace("[", "");
 		resource = resource.replace("]", "");
 		resource = "<" + resource + ">";
@@ -81,6 +97,8 @@ public class DBpedia {
             	if(res.endsWith("@en")){
 	            	res = res.replace("\"", "");
 	            	res = res.replace("@en", "");
+	            	
+	            	cache.putCurrentMethodCache(resource, res);
 	                return res;
             	}
             }
@@ -92,6 +110,11 @@ public class DBpedia {
 	}
 	
 	public static List<String> getResourceByName(String name){
+		
+		Object r = cache.getCurrentMethodCache(name);
+		if(r != null){
+			return (List<String>) r;
+		}
 
 		String queryString = 	"PREFIX prop: <http://dbpedia.org/property/> " +
 				"SELECT * " +
@@ -113,6 +136,8 @@ public class DBpedia {
 				String res = qs.getResource("n").toString();
 				result.add(res);
 			}
+			
+			cache.putCurrentMethodCache(name, result);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -122,6 +147,11 @@ public class DBpedia {
 	}
 	
 	public static String getResourceName(String resource){
+		Object r = cache.getCurrentMethodCache(resource);
+		if(r != null){
+			return (String) r;
+		}
+		
 		resource = resource.replace("[", "");
 		resource = resource.replace("]", "");
 		resource = "<" + resource + ">";
@@ -149,8 +179,10 @@ public class DBpedia {
             	String res = qs.getLiteral("n").getString();
             	res = res.replace("\"", "");
             	res = res.replace("@en", "");
-            	if(res.trim() != "Inc.")
+            	if(res.trim() != "Inc."){
+            		cache.putCurrentMethodCache(resource, res);
             		return res;
+            	}
             }
 		} catch (Exception e) {
             e.printStackTrace();
@@ -160,6 +192,11 @@ public class DBpedia {
 	}
 	
 	public static boolean resourceHasDisambiguations(String resource){
+		Object r = cache.getCurrentMethodCache(resource);
+		if(r != null){
+			return (boolean) r;
+		}
+		
 		resource = resource.replace("[", "");
 		resource = resource.replace("]", "");
 		resource = "<" + resource + ">";
@@ -179,6 +216,7 @@ public class DBpedia {
             // Execute.
             boolean result = qexec.execAsk();
             
+            cache.putCurrentMethodCache(resource, result);
             return result;
 		} catch (Exception e) {
             e.printStackTrace();
@@ -188,6 +226,11 @@ public class DBpedia {
 	}
 	
 	public static boolean resourceIsCompany(String resource){
+		Object r = cache.getCurrentMethodCache(resource);
+		if(r != null){
+			return (boolean) r;
+		}
+		
 		resource = resource.replace("[", "");
 		resource = resource.replace("]", "");
 		resource = "<" + resource + ">";
@@ -207,6 +250,7 @@ public class DBpedia {
             // Execute.
             boolean result = qexec.execAsk();
             
+            cache.putCurrentMethodCache(resource, result);
             return result;
 		} catch (Exception e) {
             e.printStackTrace();
@@ -216,6 +260,11 @@ public class DBpedia {
 	}
 	
 	public static List<String> getCompanies(String label){
+		
+		Object r = cache.getCurrentMethodCache(label);
+		if(r != null){
+			return (List<String>) r;
+		}
 		
 		List<String> resourceList = getResourceByLabel(label);
 		List<String> resultList = new ArrayList<String>();
@@ -277,10 +326,18 @@ public class DBpedia {
 			}
 		}
 		
+		if(resultList.size() > 0)
+			cache.putCurrentMethodCache(label, resultList);
+		
 		return resultList;
 	}
 	
 	public static String getResourceAbstract(String resource){
+		
+		Object r = cache.getCurrentMethodCache(resource);
+		if(r != null){
+			return (String) r;
+		}
 		
 		resource = resource.replace("[", "");
 		resource = resource.replace("]", "");
@@ -305,6 +362,7 @@ public class DBpedia {
             	String res = qs.getLiteral("n").toString();
             	if(res.endsWith("@en")){
             		res = res.replace("@en", "");
+            		cache.putCurrentMethodCache(resource, res);
 	                return res;
             	}
             }
@@ -316,7 +374,10 @@ public class DBpedia {
 	}
 	
 	public static String getCompanyAbstract(String name){
-		
+		Object res = cache.getCurrentMethodCache(name);
+		if(res != null){
+			return (String) res;
+		}
 		List<String> resources = getResourceByName(name);
 		String companyAbstract = null;
 		
@@ -328,10 +389,17 @@ public class DBpedia {
 			}
 		}
 		
+		if(companyAbstract != null)
+			cache.putCurrentMethodCache(name, companyAbstract);
+		
 		return companyAbstract;
 	}
 	
 	public static String getResourceLocationCountry(String resource){
+		Object r = cache.getCurrentMethodCache(resource);
+		if(r != null){
+			return (String) r;
+		}
 
 		resource = resource.replace("[", "");
 		resource = resource.replace("]", "");
@@ -356,6 +424,8 @@ public class DBpedia {
 				String res = qs.getLiteral("n").toString();
 				if(res.endsWith("@en")){
 					res = res.replace("@en", "");
+					
+					cache.putCurrentMethodCache(resource, res);
 					return res;
 				}
 			}
@@ -368,6 +438,11 @@ public class DBpedia {
 	
 	public static String getCompanyLocationCountry(String name){
 
+		Object res = cache.getCurrentMethodCache(name);
+		if(res != null){
+			return (String) res;
+		}
+		
 		List<String> resources = getResourceByName(name);
 		String companyLocationCountry = null;
 
@@ -378,11 +453,19 @@ public class DBpedia {
 				break;
 			}
 		}
+		
+		if(companyLocationCountry != null)
+			cache.putCurrentMethodCache(name, companyLocationCountry);
 
 		return companyLocationCountry;
 	}
 	
 	public static String getResourceHomepage(String resource){
+		Object r = cache.getCurrentMethodCache(resource);
+		if(r != null){
+			return (String) r;
+		}
+		
 		resource = resource.replace("[", "");
 		resource = resource.replace("]", "");
 		resource = "<" + resource + ">";
@@ -404,6 +487,7 @@ public class DBpedia {
 			if(rs.hasNext()){
 				QuerySolution qs = rs.next();
 				String res = qs.getResource("n").toString();
+				cache.putCurrentMethodCache(resource, res);
 				return res;
 			}
 		} catch (Exception e) {
@@ -414,7 +498,11 @@ public class DBpedia {
 	}
 	
 	public static String getCompanyHomepage(String name){
-
+		Object res = cache.getCurrentMethodCache(name);
+		if(res != null){
+			return (String) res;
+		}
+		
 		List<String> resources = getResourceByName(name);
 		String companyHomepage = null;
 
@@ -425,11 +513,19 @@ public class DBpedia {
 				break;
 			}
 		}
+		
+		if(companyHomepage != null)
+			cache.putCurrentMethodCache(name, companyHomepage);
 
 		return companyHomepage;
 	}
 	
 	public static List<String> getResourceProducts(String resource){
+		Object r = cache.getCurrentMethodCache(resource);
+		if(r != null){
+			return (List<String>) r;
+		}
+		
 		resource = resource.replace("[", "");
 		resource = resource.replace("]", "");
 		resource = "<" + resource + ">";
@@ -461,10 +557,18 @@ public class DBpedia {
             e.printStackTrace();
         }
 		
+		if(resultList.size() > 0)
+			cache.putCurrentMethodCache(resource, resultList);
+		
 		return resultList;
 	}
 	
 	public static List<String> getCompanyProducts(String name){
+		
+		Object res = cache.getCurrentMethodCache(name);
+		if(res != null){
+			return (List<String>) res;
+		}
 
 		List<String> resources = getResourceByName(name);
 		List<String> companyProducts = null;
@@ -476,6 +580,9 @@ public class DBpedia {
 				break;
 			}
 		}
+		
+		if(companyProducts != null)
+			cache.putCurrentMethodCache(companyProducts);
 
 		return companyProducts;
 	}
@@ -486,6 +593,11 @@ public class DBpedia {
 	 * @return list of resources or labels
 	 */
 	public static List<String> runQuery(String queryString){
+		Object r = cache.getCurrentMethodCache(queryString);
+		if(r != null){
+			return (List<String>) r;
+		}
+		
 		// TOdo: generalize from ?n to multiple variables
 		List<String> resultList = new ArrayList<String>();
 		
@@ -506,6 +618,10 @@ public class DBpedia {
 		} catch (Exception e) {
             e.printStackTrace();
         }
+		
+		if(resultList.size() > 0)
+			cache.putCurrentMethodCache(queryString, resultList);
+		
 		return resultList;
 	}
 	
@@ -558,7 +674,7 @@ public class DBpedia {
 				"} LIMIT "+queryLimit;
 		}
 	
-		return runQuery(prefixes+queryString);
+		return runQuery(prefixes+queryString); //runQuery already cached
 	}
 	
 
@@ -569,6 +685,11 @@ public class DBpedia {
 	 * @return	list of resources
 	 */
 	public static List<String> getCompanyIndustriesResources(String name){
+		Object r = cache.getCurrentMethodCache(name);
+		if(r != null){
+			return (List<String>) r;
+		}
+		
 		// Correct name is needed
 		List<String> resources = getResourceByName(name);
 		if(resources == null){
@@ -588,6 +709,9 @@ public class DBpedia {
 				break;
 			}
 		}
+		
+		if(companyIndustries != null)
+			cache.putCurrentMethodCache(name, companyIndustries);
 
 		return companyIndustries;
 	}
@@ -599,11 +723,20 @@ public class DBpedia {
 	 * @return return a hashmap with a entry <name,resurce>
 	 */
 	public static HashMap<String,String> getCompanyIndustriesNames(String companyName){
+		Object r = cache.getCurrentMethodCache(companyName);
+		if(r != null){
+			return (HashMap<String, String>) r;
+		}
+		
 		List<String> list = getCompanyIndustriesResources(companyName);
 		HashMap<String,String> map = new HashMap<String,String>();
 		for(String l : list){
 			map.put(getResourceName(l), l);
 		}
+		
+		if(map.size() > 0)
+			cache.putCurrentMethodCache(companyName, map);
+		
 		return map;
 	}
 	
@@ -614,11 +747,20 @@ public class DBpedia {
 	 * @return return a hashmap with a entry <companyName,resurce>
 	 */
 	public static HashMap<String,String> getIndustryCompaniesNames(String resource){
+		Object r = cache.getCurrentMethodCache(resource);
+		if(r != null){
+			return (HashMap<String, String>) r;
+		}
+		
 		List<String> list  = getResourcesQuery(null,"dbpedia-owl:industry",resource);
 		HashMap<String,String> map = new HashMap<String,String>();
 		for(String l : list){
 			map.put(getResourceName(l), l);
 		}
+		
+		if(map.size() > 0)
+			cache.putCurrentMethodCache(resource, map);
+		
 		return map;
 	}
 	
@@ -629,6 +771,11 @@ public class DBpedia {
 	 * @return	list of resources
 	 */
 	public static List<String> getCompanyCompetitorsResources(String name){
+		Object r = cache.getCurrentMethodCache(name);
+		if(r != null){
+			return (List<String>) r;
+		}
+		
 		// Correct name is needed
 		List<String> resources = getResourceByName(name);
 		if(resources == null){
@@ -671,6 +818,10 @@ public class DBpedia {
 				break;
 			}
 		}
+		
+		if(companycompetitors.size() > 0)
+			cache.putCurrentMethodCache(name, companycompetitors);
+		
 		return companycompetitors;
 	}
 	
@@ -680,14 +831,23 @@ public class DBpedia {
 	 * @param company
 	 * @return Return competitors Names
 	 */
-	public static List getCompanyCompetitorsName(String company){
+	public static List<String> getCompanyCompetitorsName(String company){
+		Object r = cache.getCurrentMethodCache(company);
+		if(r != null){
+			return (List<String>) r;
+		}
+		
 		List<String> competitorsResources = getCompanyCompetitorsResources(company);
-		List<String> competitorsNames = new ArrayList();
+		List<String> competitorsNames = new ArrayList<String>();
 		for(String resource : competitorsResources){
 			String name = getResourceName(resource);
 			if(name != null)
 				competitorsNames.add(name);
 		}
+		
+		if(competitorsNames.size() > 0)
+			cache.putCurrentMethodCache(company, competitorsNames);
+		
 		return competitorsNames;
 	}
 	
@@ -705,7 +865,7 @@ public class DBpedia {
 								"FILTER( ?re = "+resource+" )" +
 								 // write others filters or product type
 								"} LIMIT 1";
-		return !(runQuery(queryString).isEmpty());		
+		return !(runQuery(queryString).isEmpty());	 //runQuery already cached	
 	}
 	
 	/**
@@ -715,6 +875,7 @@ public class DBpedia {
 	 * @return	list of resources
 	 */
 	public static List<String> getProductCategoryResources(String name){
+		
 		List<String> resources = new ArrayList();
 		if(name.startsWith("http://")){
 			// we have a resource
@@ -739,7 +900,7 @@ public class DBpedia {
 			resource = "<" + resource + ">";			
 			if(resourceIsProduct(resource)){
 				productCategories = getResourcesQuery(resource,"<http://purl.org/dc/terms/subject>",null);
-				return productCategories;
+				return productCategories; //already cached
 			}
 		}
 		return null;
@@ -776,7 +937,7 @@ public class DBpedia {
 			resource = "<" + resource + ">";
 			if(resourceIsProduct(resource)){
 				productTypes = getResourcesQuery(resource,"rdf:type",null);//also dbpedia2:wordnet_type possible
-				return productTypes;
+				return productTypes; //already cached
 			}
 		}
 		return null;
@@ -850,7 +1011,7 @@ public class DBpedia {
 				 // write others filters or product type
 				"} LIMIT 1";
 		
-		return !(runQuery(queryString).isEmpty());
+		return !(runQuery(queryString).isEmpty()); //already cached
 	}
 	
 	/**
@@ -909,7 +1070,10 @@ public class DBpedia {
 	 * @param companyResource 
 	 * @return Return competitors Names
 	 */
-	public static List getProductCompetitorsName(String name,String companyResource){
+	public static List<String> getProductCompetitorsName(String name,String companyResource){
+		Object r = cache.getCurrentMethodCache(name, companyResource);
+		if(r != null)
+			return (List<String>) r;
 		
 		List<String> resources = getResourceByName(name);
 		if(resources == null){
@@ -926,6 +1090,10 @@ public class DBpedia {
 					if(name != null)
 						competitorsNames.add(competitor);
 				}
+				
+				if(competitorsNames.size() > 0)
+					cache.putCurrentMethodCache(name, companyResource, competitorsNames);
+				
 				return competitorsNames;
 			}		
 		}
@@ -934,6 +1102,10 @@ public class DBpedia {
 	
 	
 	public static List<String> getCompetitorsProducts(String companyName){
+		Object r = cache.getCurrentMethodCache(companyName);
+		if(r != null)
+			return (List<String>) r;
+		
 		List<String> resources = getResourceByName(companyName);
 		if(resources == null){
 			resources = getResourceByLabel(companyName);
@@ -983,6 +1155,9 @@ public class DBpedia {
             e.printStackTrace();
         }
 		
+		if(competitors.size() > 0)
+			cache.putCurrentMethodCache(companyName, competitors);
+		
 		return competitors;
 	}
 	
@@ -993,7 +1168,11 @@ public class DBpedia {
 	 * 
 	 * @return A map with key - location name, and with value lat-long
 	 */
-	public static Map getCompanyLocationCoordonates(String companyName){
+	public static Map<String, String> getCompanyLocationCoordonates(String companyName){
+		Object r = cache.getCurrentMethodCache(companyName);
+		if(r != null)
+			return (Map<String, String>) r;
+		
 		List<String> resources = getResourceByName(companyName);
 		if(resources == null){
 			resources = getResourceByLabel(companyName);
@@ -1039,6 +1218,9 @@ public class DBpedia {
             e.printStackTrace();
         }
 		
+		if(map.size() > 0)
+			cache.putCurrentMethodCache(companyName, map);
+		
 		return map;
 	}
 	
@@ -1049,6 +1231,10 @@ public class DBpedia {
 	 * @return list of competitors name
 	 */
 	public static List<String> getCompetitorsFromProducts(String companyName){
+		Object r = cache.getCurrentMethodCache(companyName);
+		if(r != null)
+			return (List<String>) r;
+		
 		List<String> resources = getResourceByName(companyName);
 		if(resources == null){
 			resources = getResourceByLabel(companyName);
@@ -1140,6 +1326,9 @@ public class DBpedia {
 		} catch (Exception e) {
             e.printStackTrace();
         }
+		
+		if(competitors.size() > 0)
+			cache.putCurrentMethodCache(companyName, competitors);
 		
 		return competitors;
 	}

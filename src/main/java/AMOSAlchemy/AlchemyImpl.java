@@ -25,6 +25,7 @@ import com.ibm.watson.developer_cloud.alchemy.v1.model.Taxonomies;
 import com.ibm.watson.developer_cloud.alchemy.v1.model.Taxonomy;
 import com.ibm.watson.developer_cloud.service.BadRequestException;
 
+import AMOSCache.AMOSCache;
 import AMOSDBPedia.DBpedia;
 
 
@@ -34,9 +35,12 @@ public class AlchemyImpl implements IAlchemy{
 	private AlchemyNewsImpl alchemyNews;
 	private AlchemyConceptsImpl alchemyConcepts;
 	
+	private AMOSCache cache;
+	
 	public AlchemyImpl(String apiKey){
 		this.alchemyLanguage = new AlchemyLanguageImpl(apiKey);
 		this.alchemyNews = new AlchemyNewsImpl(apiKey);
+		this.cache = AMOSCache.getInstance();
 	}
 	
 	public void setAlchemyConceptsImpl(String username, String password){
@@ -45,6 +49,10 @@ public class AlchemyImpl implements IAlchemy{
 	
 	@Override
 	public String getCompanyMainIndustry(String companyName) throws BadRequestException{
+		Object r = cache.getCurrentMethodCache(companyName);
+		if(r != null)
+			return (String) r;
+		
 		String companyUrl = AMOSDBPedia.DBpedia.getCompanyHomepage(companyName);
 		if(companyUrl == null)
 			companyUrl = "http://" + companyName.toLowerCase() + ".com"; //Assumes that company has a .com website if no website found on DBpedia
@@ -59,11 +67,18 @@ public class AlchemyImpl implements IAlchemy{
         		maxScore = score;
         }
         
+        if(maxScore != null)
+        	cache.putCurrentMethodCache(companyName, maxScore.getLabel());
+        
 		return maxScore.getLabel();
 	}
 
 	@Override
 	public String getCompanyMainProduct(String companyName) throws BadRequestException{
+		Object r = cache.getCurrentMethodCache(companyName);
+		if(r != null)
+			return (String) r;
+		
 		String companyUrl = AMOSDBPedia.DBpedia.getCompanyHomepage(companyName);
 		if(companyUrl == null)
 			companyUrl = "http://" + companyName.toLowerCase() + ".com"; //Assumes that company has a .com website if no website found on DBpedia
@@ -83,8 +98,10 @@ public class AlchemyImpl implements IAlchemy{
 		
         if(result == null)
         	return "No main product found...";
-        else
+        else{
+        	cache.putCurrentMethodCache(companyName, result.getText());
         	return result.getText();
+        }
 	}
 	
 	/**
@@ -95,6 +112,9 @@ public class AlchemyImpl implements IAlchemy{
 	 */
 	@Override
 	public String getPossibleCompetitors(String companyName) throws BadRequestException{
+		Object r = cache.getCurrentMethodCache(companyName);
+		if(r != null)
+			return (String) r;
 		
 		List<String> list = alchemyNews.getPossibibleCompetitorsList(companyName);
 		String possibleCompetitors = "[";
@@ -107,6 +127,8 @@ public class AlchemyImpl implements IAlchemy{
 				possibleCompetitors += ",";
 		}
 		possibleCompetitors += "]";
+		
+		cache.putCurrentMethodCache(companyName, possibleCompetitors);
 		return possibleCompetitors;		
 	}
 	
@@ -116,14 +138,17 @@ public class AlchemyImpl implements IAlchemy{
 	 * @param companyName
 	 * @return list of product founded on web site
 	 */
-	public ArrayList<String> getPossibleProducts(String companyName) throws BadRequestException{
-			
+	public List<String> getPossibleProducts(String companyName) throws BadRequestException{
+		Object r = cache.getCurrentMethodCache(companyName);
+		if(r != null)
+			return (List<String>) r;	
+		
 		String possibleProducts = "";
 		List<String> res = DBpedia.getCompanies(companyName);
 		String companyUrl = AMOSDBPedia.DBpedia.getCompanyHomepage(res.get(0));
 		System.out.println(companyUrl);
 		Entities e = alchemyLanguage.getCompanyEntities(res.get(0), companyUrl);
-		ArrayList<String> list = new ArrayList<String>();		
+		List<String> list = new ArrayList<String>();		
         for(Entity i : e.getEntities()){
         	String type = i.getType();
         	if(type.equals("Product") || type.equals("Technology")
@@ -134,6 +159,10 @@ public class AlchemyImpl implements IAlchemy{
         		list.add(i.getText());
         	}
         }
+        
+        if(list.size() > 0)
+        	cache.putCurrentMethodCache(companyName, list);
+        
         return list;		
 	}
 	
@@ -164,6 +193,10 @@ public class AlchemyImpl implements IAlchemy{
 	 * @return possible competitors list
 	 */
 	public String getCompetitorsProducts(String companyName)throws BadRequestException{
+		Object r = cache.getCurrentMethodCache(companyName);
+		if(r != null)
+			return (String) r;
+		
 		String result = "";
 		ArrayList list = new ArrayList();//alchemyNews.getPossibibleCompetitorsList(companyName);
 		list.add("Microsoft");
@@ -196,6 +229,8 @@ public class AlchemyImpl implements IAlchemy{
 					}
 			}
 		}
+		
+		cache.putCurrentMethodCache(companyName, result);
 		return result;
 	}
 	
@@ -206,7 +241,14 @@ public class AlchemyImpl implements IAlchemy{
 	 * @return product category
 	 */
 	public String getProductCategories(String products) throws BadRequestException{
-		return alchemyLanguage.getRelationObject(alchemyConcepts.getAbstract(products));
+		Object r = cache.getCurrentMethodCache(products);
+		if(r != null)
+			return (String) r;
+		
+		String result = alchemyLanguage.getRelationObject(alchemyConcepts.getAbstract(products));
+		
+		cache.putCurrentMethodCache(products, result);
+		return result;
 	}
 	
 	/**
@@ -217,6 +259,10 @@ public class AlchemyImpl implements IAlchemy{
 	 * @return list of news
 	 */
 	public String getSentimentAnalysisOfNews(String name, String entity, String startTime, String endTime, int count)throws BadRequestException{
+		Object r = cache.getCurrentMethodCache(name, entity, startTime, endTime, count);
+		if(r != null)
+			return (String) r;
+		
 		Documents docs = alchemyNews.getSentimentAnalysisOfNews(name, entity, startTime, endTime, count);
 		String positive = "", negative = "";
 		Integer total = 0, poz = 0, neg = 0;
@@ -239,7 +285,9 @@ public class AlchemyImpl implements IAlchemy{
 				}
 			}
 		//return "Positive articles: "+poz.toString()+"\n"+positive+" Negative Articles: "+neg.toString()+"\n"+negative;
-		return "Positive articles: "+poz.toString()+" Negative Articles: "+neg.toString();
+		String result = "Positive articles: "+poz.toString()+" Negative Articles: "+neg.toString();
+		cache.putCurrentMethodCache(name, entity, startTime, endTime, count, result);
+		return result;
 	}
 	
 	/**
@@ -250,6 +298,10 @@ public class AlchemyImpl implements IAlchemy{
 	 * @return list of news
 	 */
 	public double getNumberSentimentAnalysisOfNews(String name, String entity, String startTime, String endTime, int count)throws BadRequestException{
+		Object r = cache.getCurrentMethodCache(name, entity, startTime, endTime, count);
+		if(r != null)
+			return (double) r;
+		
 		Documents docs = alchemyNews.getSentimentAnalysisOfNews(name,entity,startTime, endTime, count);
 		System.out.println(docs);
 		if(docs == null || docs.getDocuments() == null) return 0;
@@ -266,7 +318,10 @@ public class AlchemyImpl implements IAlchemy{
 				++neg;				
 			}
 		}
-		return ((poz-neg)*1.0/(poz+neg)*1.0);
+		
+		double result = ((poz-neg)*1.0/(poz+neg)*1.0);
+		cache.putCurrentMethodCache(name, entity, startTime, endTime, count);
+		return result;
 	}
 	
 	/**
@@ -277,18 +332,30 @@ public class AlchemyImpl implements IAlchemy{
 	 * @return map(product,sentiment)
 	 */
 	public Map<String, String> getCompetitorsProductSentiment(String name, String companyResource){
+		Object r = cache.getCurrentMethodCache(name, companyResource);
+		if(r != null)
+			return (Map<String, String>) r;
+		
 		List<String> products = DBpedia.getProductCompetitorsName(name,companyResource);
 		products.add(name);
 		Map<String, String> relatedproduct = new HashMap<String, String>();
 		for(String product : products){
 			relatedproduct.put(product, String.valueOf(getNumberSentimentAnalysisOfNews(product,"O[Product^Technology^OperatingSystem^Facility^FieldTerminology]","now-5d", "now", 20)));
 		}
+		
+		if(relatedproduct.size() > 0)
+			cache.putCurrentMethodCache(name, companyResource, relatedproduct);
+		
 		return relatedproduct;
 	}
 	
 	@Override
 	public double getAvgNewsSentiment(String companyName, String entity, String startTime, String endTime, int limit)
 			throws BadRequestException {
+		Object r = cache.getCurrentMethodCache(companyName, entity, startTime, endTime, limit);
+		if(r != null)
+			return (double) r;
+		
 		Documents docs = alchemyNews.getSentimentAnalysisOfNews(companyName, entity, startTime, endTime, limit);
 		double avgSentiment = 0.0;
 		if(docs != null && docs.getDocuments() != null){
@@ -300,6 +367,8 @@ public class AlchemyImpl implements IAlchemy{
 			}
 			avgSentiment = avgSentiment/(double)numDocs;
 		}
+		
+		cache.putCurrentMethodCache(companyName, entity, startTime, endTime, limit, avgSentiment);
 		return avgSentiment;
 	}
 	
@@ -311,7 +380,11 @@ public class AlchemyImpl implements IAlchemy{
 	 * @param weeks - number of weeks
 	 * @param limit - the limit of news for a query
 	 */
-	public ArrayList<String> getAvgNewsSentimentPeriod(String[] entityName, String entity, int weeks, int limit)throws BadRequestException{
+	public List<String> getAvgNewsSentimentPeriod(String[] entityName, String entity, int weeks, int limit)throws BadRequestException{
+		Object r = cache.getCurrentMethodCache(entityName, entity, weeks, limit);
+		if(r != null)
+			return (List<String>) r;
+		
 		double[] rs = new double[weeks];
 		double k = 0.;
 		for(int j=0;j<entityName.length;++j){
@@ -324,12 +397,15 @@ public class AlchemyImpl implements IAlchemy{
 			}
 			k=k+1;
 		}
-		ArrayList<String> ra =  new ArrayList<String>();
+		List<String> ra =  new ArrayList<String>();
 		for(int j=0;j<weeks;++j){
 			rs[j] = rs[j]/k;
 			ra.add(String.valueOf(rs[j]));
 			//System.out.println(rs[j]);
 		}
+		
+		if(ra.size() > 0)
+			cache.putCurrentMethodCache(entityName, entity, weeks, limit, ra);
 		
 		return ra;
 	}

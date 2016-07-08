@@ -9,6 +9,7 @@ package AMOSAlchemy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -40,7 +41,7 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 	 * @param companyName - company name
 	 * @return list of possible competitors name
 	 */
-	public  ArrayList getPossibibleCompetitorsList(String companyName) throws BadRequestException{
+	public List<String> getPossibibleCompetitorsList(String companyName) throws BadRequestException{
 		  
 		  
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -49,7 +50,8 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		      new String[] {"enriched.url.title", "enriched.url.url",
 		          "enriched.url.enrichedTitle.docSentiment",
 		          "q.enriched.url.enrichedTitle.entities.entity.text",
-		          "q.enriched.url.enrichedTitle.entities.entity.type"};
+		          "q.enriched.url.enrichedTitle.entities.entity.type",
+		          "q.enriched.url.enrichedTitle.entities.entity.disambiguated.geo"};
 		  params.put(AlchemyDataNews.RETURN, StringUtils.join(fields, ","));
 		  params.put(AlchemyDataNews.START, "now-10d");
 		  params.put(AlchemyDataNews.END, "now");
@@ -61,7 +63,7 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		  
 		  DocumentsResult result =  service.getNewsDocuments(params);
 		  Documents d = result.getDocuments();
-		  ArrayList list = new ArrayList();
+		  List<String> list = new ArrayList<String>();
 		  for(Document d2 : d.getDocuments()){
 
 			  for(Entity e : d2.getSource().getEnriched().getArticle().getEnrichedTitle().getEntities()){
@@ -142,7 +144,7 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 	 * @param comapanyName - company name
 	 * @return list of possible industries of a company
 	 */
-	public  ArrayList getPossibibleSubTypesList(String companyName) throws BadRequestException{
+	public List<String> getPossibibleSubTypesList(String companyName) throws BadRequestException{
 		 Map<String, Object> params = new HashMap<String, Object>();
 
 		  String[] fields =
@@ -158,7 +160,7 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		  
 		  DocumentsResult result =  service.getNewsDocuments(params);
 		  Documents d = result.getDocuments();
-		  ArrayList list = new ArrayList();
+		  List<String> list = new ArrayList<String>();
 		  System.out.println(d);
 		  for(Document d2 : d.getDocuments()){
 
