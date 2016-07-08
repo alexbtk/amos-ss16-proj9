@@ -132,8 +132,8 @@
 	<header class="main-header">
 		<!-- Logo -->
 		<a href="#" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels -->
-			<span class="logo-mini"><b>L</b>Ogo</span> <!-- logo for regular state and mobile devices -->
-			<span class="logo-lg"><b>Cognitive</b>Logo</span>
+			<span class="logo-mini"><b>Cog</b>ni</span> <!-- logo for regular state and mobile devices -->
+			<span class="logo-lg"><b>Cogni</b>Master</span>
 		</a>
 		<!-- Header Navbar: style can be found in header.less -->
 		<nav class="navbar navbar-static-top">
@@ -300,7 +300,7 @@
 						<div class="icon">
 							<i class="ion ion-stats-bars"></i>
 						</div>
-						<a href="#" onclick="openSection('company');"
+						<a href="#" onclick="openSection('company');" id="companyMoreitem"
 							class="small-box-footer">More info <i
 							class="fa fa-arrow-circle-right"></i></a>
 					</div>
@@ -350,10 +350,6 @@
 								data-widget="collapse" data-toggle="tooltip" title="Collapse">
 								<i class="fa fa-minus"></i>
 							</button>
-							<button type="button" class="btn btn-box-tool"
-								data-widget="remove" data-toggle="tooltip" title="Remove">
-								<i class="fa fa-times"></i>
-							</button>
 						</div>
 					</div>
 					<div class="box-body">
@@ -362,25 +358,22 @@
 								<h3 class="box-title"></h3>
 							</div>
 							<!-- /.box-header -->
-							<!-- form start -->
-							<form class="form-horizontal" method="POST"
-								action="getCompanyLocationMap">
-								<div class="box-body">
+								<div class="box-body" id="mapforcompany">
 									<div id="world-map" style="width: 600px; height: 400px"></div>
 								</div>
 								<!-- /.box-body -->
 								<div class="box-footer">
-									<button type="submit" class="btn btn-info pull-right">Search</button>
+									
 								</div>
 								<!-- /.box-footer -->
-							</form>
+							
 						</div>
 
 
 					</div>
 					<!-- /.box-body -->
 
-					<div class="box-footer">Footer</div>
+					<div class="box-footer"></div>
 					<!-- /.box-footer-->
 				</div>
 				<!-- /.box -->
@@ -495,10 +488,10 @@
 						data-widget="collapse" data-toggle="tooltip" title="Collapse">
 						<i class="fa fa-minus"></i>
 					</button>
-					<button type="button" class="btn btn-box-tool" data-widget="remove"
+					<!--<button type="button" class="btn btn-box-tool" data-widget="remove"
 						data-toggle="tooltip" title="Remove">
 						<i class="fa fa-times"></i>
-					</button>
+					</button>-->
 				</div>
 			</div>
 			<div class="box-body"></div>
