@@ -90,6 +90,7 @@ $(document)
 									$('#searchMenu').fadeIn(500);
 									$("#content").fadeIn(500);
 								});
+								//$("#companyMoreitem").click();
 							});
 
 					$("#logoutButton").on("click", function() {
@@ -125,7 +126,7 @@ $(document)
 						source : function(request, response) {
 							response(tags);
 						}
-					});
+					}).autocomplete( "widget" ).css("z-index","10000000000 !important");//.addClass( "autocompletecostumclass" );
 
 					$(".companyInput").keyup(function() {
 						var id = "#" + $(this).attr('id');
@@ -474,13 +475,12 @@ function openSection(id) {
 		    	var twitter = parseFloat($("#sentimentQuery").find("#twiterSlider").val());
 		    	var news = parseFloat($("#sentimentQuery").find("#newsSlider").val());
 							
-				var valT = parseFloat($("#sentimentQuery #twitterValues").text()) + 4.;
-				var valN = parseFloat($("#sentimentQuery #newsValues").text()) + 4.;
+				var valT = parseFloat($("#sentimentQuery #twitterValues").text());
+				var valN = parseFloat($("#sentimentQuery #newsValues").text());
 				var reSe = 2.;
-				reSe = ((valT*twitter)/100.) + ((valN*news)/100.);	
+				reSe = ((valT*twitter)/100.) + 4. + ((valN*news)/100.) + 4.;	
 				
-				if($("#sentimentQuery").find("#twiterSlider").val() != "0" && $("#sentimentQuery").find("#newsSlider").val() != "0")
-					reSe /= 2.0;
+				reSe /= 2.0;
 				$('#sentimentResult').slider('setValue', (reSe-4.));
 			
 		    });		    

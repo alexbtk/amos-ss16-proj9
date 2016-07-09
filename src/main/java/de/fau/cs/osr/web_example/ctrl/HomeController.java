@@ -239,15 +239,7 @@ public class HomeController {
 					"{\"title\":\"Company Products(DBpedia)\",\"content\":[" + StringUtils.join(products, ",") + "]}");
 		}
 		if (requests.containsKey("productsCompetitors")) {
-			List products = DBpedia.getCompetitorsProducts(requests.get("productsCompetitors"));
-			/*List<String> DBproducts = DBpedia.getCompanyProducts(requests.get("productsCompetitors"));
-			String companyResourse = DBpedia.getResourceByName(requests.get("productsCompetitors")).get(0);
-			for (String p : DBproducts) {
-				List<String> Cpr = DBpedia.getProductCompetitorsName(p, "<" + companyResourse + ">");
-				if (Cpr != null)
-					for (String pC : Cpr)
-						products.add("\"" + pC + "\"");
-			}*/
+			List products = DBpedia.getCompetitorsProducts(requests.get("productsCompetitors"));			
 			answers.add("{\"title\":\"Company Competitors Products(DBpedia)\",\"content\":[\""
 					+ StringUtils.join(products, "\",\"") + "\"]}");
 		}
@@ -329,7 +321,7 @@ public class HomeController {
 								"Company", "now-7d", "now", 5);
 						resultString += avgSentiment;
 
-						for (int i = 1; i < w; i++) {
+						for (int i = 2; i <= w; i++) {
 							avgSentiment = this.service.getAvgNewsSentiment(requests.get("avgNewsSentimentGraph"),
 									"Company", "now-" + (7 * i) + "d", "now-" + (7 * (i - 1)) + "d", 5);
 							resultString += ", " + avgSentiment;
@@ -348,7 +340,7 @@ public class HomeController {
 							"Company", "now-7d", "now", 5);
 					resultString += avgSentiment;
 
-					for (int i = 1; i < w; i++) {
+					for (int i = 2; i <= w; i++) {
 						avgSentiment = this.service.getAvgNewsSentiment(requests.get("avgNewsSentimentGraph"),
 								"Company", "now-" + (7 * i) + "d", "now-" + (7 * (i - 1)) + "d", 5);
 						resultString += ", " + avgSentiment;

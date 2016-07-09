@@ -83,3 +83,5 @@
 	display: none;
 	width: 100%;
 }
+
+.ui-autocomplete { position: absolute; cursor: default;z-index:3000000 !important;}

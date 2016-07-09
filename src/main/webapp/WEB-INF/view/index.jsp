@@ -383,8 +383,8 @@
 						<h3 class="box-title">Sentiment Graph</h3>
 					</div>
 					<div class="box-body">
-						<div id="avgNewsSentimentGraphComparation">
-							<canvas id="avgNewsSentimentGraphCanvasComparationC"></canvas>
+						<div id="avgNewsSentimentGraphComparation" style="height:300px;">
+							<canvas id="avgNewsSentimentGraphCanvasComparationC" style="height:300px;"></canvas>
 						</div>
 					</div>
 					<!-- /.box-body -->
