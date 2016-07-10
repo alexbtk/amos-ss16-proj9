@@ -75,6 +75,7 @@ $(document)
 									$('#competitorsSection').find("#existCompetitorsIndustry").remove();
 								if($('#companySection').find("#existCompanyQuery").length>0)
 									$('#companySection').find("#existCompanyQuery").remove();
+								$("#alchelmystatusprogress").addClass("progress-bar-green").removeClass("progress-bar-red");
 							});
 
 					$("#welcomeButton").on(
@@ -448,7 +449,9 @@ function openSection(id) {
 										}
 									});
 						};
-				});
+				}).fail( function(xhr, textStatus, errorThrown) {
+			    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
+			    });
 		
 		var colapseB = $($("#template").html());
 		var host = $('#companySection');
@@ -535,10 +538,32 @@ function openSection(id) {
 								backgroundColor : '#383f47',
 								markers : data[0]["markers"],
 							});
-						});
+						}).fail( function(xhr, textStatus, errorThrown) {
+					    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
+					    });
 
 		// Add Company Relations
-		getNewsRelation(companyName);		
+		//getNewsRelation(companyName);	
+		$.post("qeuryRequest", {
+			"recentDev" : companyName,
+		}).done(
+					function(data) {
+						var res = JSON.parse(data);		
+						console.log("recent devs");
+						console.log(res);
+						var ul = $("<ul></ul>");
+						for(var i=0;i<res[0]['content'].length;++i){
+							ul.append($("<li></li>").append($("<a href='"+res[0]['content'][i]['url']+"' target='_blank'></a>").text(res[0]['content'][i]['sentence'])));
+						}
+						var colapseBa = $($("#template").html());
+				 	    var hostDe = $('#companySection #recentDevelopments');  
+				 	    colapseBa.find(".box-title").text("Recent Developments");
+				 	    colapseBa.find(".box-body").append(ul);
+				 	    hostDe.empty().append(colapseBa);
+					
+	    }).fail( function(xhr, textStatus, errorThrown) {
+	    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
+	    });
 		
 	} else if (id == "products") {
 		var companyName = $("#dashboardCompanyInput").val();

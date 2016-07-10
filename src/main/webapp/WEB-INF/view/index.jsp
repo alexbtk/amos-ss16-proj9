@@ -161,6 +161,49 @@
 							<span class="hidden-xs">Log out</span>
 					</a></li>
 					<!-- Control Sidebar Toggle Button -->
+			<li class="dropdown tasks-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-flag-o"></i>
+              <span class="label label-danger">2</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="header">You have 2 accounts</li>
+              <li>
+                <!-- inner menu: contains the actual data -->
+                <ul class="menu">
+                  <li><!-- Task item -->
+                    <a href="#">
+                      <h3>
+                        Alchemy status
+                        
+                      </h3>
+                      <div class="progress xs">
+                        <div id="alchelmystatusprogress" class="progress-bar progress-bar-green" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                          
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <!-- end task item -->
+                  <li><!-- Task item -->
+                    <a href="#">
+                      <h3>
+                        Twitter status
+                       
+                      </h3>
+                      <div class="progress xs">
+                        <div id="twitterstatus" class="progress-bar progress-bar-green" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                         
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <!-- end task item -->
+               
+                </ul>
+              </li>
+            </ul>
+          </li>
 					<li><a href="#" data-toggle="control-sidebar"><i
 							class="fa fa-gears"></i></a></li>
 				</ul>

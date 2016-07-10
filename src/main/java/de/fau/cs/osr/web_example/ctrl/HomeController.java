@@ -46,6 +46,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import AMOSAlchemy.AlchemyNewsImpl;
 import AMOSAlchemy.IAlchemy;
 import AMOSAlchemy.IAlchemyFactory;
 
@@ -177,11 +178,23 @@ public class HomeController {
 	public String queryResponse(@RequestParam Map<String, String> requests, @CookieValue("apiKey") String apiKey, @CookieValue("twitterUsername") String twitterUsername, @CookieValue("twitterPassword") String twitterPassword ,Model m) {
 		this.service = fac.createAlchemy(apiKey);
 		languageService = fac.createAlchemyLanguage(apiKey);
+		AlchemyNewsImpl serviceNews = new AlchemyNewsImpl(apiKey);
 		twitterBluemixCrawler = new TwitterBluemixCrawler(twitterUsername, twitterPassword);
 		//twitterCrawler = new TwitterCrawler(consumerKey, consumerSecret, token, tokenSecret);
 		int weeks = 1;
 		List<String> answers = new ArrayList<String>();
 		// Todo - catch error: incorrect companyName, noResult
+		if (requests.containsKey("recentDev")) {
+			Map map = serviceNews.getRecentDevelopmentList(requests.get("recentDev"));
+			Iterator it = map.entrySet().iterator();
+			List devs = new ArrayList<String>();
+			while (it.hasNext()) {
+				Map.Entry pair = (Map.Entry) it.next();
+				it.remove();
+				devs.add("{\"url\":\"" + pair.getKey() + "\",\"sentence\":\"" + pair.getValue() + "\"}");
+			}
+			answers.add("{\"title\":\"Company Devs\",\"content\":[" + StringUtils.join(devs, ",") + "]}");
+		}
 		if (requests.containsKey("question1")) {
 			answers.add("{\"title\":\"Main industry(Alchemy)\",\"content\":\""
 					+ service.getCompanyMainIndustry(requests.get("question1")) + "\"}");
