@@ -257,9 +257,7 @@
 					<!-- small box -->
 					<div class="small-box bg-aqua">
 						<div class="inner">
-							<h3>150</h3>
-
-							<p>Twitter</p>
+							<h3>Twitter</h3>
 						</div>
 						<div class="icon">
 							<i class="ion ion-social-twitter"></i>
@@ -274,11 +272,7 @@
 					<!-- small box -->
 					<div class="small-box bg-green">
 						<div class="inner">
-							<h3>
-								53<sup style="font-size: 20px">%</sup>
-							</h3>
-
-							<p>Products</p>
+							<h3>Products</h3>
 						</div>
 						<div class="icon">
 							<i class="ion ion-bag"></i>
@@ -293,9 +287,7 @@
 					<!-- small box -->
 					<div class="small-box bg-yellow">
 						<div class="inner">
-							<h3>44</h3>
-
-							<p>Company</p>
+							<h3>Company</h3>
 						</div>
 						<div class="icon">
 							<i class="ion ion-stats-bars"></i>
@@ -310,9 +302,7 @@
 					<!-- small box -->
 					<div class="small-box bg-red">
 						<div class="inner">
-							<h3>65</h3>
-
-							<p>Competitors</p>
+							<h3>Competitors</h3>
 						</div>
 						<div class="icon">
 							<i class="ion ion-ios-people"></i>
