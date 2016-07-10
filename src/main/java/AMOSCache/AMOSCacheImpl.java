@@ -30,7 +30,10 @@ public class AMOSCacheImpl extends AMOSCache {
 			if((System.currentTimeMillis()-entry.getTimestamp()) > CACHE_TIME)
 				cacheMap.remove(key);
 			else
-				return entry.getValue();
+				// temporal solution
+				if((entry.getValue() instanceof Map<?, ?> && ((Map<?,?>)entry.getValue()).size() > 0 )
+				  || (entry.getValue() instanceof List<?> && ((List<?>)entry.getValue()).size() > 0 ))
+							return entry.getValue();
 		}
 		
 		return null;
