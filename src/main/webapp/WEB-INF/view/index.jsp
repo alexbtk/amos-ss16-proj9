@@ -331,69 +331,81 @@
 				<div id="graphProducts"></div>
 			</section>
 			<section class="contentSection" id="companySection">
-				<div class="box">
-					<div class="box-header with-border">
-						<h3 class="box-title">Location Map</h3>
-
-						<div class="box-tools pull-right">
-							<button type="button" class="btn btn-box-tool"
-								data-widget="collapse" data-toggle="tooltip" title="Collapse">
-								<i class="fa fa-minus"></i>
-							</button>
-						</div>
+				<div class="row">
+					<div class="col-lg-4 col-md-6 col-xs-12">
+						<div id="recentDevelopments"></div>
 					</div>
-					<div class="box-body">
-						<div class="box box-info">
+					<div class="col-lg-4 col-md-6 col-xs-12">
+						<div class="box">
 							<div class="box-header with-border">
-								<h3 class="box-title"></h3>
+								<h3 class="box-title">Location Map</h3>
+
+								<div class="box-tools pull-right">
+									<button type="button" class="btn btn-box-tool"
+										data-widget="collapse" data-toggle="tooltip" title="Collapse">
+										<i class="fa fa-minus"></i>
+									</button>
+								</div>
 							</div>
-							<!-- /.box-header -->
-								<div class="box-body" id="mapforcompany">
-									<div id="world-map" style="width: 600px; height: 400px"></div>
+							<div class="box-body">
+								<div class="box box-info">
+									<div class="box-header with-border">
+										<h3 class="box-title"></h3>
+									</div>
+									<!-- /.box-header -->
+									<div class="box-body" id="mapforcompany">
+										<div id="world-map" style="width: 600px; height: 400px"></div>
+									</div>
+									<!-- /.box-body -->
+									<div class="box-footer"></div>
+									<!-- /.box-footer -->
+
 								</div>
-								<!-- /.box-body -->
-								<div class="box-footer">
-									
+
+
+							</div>
+							<!-- /.box-body -->
+
+							<div class="box-footer"></div>
+							<!-- /.box-footer-->
+						</div>
+						<!-- /.box -->
+					</div>
+					<div class="col-lg-4 col-md-6 col-xs-12">
+						<div class="box">
+							<div class="box-header with-border">
+								<h3 class="box-title">Sentiment Graph</h3>
+							</div>
+							<div class="box-body">
+								<div id="avgNewsSentimentGraphComparation"
+									style="height: 300px;">
+									<canvas id="avgNewsSentimentGraphCanvasComparationC"
+										style="height: 300px;"></canvas>
 								</div>
-								<!-- /.box-footer -->
-							
+							</div>
+							<!-- /.box-body -->
+
+							<div class="box-footer"></div>
+							<!-- /.box-footer-->
 						</div>
-
-
+						<!-- /.box -->
 					</div>
-					<!-- /.box-body -->
+					<div class="col-lg-4 col-md-6 col-xs-12"></div>
 
-					<div class="box-footer"></div>
-					<!-- /.box-footer-->
-				</div>
-				<!-- /.box -->
-
-				<div class="box">
-					<div class="box-header with-border">
-						<h3 class="box-title">Sentiment Graph</h3>
+					<div id="avgNewsSentimentGraphSlider">
+						<p>Weeks for News Sentiment Graph: 7 Weeks</p>
+						<input type="range" value="7" min="2" max="52" /><br />
+						<button>Draw Graph!</button>
 					</div>
-					<div class="box-body">
-						<div id="avgNewsSentimentGraphComparation" style="height:300px;">
-							<canvas id="avgNewsSentimentGraphCanvasComparationC" style="height:300px;"></canvas>
-						</div>
-					</div>
-					<!-- /.box-body -->
+					<div id="avgNewsSentimentGraph"></div>
 
-					<div class="box-footer"></div>
-					<!-- /.box-footer-->
-				</div>
-				<!-- /.box -->
 
-				<!--<a href="${pageContext.request.contextPath}/locationmap">Locationmap!</a> -->
-				<div id="avgNewsSentimentGraphSlider">
-					<p>Weeks for News Sentiment Graph: 7 Weeks</p>
-					<input type="range" value="7" min="2" max="52" /><br />
-					<button>Draw Graph!</button>
-				</div>
-				<div id="avgNewsSentimentGraph">
+
+					<!--<a href="${pageContext.request.contextPath}/locationmap">Locationmap!</a> -->
+
 					<canvas id="avgNewsSentimentGraphCanvas"></canvas>
 				</div>
-				<div id="recentDevelopments"></div>
+
 			</section>
 			<section class="contentSection" id="twitterSection">
 				<div class="row">
@@ -445,7 +457,7 @@
 									<div id="negUnder10" class="collapse"></div>
 								</div>
 								<div class="tab-pane" id="neutsent">
-								<p>
+									<p>
 										<button type="button" class="btn btn-xs"
 											data-toggle="collapse" data-target="#neutOver100"
 											aria-expanded="true">+</button>
@@ -466,9 +478,9 @@
 										Tweets with less than 10 retweets
 									</p>
 									<div id="neutUnder10" class="collapse"></div>
-									</div>
+								</div>
 								<div class="tab-pane" id="possent">
-								<p>
+									<p>
 										<button type="button" class="btn btn-xs"
 											data-toggle="collapse" data-target="#posOver100"
 											aria-expanded="true">+</button>
