@@ -380,7 +380,9 @@ function openSection(id) {
 													$("#competitorsSentimentGraphCanvas")[0]
 															.getContext('2d')).Scatter(d, options);
 										}
-									});
+									}).fail( function(xhr, textStatus, errorThrown) {
+								    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
+								    });
 							
 							colorIndex = (colorIndex+1) % 5;
 						});
@@ -447,7 +449,9 @@ function openSection(id) {
 													$("#avgNewsSentimentGraphCanvasComparationC")[0]
 															.getContext('2d')).Scatter(d, options);
 										}
-									});
+									}).fail( function(xhr, textStatus, errorThrown) {
+								    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
+								    });
 						};
 				}).fail( function(xhr, textStatus, errorThrown) {
 			    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
@@ -757,7 +761,9 @@ function openSection(id) {
 														.getContext('2d'))
 												.Scatter(d, options);
 
-									});
+									}).fail( function(xhr, textStatus, errorThrown) {
+								    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
+								    });
 				});
 		hostG.empty().append(slider).append(button);
 	} else if (id == "twitter") {
