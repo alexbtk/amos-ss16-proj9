@@ -444,8 +444,52 @@
 									</p>
 									<div id="negUnder10" class="collapse"></div>
 								</div>
-								<div class="tab-pane" id="neutsent"></div>
-								<div class="tab-pane" id="possent"></div>
+								<div class="tab-pane" id="neutsent">
+								<p>
+										<button type="button" class="btn btn-xs"
+											data-toggle="collapse" data-target="#neutOver100"
+											aria-expanded="true">+</button>
+										Tweets with over 100 retweets
+									</p>
+									<div id="neutOver100" class="collapse"></div>
+									<p>
+										<button type="button" class="btn btn-xs"
+											data-toggle="collapse" data-target="#neutUnder100"
+											aria-expanded="true">+</button>
+										Tweets with more than 10 but less than 100 retweets
+									</p>
+									<div id="neutUnder100" class="collapse"></div>
+									<p>
+										<button type="button" class="btn btn-xs"
+											data-toggle="collapse" data-target="#neutUnder10"
+											aria-expanded="true">+</button>
+										Tweets with less than 10 retweets
+									</p>
+									<div id="neutUnder10" class="collapse"></div>
+									</div>
+								<div class="tab-pane" id="possent">
+								<p>
+										<button type="button" class="btn btn-xs"
+											data-toggle="collapse" data-target="#posOver100"
+											aria-expanded="true">+</button>
+										Tweets with over 100 retweets
+									</p>
+									<div id="posOver100" class="collapse"></div>
+									<p>
+										<button type="button" class="btn btn-xs"
+											data-toggle="collapse" data-target="#posUnder100"
+											aria-expanded="true">+</button>
+										Tweets with more than 10 but less than 100 retweets
+									</p>
+									<div id="posUnder100" class="collapse"></div>
+									<p>
+										<button type="button" class="btn btn-xs"
+											data-toggle="collapse" data-target="#posUnder10"
+											aria-expanded="true">+</button>
+										Tweets with less than 10 retweets
+									</p>
+									<div id="posUnder10" class="collapse"></div>
+								</div>
 							</div>
 						</div>
 
