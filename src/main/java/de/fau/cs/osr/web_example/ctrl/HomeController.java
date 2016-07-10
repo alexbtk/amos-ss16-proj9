@@ -206,11 +206,17 @@ public class HomeController {
 					+ "\"}");
 		}
 		if (requests.containsKey("question6")) {
-			List<TwitterBluemixPost> posts = twitterBluemixCrawler.crawlPosts(requests.get("question6"), "1", "10");	
+			String nameC = requests.get("question6");
+			nameC.replaceAll("Inc.", "");
+			nameC.replaceAll("Corporation", "");
+			nameC.replaceAll("Company", "");
+			nameC.replaceAll("Association", "");
+			
+			List<TwitterBluemixPost> posts = twitterBluemixCrawler.crawlPosts(nameC.trim(), "1", "10");	
 			Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForBluemixTweets(posts, languageService);
 			
 			Double newsSentiment = service.getNumberSentimentAnalysisOfNews(requests.get("question6"),
-					"Company", "now-1d", "now", 20);
+					"Company", "now-10d", "now", 5);
 			answers.add(
 					"{\"title\":\"Twiter vs News Sentiment\",\"content\":\""
 							+ "<p>News: " + newsSentiment 

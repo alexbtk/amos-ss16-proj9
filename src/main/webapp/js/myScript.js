@@ -406,8 +406,11 @@ function openSection(id) {
 						res = JSON.parse(data);						
 						var toCompare = [companyName];
 						for(var ii = 0;ii<2 && ii < res[0].length;++ii)
-							toCompare.push(res[0][ii]);
+							if(res[0][ii] != "" && res[0][ii] != '' && res[0][ii] != null)
+								toCompare.push(res[0][ii]);
 						var d = [];
+						console.log("top");
+						console.log(toCompare);
 						for(var ii in toCompare){
 							$.post("qeuryRequest", {
 								"avgNewsSentimentGraph" : toCompare[ii],
