@@ -76,6 +76,7 @@ $(document)
 								if($('#companySection').find("#existCompanyQuery").length>0)
 									$('#companySection').find("#existCompanyQuery").remove();
 								$("#alchelmystatusprogress").addClass("progress-bar-green").removeClass("progress-bar-red");
+								$("#twitterstatusprogress").addClass("progress-bar-green").removeClass("progress-bar-red");
 							});
 
 					$("#welcomeButton").on(
@@ -457,6 +458,8 @@ function openSection(id) {
 			    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
 			    });
 		
+		
+		
 		var colapseB = $($("#template").html());
 		var host = $('#companySection');
 		if($('#' + id + 'Section').find("#existCompanyQuery").length == 0)
@@ -503,11 +506,26 @@ function openSection(id) {
 					function(data) {
 						var res = JSON.parse(data);		
 						console.log(res);
-						var valT = res[0]['twiter'];
 						var valN = res[0]['news'];
 						$("#sentimentQuery #newsValues").text(valN);
+					
+	    }).fail( function(xhr, textStatus, errorThrown) {
+	    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
+	    });
+		
+		$.post("qeuryRequest", {
+			"question6h" : companyName,
+		}).done(
+					function(data) {
+						console.log(data);
+						var res = JSON.parse(data);	
+						
+						console.log(res);
+						var valT = res[0]['twiter'];
 						$("#sentimentQuery #twitterValues").text(valT);
 					
+	    }).fail( function(xhr, textStatus, errorThrown) {
+	    	 $("#twitterstatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
 	    });
 		
 		$("#sentimentQuery").find("input[type=checkbox]").each(function(){
@@ -515,7 +533,9 @@ function openSection(id) {
 		});
 		
 		$("#boxSentimentReviewmakeQuery").click();
-
+		
+		return;
+		
 		// Company locations on map
 		$
 				.post("qeuryRequest", {

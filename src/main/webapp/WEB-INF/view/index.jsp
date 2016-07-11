@@ -192,7 +192,7 @@
                        
                       </h3>
                       <div class="progress xs">
-                        <div id="twitterstatus" class="progress-bar progress-bar-green" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                        <div id="twitterstatusprogress" class="progress-bar progress-bar-green" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
                          
                         </div>
                       </div>

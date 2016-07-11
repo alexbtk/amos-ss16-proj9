@@ -219,7 +219,19 @@ public class HomeController {
 					+ "\"}");
 		}
 		if (requests.containsKey("question6")) {
-			String nameC = requests.get("question6");
+			Double avgSentimentValue = 0.;
+			
+			Double newsSentiment = service.getNumberSentimentAnalysisOfNews(requests.get("question6"),
+					"Company", "now-10d", "now", 5);
+			answers.add(
+					"{\"title\":\"Twiter vs News Sentiment\",\"content\":\""
+							+ "<p>News: " + newsSentiment 
+							+ "</p><p>Twiter:" + avgSentimentValue.toString() +
+							"</p>\",\"twiter\":" + avgSentimentValue.toString() + 
+							",\"news\":"+newsSentiment.toString()+"}");
+		}
+		if (requests.containsKey("question6h")) {
+			String nameC = requests.get("question6h");
 			nameC.replaceAll("Inc.", "");
 			nameC.replaceAll("Corporation", "");
 			nameC.replaceAll("Company", "");
@@ -227,9 +239,12 @@ public class HomeController {
 			
 			List<TwitterBluemixPost> posts = twitterBluemixCrawler.crawlPosts(nameC.trim(), "1", "10");	
 			Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForBluemixTweets(posts, languageService);
+			if(Double.isNaN(avgSentimentValue)){
+				avgSentimentValue = 0.;
+				twitterBluemixCrawler.crawlPosts(null, null, null);
+			}
 			
-			Double newsSentiment = service.getNumberSentimentAnalysisOfNews(requests.get("question6"),
-					"Company", "now-10d", "now", 5);
+			Double newsSentiment = 0.;
 			answers.add(
 					"{\"title\":\"Twiter vs News Sentiment\",\"content\":\""
 							+ "<p>News: " + newsSentiment 
