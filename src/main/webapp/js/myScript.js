@@ -1026,6 +1026,76 @@ function openSection(id) {
 				alert("No company!!");
 				return;
 			}
+			
+			if ($('#' + id + 'Section').find("#existOverviewQuery").length > 0) {
+				if ($('#overviewSection').find("#existOverviewQuery")
+						.attr("class") == companyName)
+					return;
+			}
+			
+			// news graph sentiment> company vs competitors
+			$("#loading").show();
+			$.post("qeuryRequest", {
+					"productEmployeesCompetitors" : companyName,
+			}).done(
+				function(data) {
+					$("#loading").hide();
+					res = JSON.parse(data);						
+					var toCompare = [companyName];
+					for(var ii = 0;ii<2 && ii < res[0].length;++ii)
+						if(res[0][ii] != "" && res[0][ii] != '' && res[0][ii] != null)
+							toCompare.push(res[0][ii]);
+					var d = [];
+					console.log("top");
+					console.log(toCompare);
+					for(var ii in toCompare){
+						$.post("qeuryRequest", {
+							"avgNewsSentimentGraph" : toCompare[ii],
+							"avgNewsSentimentGraphWeeks" : $("#advancedOptions div input").val()
+						}).done(
+								function(data) {
+									res = JSON.parse(data);
+									var values = "";
+									
+									var d0 = {};
+									d0["data"] = [];
+									var i = 0;
+									res[i]['values'].forEach(function(entry) {
+										values = values + entry + " ";
+										d0["data"].push({
+											"x" : (-1 * i),
+											"y" : entry
+										});
+										i++;
+									});
+									var idColor = d.length;
+									if(d.length >= colorsGraph.length) 
+										idColor = 0;
+									d0["label"] = toCompare[d.length];									
+									d0["strokeColor"] = colorsGraph[idColor];
+									d0["pointColor"] = colorsGraph[idColor];
+									d0["pointStrokeColor"] = colorsGraph[idColor];
+									d.push(d0);				
+									
+									if(d.length == toCompare.length){
+										var options = {};
+										var avgNewsChartC = new Chart(
+												$("#overviewNewsSentimentGraphCanvasComparationC")[0]
+														.getContext('2d')).Scatter(d, options);
+									}
+								}).fail( function(xhr, textStatus, errorThrown) {
+							    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
+							    });
+					};
+			}).fail( function(xhr, textStatus, errorThrown) {
+				 $("#loading").hide();
+		    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
+		    });
+			
+			var host = $('#overviewSection');
+			if($('#' + id + 'Section').find("#existOverviewQuery").length == 0)
+				host.append("<div id='existOverviewQuery' class='"+companyName+"'></div>");
+			else $('#' + id + 'Section').find("#existOverviewQuery").attr("class",companyName);
 		}
 
 	}

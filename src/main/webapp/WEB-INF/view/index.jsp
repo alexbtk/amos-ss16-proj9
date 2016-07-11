@@ -378,7 +378,76 @@
 
 
 			<section class="contentSection" id="overviewSection">
-				Overview content</section>
+				<div class="row">
+					<div class="col-lg-4 col-md-6 col-xs-12">
+						<div class="box">
+							<div class="box-header with-border">
+								<h3 class="box-title">Credit Index</h3>
+
+								<div class="box-tools pull-right">
+									<button type="button" class="btn btn-box-tool"
+										data-widget="collapse" data-toggle="tooltip" title="Collapse">
+										<i class="fa fa-minus"></i>
+									</button>
+								</div>
+							</div>
+							<div class="box-body">
+								<div >
+
+								</div>
+							</div>
+							<!-- /.box-body -->
+
+							<div class="box-footer"></div>
+							<!-- /.box-footer-->
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-6 col-xs-12">
+						<div class="box">
+							<div class="box-header with-border">
+								<h3 class="box-title">Pie Charts</h3>
+
+								<div class="box-tools pull-right">
+									<button type="button" class="btn btn-box-tool"
+										data-widget="collapse" data-toggle="tooltip" title="Collapse">
+										<i class="fa fa-minus"></i>
+									</button>
+								</div>
+							</div>
+							<div class="box-body">
+								<div >
+
+								</div>
+							</div>
+							<!-- /.box-body -->
+
+							<div class="box-footer"></div>
+							<!-- /.box-footer-->
+						</div>
+						<!-- /.box -->
+					</div>
+					<div class="col-lg-4 col-md-6 col-xs-12">
+						<div class="box">
+							<div class="box-header with-border">
+								<h3 class="box-title">Sentiment Graph</h3>
+							</div>
+							<div class="box-body">
+								<div id="overviewNewsSentimentGraphComparation"
+									style="height: 300px;">
+									<canvas id="overviewNewsSentimentGraphCanvasComparationC"
+										style="height: 100%; width: 100%;"></canvas>
+								</div>
+							</div>
+							<!-- /.box-body -->
+
+							<div class="box-footer"></div>
+							<!-- /.box-footer-->
+						</div>
+						<!-- /.box -->
+					</div>
+					<div class="col-lg-4 col-md-6 col-xs-12"></div>
+					</div>
+			</section>
 			<section class="contentSection" id="competitorsSection">
 				Competitors content</section>
 			<section class="contentSection" id="productsSection">
