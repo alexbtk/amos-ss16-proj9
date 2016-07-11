@@ -392,7 +392,7 @@
 								</div>
 							</div>
 							<div class="box-body">
-								<div >
+								<div id="creditindexValues" >
 
 								</div>
 							</div>
@@ -678,12 +678,7 @@
 		</div>
 		<!-- /.box --> </template>
 		<template id="boxSentimentReview">
-		<div class="box">
-			<div class="box-header with-border">
-				<h3 class="box-title">Bordered Table</h3>
-			</div>
-			<!-- /.box-header -->
-			<div class="box-body">
+		
 				<table class="table table-bordered" id="sentimentQuery">
 					<tr>
 						<th style="width: 10px">#</th>
@@ -717,11 +712,10 @@
 					</tr>
 
 				</table>
-			</div>
-			<!-- /.box-body -->
+			
 			<button type="button" id="boxSentimentReviewmakeQuery"
 				class="btn btn-block btn-primary">Calculate</button>
-		</div>
+		
 		<!-- /.box --> </template>
 	</div>
 

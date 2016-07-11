@@ -478,79 +478,6 @@ function openSection(id) {
 			host.append("<div id='existCompanyQuery' class='"+companyName+"'></div>");
 		else $('#' + id + 'Section').find("#existCompanyQuery").attr("class",companyName);
 		
-		//boxSentimentReview
-		var sentimentReview = $("#boxSentimentReview").html();
-		
-		if($("#sentimentQuery").length == 0){
-			host.append(sentimentReview);
-			$('.slider').slider();
-		    
-		    $("#sentimentQuery").find("input[type=checkbox]").each(function(){
-		      $(this).change(function(){
-		        if($(this).is(":checked")){
-		          $(this).parent().next().next().find("input").slider('setValue', 100);
-		         }else{
-		          $(this).parent().next().next().find("input").slider('setValue', 0);
-		         }
-		      })
-		    }) ;	    
-		    		
-		    
-		    $("#boxSentimentReviewmakeQuery").click(function(){
-		    	var twitter = parseFloat($("#sentimentQuery").find("#twiterSlider").val());
-		    	var news = parseFloat($("#sentimentQuery").find("#newsSlider").val());
-							
-				var valT = parseFloat($("#sentimentQuery #twitterValues").text());
-				var valN = parseFloat($("#sentimentQuery #newsValues").text());
-				var reSe = 2.;
-				reSe = ((valT*twitter)/100.) + 4. + ((valN*news)/100.) + 4.;	
-				
-				reSe /= 2.0;
-				$('#sentimentResult').slider('setValue', (reSe-4.));
-			
-		    });		    
-		    
-		}
-		
-		$("#loading").show();
-		$.post("qeuryRequest", {
-			"question6" : companyName,
-		}).done(
-					function(data) {
-						$("#loading").hide();
-						var res = JSON.parse(data);		
-						console.log(res);
-						var valN = res[0]['news'];
-						$("#sentimentQuery #newsValues").text(valN);
-					
-	    }).fail( function(xhr, textStatus, errorThrown) {
-	    	 $("#loading").hide();
-	    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
-	    });
-		
-		$.post("qeuryRequest", {
-			"question6h" : companyName,
-		}).done(
-					function(data) {
-						$("#loading").hide();
-						console.log(data);
-						var res = JSON.parse(data);	
-						
-						console.log(res);
-						var valT = res[0]['twiter'];
-						$("#sentimentQuery #twitterValues").text(valT);
-					
-	    }).fail( function(xhr, textStatus, errorThrown) {
-	    	 $("#loading").hide();
-	    	 $("#twitterstatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
-	    });
-		
-		$("#sentimentQuery").find("input[type=checkbox]").each(function(){
-		      $(this).attr("checked","checked");
-		});
-		
-		$("#boxSentimentReviewmakeQuery").click();
-		
 		
 		
 		// Company locations on map
@@ -1096,6 +1023,81 @@ function openSection(id) {
 			if($('#' + id + 'Section').find("#existOverviewQuery").length == 0)
 				host.append("<div id='existOverviewQuery' class='"+companyName+"'></div>");
 			else $('#' + id + 'Section').find("#existOverviewQuery").attr("class",companyName);
+			
+			//boxSentimentReview
+			var sentimentReview = $("#boxSentimentReview").html();
+			
+			if($("#sentimentQuery").length == 0){
+				host.find("#creditindexValues").append(sentimentReview);
+				$('.slider').slider();
+			    
+			    $("#sentimentQuery").find("input[type=checkbox]").each(function(){
+			      $(this).change(function(){
+			        if($(this).is(":checked")){
+			          $(this).parent().next().next().find("input").slider('setValue', 100);
+			         }else{
+			          $(this).parent().next().next().find("input").slider('setValue', 0);
+			         }
+			      })
+			    }) ;	    
+			    		
+			    
+			    $("#boxSentimentReviewmakeQuery").click(function(){
+			    	var twitter = parseFloat($("#sentimentQuery").find("#twiterSlider").val());
+			    	var news = parseFloat($("#sentimentQuery").find("#newsSlider").val());
+								
+					var valT = parseFloat($("#sentimentQuery #twitterValues").text());
+					var valN = parseFloat($("#sentimentQuery #newsValues").text());
+					var reSe = 2.;
+					reSe = ((valT*twitter)/100.) + 4. + ((valN*news)/100.) + 4.;	
+					
+					reSe /= 2.0;
+					$('#sentimentResult').slider('setValue', (reSe-4.));
+				
+			    });		    
+			    
+			}
+			
+			$("#loading").show();
+			$.post("qeuryRequest", {
+				"question6" : companyName,
+			}).done(
+						function(data) {
+							$("#loading").hide();
+							var res = JSON.parse(data);		
+							console.log(res);
+							var valN = res[0]['news'];
+							$("#sentimentQuery #newsValues").text(valN);
+						
+		    }).fail( function(xhr, textStatus, errorThrown) {
+		    	 $("#loading").hide();
+		    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
+		    });
+			
+			$.post("qeuryRequest", {
+				"question6h" : companyName,
+			}).done(
+						function(data) {
+							$("#loading").hide();
+							console.log(data);
+							var res = JSON.parse(data);	
+							
+							console.log(res);
+							var valT = res[0]['twiter'];
+							$("#sentimentQuery #twitterValues").text(valT);
+						
+		    }).fail( function(xhr, textStatus, errorThrown) {
+		    	 $("#loading").hide();
+		    	 $("#twitterstatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
+		    });
+			
+			$("#sentimentQuery").find("input[type=checkbox]").each(function(){
+			      $(this).attr("checked","checked");
+			});
+			
+			$("#boxSentimentReviewmakeQuery").click();
+			
+			
 		}
 
 	}
