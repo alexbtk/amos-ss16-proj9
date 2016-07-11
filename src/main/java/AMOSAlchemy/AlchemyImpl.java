@@ -320,7 +320,7 @@ public class AlchemyImpl implements IAlchemy{
 		}
 		
 		double result = ((poz-neg)*1.0/(poz+neg)*1.0);
-		cache.putCurrentMethodCache(name, entity, startTime, endTime, count);
+		cache.putCurrentMethodCache(name, entity, startTime, endTime, count,result);
 		return result;
 	}
 	

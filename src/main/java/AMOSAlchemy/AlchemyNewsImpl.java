@@ -211,14 +211,17 @@ public  class AlchemyNewsImpl implements IAlchemyNews{
 		JSONArray docsArray = null;
 		try {
 			Request request = new Request.Builder().url(queryString).build();
-			Response response = client.newCall(request).execute();
+			okhttp3.Call call = client.newCall(request);
+			Response response = call.execute();
 			String responseString = response.body().string();
 
 			JSONParser parser = new JSONParser();
 			Object obj = parser.parse(responseString);
 			jsonResult = (JSONObject)obj;
-			if(!(jsonResult.get("status")).equals("OK"))
+			if(!(jsonResult.get("status")).equals("OK")){
+				call.cancel();
 				return li;
+			}
 			JSONObject val = (JSONObject)jsonResult.get("result");
 			docsArray = (JSONArray)val.get("docs");
 			

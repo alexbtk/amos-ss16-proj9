@@ -236,15 +236,20 @@ public class HomeController {
 			nameC.replaceAll("Corporation", "");
 			nameC.replaceAll("Company", "");
 			nameC.replaceAll("Association", "");
-			
-			List<TwitterBluemixPost> posts = twitterBluemixCrawler.crawlPosts(nameC.trim(), "1", "10");	
-
-			Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForBluemixTweets(posts, languageService);
-			if(Double.isNaN(avgSentimentValue)){
-				avgSentimentValue = 0.;
-				twitterBluemixCrawler.crawlPosts(null, null, null);
+			Object r = cache.getCurrentMethodCache(requests.containsKey("question6h")+"twitterSentiment");
+			Double avgSentimentValue = 0.;
+			if(r == null){
+				List<TwitterBluemixPost> posts = twitterBluemixCrawler.crawlPosts(nameC.trim(), "1", "10");	
+	
+				avgSentimentValue = twitterAnalyzer.getAverageSentimetForBluemixTweets(posts, languageService);
+				if(Double.isNaN(avgSentimentValue)){
+					avgSentimentValue = 1.;
+					//twitterBluemixCrawler.crawlPosts(null, null, null);
+				}
+				cache.putCurrentMethodCache(requests.containsKey("question6h")+"+twitterSentiment", avgSentimentValue);
+			}else{
+				avgSentimentValue = (Double)r;
 			}
-			
 			Double newsSentiment = 0.;
 			answers.add(
 					"{\"title\":\"Twiter vs News Sentiment\",\"content\":\""
