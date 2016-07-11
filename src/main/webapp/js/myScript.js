@@ -534,7 +534,7 @@ function openSection(id) {
 		
 		$("#boxSentimentReviewmakeQuery").click();
 		
-		return;
+		
 		
 		// Company locations on map
 		$
