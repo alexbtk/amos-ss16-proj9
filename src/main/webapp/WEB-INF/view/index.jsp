@@ -465,6 +465,12 @@
 				<div class="row">
 					<div class="col-lg-4 col-md-6 col-xs-12">
 						<div id="recentDevelopments"></div>
+						<div id="avgNewsSentimentGraphSlider">
+							<p>Weeks for News Sentiment Graph: 7 Weeks</p>
+							<input type="range" value="7" min="2" max="52" /><br />
+							<button>Draw Graph!</button>
+						</div>	
+						<canvas id="avgNewsSentimentGraphCanvas"></canvas>
 					</div>
 					<div class="col-lg-4 col-md-6 col-xs-12">
 						<div class="box">
@@ -523,18 +529,7 @@
 					</div>
 					<div class="col-lg-4 col-md-6 col-xs-12"></div>
 
-					<div id="avgNewsSentimentGraphSlider">
-						<p>Weeks for News Sentiment Graph: 7 Weeks</p>
-						<input type="range" value="7" min="2" max="52" /><br />
-						<button>Draw Graph!</button>
-					</div>
-					<div id="avgNewsSentimentGraph"></div>
-
-
-
-					<!--<a href="${pageContext.request.contextPath}/locationmap">Locationmap!</a> -->
-
-					<canvas id="avgNewsSentimentGraphCanvas"></canvas>
+					
 				</div>
 
 			</section>
