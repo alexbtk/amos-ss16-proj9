@@ -909,6 +909,7 @@ function openSection(id) {
 			
 		}).fail(function(){
 			$("#loading").hide();
+	    	 $("#twitterstatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
 		});
 		
 		$.post("qeuryRequest", {
@@ -951,6 +952,7 @@ function openSection(id) {
 					
 	    }).fail(function(){
 	    	$("#loading").hide();
+	    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
 	    });
 				
 		
