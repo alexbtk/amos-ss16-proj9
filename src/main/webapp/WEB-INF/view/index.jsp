@@ -128,7 +128,8 @@
   <![endif]-->
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-
+	<div id="loading"><img src="${pageContext.request.contextPath}/img/ajax-loader.gif"/></div>
+	
 	<header class="main-header">
 		<!-- Logo -->
 		<a href="#" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -269,7 +270,7 @@
 		</div>
 	</div>
 	<div id="welcome">
-		<img src="${pageContext.request.contextPath}/img/cognitive.JPG" />
+		<img src="${pageContext.request.contextPath}/img/logo.PNG" style="margin-left: -20px;"/>
 		<h1>Welcome to Cognitive Services!</h1>
 		<div class="box box-primary">
 			<h2>Please enter a company name:</h2>

@@ -180,11 +180,13 @@ $(document)
 					});
 					
 					$("#avgNewsSentimentGraphSlider button").click(function(){
+						$("#loading").show();
 						$.post("qeuryRequest", {
 							"avgNewsSentimentGraph" : $("#dashboardCompanyInput").val(),
 							"avgNewsSentimentGraphWeeks" : $("#avgNewsSentimentGraphSlider input").val()
 						}).done(
 								function(data) {
+									$("#loading").hide();
 									res = JSON.parse(data);
 									
 									var values = "";
@@ -212,6 +214,8 @@ $(document)
 											$("#avgNewsSentimentGraphCanvas")[0]
 													.getContext('2d')).Scatter(d, options);
 
+								}).fail(function(){
+									$("#loading").hide();
 								});
 					});		
 				
@@ -269,10 +273,12 @@ function openSection(id) {
 
 		host.html("loading...");
 
+		$("#loading").show();
 		$.post("qeuryRequest", {
 			"industriesCompetitors" : companyName
 		}).done(
 				function(data) {
+					$("#loading").hide();
 					data = JSON.parse(data);
 					console.log(data);
 					host.empty();
@@ -388,6 +394,8 @@ function openSection(id) {
 							colorIndex = (colorIndex+1) % 5;
 						});
 					});
+				}).fail(function(){
+					$("#loading").hide();
 				});
 	} else if (id == "company") {
 		var companyName = $("#dashboardCompanyInput").val();
@@ -402,11 +410,12 @@ function openSection(id) {
 		}
 		
 		// news graph sentiment> company vs competitors
-		
+		$("#loading").show();
 		$.post("qeuryRequest", {
 				"productEmployeesCompetitors" : companyName,
 		}).done(
 					function(data) {
+						$("#loading").hide();
 						res = JSON.parse(data);						
 						var toCompare = [companyName];
 						for(var ii = 0;ii<2 && ii < res[0].length;++ii)
@@ -455,6 +464,7 @@ function openSection(id) {
 								    });
 						};
 				}).fail( function(xhr, textStatus, errorThrown) {
+					 $("#loading").hide();
 			    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
 			    });
 		
@@ -500,16 +510,19 @@ function openSection(id) {
 		    
 		}
 		
+		$("#loading").show();
 		$.post("qeuryRequest", {
 			"question6" : companyName,
 		}).done(
 					function(data) {
+						$("#loading").hide();
 						var res = JSON.parse(data);		
 						console.log(res);
 						var valN = res[0]['news'];
 						$("#sentimentQuery #newsValues").text(valN);
 					
 	    }).fail( function(xhr, textStatus, errorThrown) {
+	    	 $("#loading").hide();
 	    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
 	    });
 		
@@ -517,6 +530,7 @@ function openSection(id) {
 			"question6h" : companyName,
 		}).done(
 					function(data) {
+						$("#loading").hide();
 						console.log(data);
 						var res = JSON.parse(data);	
 						
@@ -525,6 +539,7 @@ function openSection(id) {
 						$("#sentimentQuery #twitterValues").text(valT);
 					
 	    }).fail( function(xhr, textStatus, errorThrown) {
+	    	 $("#loading").hide();
 	    	 $("#twitterstatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
 	    });
 		
@@ -567,11 +582,14 @@ function openSection(id) {
 					    });
 
 		// Add Company Relations
-		//getNewsRelation(companyName);	
+		//getNewsRelation(companyName);
+		$("#loading").show();
 		$.post("qeuryRequest", {
 			"recentDev" : companyName,
 		}).done(
 					function(data) {
+						$("#loading").hide();
+						
 						var res = JSON.parse(data);		
 						console.log("recent devs");
 						console.log(res);
@@ -584,8 +602,10 @@ function openSection(id) {
 				 	    colapseBa.find(".box-title").text("Recent Developments");
 				 	    colapseBa.find(".box-body").append(ul);
 				 	    hostDe.empty().append(colapseBa);
+				 	    
 					
 	    }).fail( function(xhr, textStatus, errorThrown) {
+	    	 $("#loading").hide();
 	    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
 	    });
 		
@@ -607,12 +627,14 @@ function openSection(id) {
 
 		host.html("loading company products...");
 
+		$("#loading").show();
 		$
 				.post("qeuryRequest", {
 					"productsCompany" : companyName
 				})
 				.done(
 						function(data) {
+							$("#loading").hide();
 							data = JSON.parse(data);
 							host.empty();
 							host
@@ -645,6 +667,8 @@ function openSection(id) {
 												}
 											});
 
+						}).fail(function(){
+							$("#loading").hide();
 						});
 
 		var hostC = $('#productsSection #competitorsProducts');
@@ -657,6 +681,7 @@ function openSection(id) {
 				})
 				.done(
 						function(data) {
+							$("#loading").hide();
 							data = JSON.parse(data);
 							hostC.empty();
 							var checkAll = '<input type="checkbox" name="checkAll" value="checkAll" />Check All<br/>';
@@ -686,6 +711,8 @@ function openSection(id) {
 												}
 											});
 
+						}).fail(function(){
+							$("#loading").hide();
 						});
 		// Graph
 		var hostG = $('#productsSection #graphProducts');
@@ -734,6 +761,7 @@ function openSection(id) {
 					if (isNaN(timeFrame))
 						timeFrame = 2;
 
+					$("#loading").show();
 					$
 							.post("qeuryRequest", {
 								"avgCompanyProducts" : avgCP,
@@ -744,6 +772,7 @@ function openSection(id) {
 							})
 							.done(
 									function(data) {
+										$("#loading").hide();
 										var res = JSON.parse(data);
 
 										var values = "";
@@ -782,7 +811,8 @@ function openSection(id) {
 												.Scatter(d, options);
 
 									}).fail( function(xhr, textStatus, errorThrown) {
-								    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
+										$("#loading").hide(); 
+										$("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
 								    });
 				});
 		hostG.empty().append(slider).append(button);
@@ -829,9 +859,11 @@ function openSection(id) {
 		
 
 		// Company average twitter sentiment
+		$("#loading").show();
 		$.post("qeuryRequest", {
 			"avgTwitterBluemixSentimentPosts" : companyName
 		}).done(function(data) {
+			$("#loading").hide();
 			data = JSON.parse(data);
 			var sentValue = data[0]["avgSentiment"];
 			var negPostsArray = data[0]["negPosts"];
@@ -939,6 +971,8 @@ function openSection(id) {
 		        }       
 		    });
 			
+		}).fail(function(){
+			$("#loading").hide();
 		});
 		
 		$.post("qeuryRequest", {
@@ -946,6 +980,7 @@ function openSection(id) {
 			"timeframe" : 2
 		}).done(
 					function(data) {
+						$("#loading").hide();
 						var res = JSON.parse(data);		
 						var newsSentimentCountString = res[0]['content'];
 						var numberPattern = /\d+/g;
@@ -978,6 +1013,8 @@ function openSection(id) {
 					        }       
 					    });
 					
+	    }).fail(function(){
+	    	$("#loading").hide();
 	    });
 				
 		

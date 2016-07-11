@@ -84,4 +84,19 @@
 	width: 100%;
 }
 
+#loading{
+	display: none;
+	position: absolute;
+	height: 100vh;
+	width: 100%;
+	z-index: 99999;
+	background-color: rgba(50, 50, 50, 0.7);
+}
+
+#loading img{
+	display: block;
+	margin-top: 45vh;
+	margin-left: auto;
+	margin-right: auto;
+}
 .ui-autocomplete { position: absolute; cursor: default;z-index:3000000 !important;}
