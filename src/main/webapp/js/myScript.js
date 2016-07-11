@@ -91,6 +91,7 @@ $(document)
 									$('#companySection').show();
 									$('#searchMenu').fadeIn(500);
 									$("#content").fadeIn(500);
+									openSection('overview');
 								});
 								//$("#companyMoreitem").click();
 							});
@@ -158,7 +159,8 @@ $(document)
 					});
 
 					$("#searchButton").click(function() {
-						$("#companyMoreitem").click();
+						//$("#companyMoreitem").click();
+						openSection('overview');
 					});
 					
 					$("#avgNewsSentimentGraphSlider input").change(function(){
@@ -1018,7 +1020,13 @@ function openSection(id) {
 	    });
 				
 		
-		};
+		} else if(id == 'overview'){
+			var companyName = $("#dashboardCompanyInput").val();
+			if (companyName == "") {
+				alert("No company!!");
+				return;
+			}
+		}
 
 	}
 

@@ -295,6 +295,22 @@
 	<div id="content">
 		<!-- Main content -->
 		<section class="content">
+			<div class="row">
+				<div class="col-lg-12 col-md-6 col-xs-6">
+					<!-- small box -->
+					<div class="small-box bg-grey">
+						<div class="inner">
+							<h3>Overview</h3>
+						</div>
+						<div class="icon">
+							<i class="ion ion-stats-bars"></i>
+						</div>
+						<a href="#" onclick="openSection('overview');"
+							class="small-box-footer">More info <i
+							class="fa fa-arrow-circle-right"></i></a>
+					</div>
+				</div>
+			</div>
 			<!-- Small boxes (Stat box) -->
 			<div class="row">
 				<div class="col-lg-3 col-xs-6">
@@ -361,6 +377,8 @@
 			<!-- /.row -->
 
 
+			<section class="contentSection" id="overviewSection">
+				Overview content</section>
 			<section class="contentSection" id="competitorsSection">
 				Competitors content</section>
 			<section class="contentSection" id="productsSection">
