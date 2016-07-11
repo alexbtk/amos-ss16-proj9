@@ -1183,7 +1183,7 @@ public class DBpedia {
 			return null;
 		System.out.println(resources.get(0));
 		
-		HashMap<String,String> map = new HashMap<String,String>();
+		Map<String,String> map = new HashMap<String,String>();
 		
 		String queryString =  "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> " +
 		"PREFIX dbo: <http://dbpedia.org/ontology/> "+
@@ -1218,8 +1218,9 @@ public class DBpedia {
             e.printStackTrace();
         }
 		
-		if(map.size() > 0)
+		if(map.size() > 0){
 			cache.putCurrentMethodCache(companyName, map);
+		}
 		
 		return map;
 	}

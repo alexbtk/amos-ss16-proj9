@@ -20,6 +20,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 
+import com.squareup.okhttp.Call;
+
 import AMOSCache.AMOSCache;
 
 import org.json.simple.parser.JSONParser;
@@ -67,13 +69,19 @@ public class TwitterBluemixCrawler {
 		
 		try {
 			Request request = new Request.Builder().header("Authorization", credential).url("https://" + userName + ":" + password + "@cdeservice.mybluemix.net:443/api/v1/messages/search?q=" + companyName + "&from=" + startRecord + "&size=" + numberOfRecords).build();
-			Response response = client.newCall(request).execute();
+			okhttp3.Call call = client.newCall(request);
+			Response response = call.execute();
 			String responseString = response.body().string();
 			
 			JSONParser parser = new JSONParser();
 			Object obj = parser.parse(responseString);
 			jsonResult = (JSONObject)obj;
 			postsArray = (JSONArray)jsonResult.get("tweets");
+			
+			if(postsArray == null){
+				call.cancel();
+				return null;
+			}
 			
 			for (int i = 0; i < postsArray.size(); i++){
 				TwitterBluemixPost bluemixPost = new TwitterBluemixPost();

@@ -1,11 +1,14 @@
 package AMOSCache;
 
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import AMOSTwitterBluemix.TwitterBluemixPost;
@@ -16,24 +19,44 @@ public class AMOSCacheImpl extends AMOSCache {
 	private final long CACHE_TIME = TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS);
 	
 	AMOSCacheImpl(){
-		cacheMap = new HashMap<String, AMOSCacheEntry>();
+		cacheMap = new ConcurrentHashMap<String, AMOSCacheEntry>();
 	}
 
 	public void put(String key, Object result) {
-		cacheMap.put(key, new AMOSCacheEntry(result));
+		
+		if(result instanceof Map<?,?>){
+			System.out.println("Put map with size: " + ((Map<String, String>)result).size());
+			cacheMap.put(key, new AMOSCacheEntry(new ConcurrentHashMap<String, String>((Map<String, String>)result)));
+		}
+		else if(key.contains("TwitterBluemixCrawler+crawlPosts"))
+			cacheMap.put(key, new AMOSCacheEntry(new ArrayList<TwitterBluemixPost>((List<TwitterBluemixPost>)result)));
+		else if(result instanceof List<?>)
+			cacheMap.put(key, new AMOSCacheEntry(new ArrayList<String>((List<String>)result)));
+		else
+			cacheMap.put(key, new AMOSCacheEntry(result));
 	}
 
 	public Object get(String key) {
 		
 		if(cacheMap.containsKey(key)){
 			AMOSCacheEntry entry = cacheMap.get(key);
-			if((System.currentTimeMillis()-entry.getTimestamp()) > CACHE_TIME)
+			if((System.currentTimeMillis()-entry.getTimestamp()) > CACHE_TIME){
 				cacheMap.remove(key);
+			}
 			else
 				// temporal solution
-				if((entry.getValue() instanceof Map<?, ?> && ((Map<?,?>)entry.getValue()).size() > 0 )
-				  || (entry.getValue() instanceof List<?> && ((List<?>)entry.getValue()).size() > 0 ))
-							return entry.getValue();
+				/*if((entry.getValue() instanceof Map<?, ?> && ((Map<?,?>)entry.getValue()).size() < 1 )
+				  || (entry.getValue() instanceof List<?> && ((List<?>)entry.getValue()).size() < 1 ))
+					return null;*/
+				
+			
+				//System.out.println("Return cache entry...");
+				
+				if(entry.getMap() != null)
+					return new HashMap<String, String>((Map<String, String>)entry.getMap());
+				else
+					return entry.getValue();
+		
 		}
 		
 		return null;
@@ -47,8 +70,12 @@ public class AMOSCacheImpl extends AMOSCache {
 			key = key + "+" + arg.toString();
 		}
 		
-		if(cacheMap.containsKey(key))
+		System.out.println("getcurrentMethodCache: " + key);
+		
+		if(cacheMap.containsKey(key)){
+			System.out.println("Contains key...");
 			return this.get(key);
+		}
 		else
 			return null;
 	}
@@ -70,6 +97,8 @@ public class AMOSCacheImpl extends AMOSCache {
 		
 		for(Entry<String, AMOSCacheEntry> entry : this.cacheMap.entrySet()){
 			result = result + "###" + entry.getKey() + ";;;";
+			if(entry.getKey().equals("AMOSDBPedia.DBpedia+getCompanyLocationCoordonates+Apple Inc."))
+				System.out.println("Got coordonates cache entry");
 			Object val = entry.getValue().getValue();
 			//format lists
 			if(val instanceof List<?>){
@@ -81,10 +110,11 @@ public class AMOSCacheImpl extends AMOSCache {
 						result = result + l.get(i).toString() + ",,,";
 				}
 			}
-			else if(val instanceof Map<?, ?>){
-				Map<?, ?> map = (Map<?, ?>)val;
+			else if(entry.getValue().getMap() != null){
+				Map<?, ?> map = entry.getValue().getMap();
 				int i = 0;
 				int size = map.entrySet().size();
+				System.out.println("Coordonate entries size: " + size + "; Map size: " + map.size());
 				for(Entry<?, ? > e : map.entrySet()){
 					if(i == size-1)
 						result = result + e.getKey().toString() + "===" + e.getValue().toString();
@@ -107,6 +137,7 @@ public class AMOSCacheImpl extends AMOSCache {
 
 	@Override
 	public synchronized void setCache(String dump) {
+		System.out.println(Charset.defaultCharset().name());
 		String[] lines = dump.split("###");
 		this.cacheMap.clear();
 		
@@ -146,6 +177,7 @@ public class AMOSCacheImpl extends AMOSCache {
 						this.cacheMap.put(key, new AMOSCacheEntry(Boolean.parseBoolean(split[1]), timestamp));
 					}
 					else if(returnType.equals(double.class)){
+						//System.out.println("Setting double: " + key + " " + Double.parseDouble(split[1]));
 						this.cacheMap.put(key, new AMOSCacheEntry(Double.parseDouble(split[1]), timestamp));
 					}
 					else if(returnType.equals(List.class)){
@@ -160,7 +192,7 @@ public class AMOSCacheImpl extends AMOSCache {
 									list.add(post);
 							}
 
-							this.cacheMap.put(key, new AMOSCacheEntry(list, timestamp));
+							this.cacheMap.put(key, new AMOSCacheEntry(new ArrayList<TwitterBluemixPost>(list), timestamp));
 						
 						}
 						//Assumes that List is List of Strings otherwise
@@ -170,7 +202,7 @@ public class AMOSCacheImpl extends AMOSCache {
 							for(String s : listElems)
 								list.add(s);
 
-							this.cacheMap.put(key, new AMOSCacheEntry(list, timestamp));
+							this.cacheMap.put(key, new AMOSCacheEntry(new ArrayList<String>(list), timestamp));
 						}
 					}
 					//Assumes Map<String, String>
@@ -186,7 +218,7 @@ public class AMOSCacheImpl extends AMOSCache {
 								map.put(entry[0], entry[1]);
 						}
 						
-						this.cacheMap.put(key, new AMOSCacheEntry(map, timestamp));
+						this.cacheMap.put(key, new AMOSCacheEntry(new ConcurrentHashMap<String, String>((Map<String, String>)map), timestamp));
 					}
 					else{
 						System.out.println("Unsupported return type: " + returnType.getName());

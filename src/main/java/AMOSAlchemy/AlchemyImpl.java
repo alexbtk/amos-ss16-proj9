@@ -303,7 +303,7 @@ public class AlchemyImpl implements IAlchemy{
 			return (double) r;
 		
 		Documents docs = alchemyNews.getSentimentAnalysisOfNews(name,entity,startTime, endTime, count);
-		System.out.println(docs);
+		//System.out.println(docs);
 		if(docs == null || docs.getDocuments() == null) return 0;
 		String positive = "", negative = "";
 		Integer total = 0, poz = 0, neg = 0;
@@ -353,9 +353,11 @@ public class AlchemyImpl implements IAlchemy{
 	public double getAvgNewsSentiment(String companyName, String entity, String startTime, String endTime, int limit)
 			throws BadRequestException {
 		Object r = cache.getCurrentMethodCache(companyName, entity, startTime, endTime, limit);
-		if(r != null)
+		if(r != null){
+			System.out.println("Got it cached...");
 			return (double) r;
-		
+		}
+		System.out.println("Not cached: " + companyName + "+" + entity + "+" + startTime + "+" + endTime + "+" + limit);
 		Documents docs = alchemyNews.getSentimentAnalysisOfNews(companyName, entity, startTime, endTime, limit);
 		double avgSentiment = 0.0;
 		if(docs != null && docs.getDocuments() != null){
