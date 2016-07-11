@@ -538,6 +538,8 @@ function openSection(id) {
 	    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
 	    });
 		
+		$("#avgNewsSentimentGraphSlider button").click();
+		
 	} else if (id == "products") {
 		var companyName = $("#dashboardCompanyInput").val();
 		if (companyName == "") {
