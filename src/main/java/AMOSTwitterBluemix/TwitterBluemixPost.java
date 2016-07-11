@@ -35,11 +35,11 @@ public class TwitterBluemixPost {
 	
 	@Override
 	public String toString(){
-		String s =  "id=" + id + "," +
-					"displayName" + displayName + "," +
-					"postContent" + postContent + "," +
-					"sentiment" + sentiment + "," +
-					"retweetCount" + retweetCount;
+		String s =  "" + id + "," +
+					"" + displayName + "," +
+					"" + postContent + "," +
+					"" + sentiment + "," +
+					"" + retweetCount;
 		return s;
 	}
 }

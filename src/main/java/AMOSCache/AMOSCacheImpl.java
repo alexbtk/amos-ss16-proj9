@@ -164,7 +164,7 @@ public class AMOSCacheImpl extends AMOSCache {
 				} catch (ClassNotFoundException e) {
 					continue;
 				}
-				
+				System.out.println(split[1]);
 				if(method == null)
 					continue;
 				
@@ -176,8 +176,8 @@ public class AMOSCacheImpl extends AMOSCache {
 					else if(returnType.equals(boolean.class)){
 						this.cacheMap.put(key, new AMOSCacheEntry(Boolean.parseBoolean(split[1]), timestamp));
 					}
-					else if(returnType.equals(double.class)){
-						//System.out.println("Setting double: " + key + " " + Double.parseDouble(split[1]));
+					else if(returnType.equals(double.class) || returnType.equals(Double.class)){
+						System.out.println("Setting double: " + key + " " + Double.parseDouble(split[1]));
 						this.cacheMap.put(key, new AMOSCacheEntry(Double.parseDouble(split[1]), timestamp));
 					}
 					else if(returnType.equals(List.class)){

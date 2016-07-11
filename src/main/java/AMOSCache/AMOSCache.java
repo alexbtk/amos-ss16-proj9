@@ -20,4 +20,6 @@ public abstract class AMOSCache {
 	public abstract void putCurrentMethodCache(Object... args);
 	public abstract String toString();
 	public abstract void setCache(String dump);
+
+	public abstract void put(String key, Object result);
 }

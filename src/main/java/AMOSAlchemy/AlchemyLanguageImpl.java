@@ -23,10 +23,11 @@ import com.ibm.watson.developer_cloud.service.BadRequestException;
 public class AlchemyLanguageImpl implements IAlchemyLanguage{
 	
 	private AlchemyLanguage service;
-	
+	private AMOSCache.AMOSCache cache;
 	public AlchemyLanguageImpl(String apiKey){
 		service = new AlchemyLanguage();
 		service.setApiKey(apiKey);
+		cache = AMOSCache.AMOSCache.getInstance();
 	}
 
 	@Override
@@ -123,9 +124,14 @@ public class AlchemyLanguageImpl implements IAlchemyLanguage{
 	 * @param text	text to analyze
 	 * @return DocumentSentiment object with sentiment values inside
 	 */
-	public DocumentSentiment getSentimentForText(String text) throws BadRequestException{
+	public double getSentimentForText(String text) throws BadRequestException{
+	   Object r = cache.getCurrentMethodCache(text);			
+			if(r != null)
+				return (double) r;
 		Map<String,Object> params = new HashMap<String, Object>();
 		params.put(AlchemyLanguage.TEXT, text);
-		return service.getSentiment(params);
+		Double val = service.getSentiment(params).getSentiment().getScore().doubleValue();
+		cache.putCurrentMethodCache(text, val);
+		return val;
 	}
 }

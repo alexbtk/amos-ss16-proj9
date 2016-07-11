@@ -35,13 +35,12 @@ public class TwitterAnalyzer {
 	 * @return	average double sentiment value of provided tweets
 	 */
 	public double getAverageSentimetForTweets(List<Status> tweets, IAlchemyLanguage languageService) {
-		DocumentSentiment sentiment;
+		
 		List<Double> sentimentValues = new ArrayList<Double>();
 		Double sumSentiment = 0.0;
 		for (Status tweet : tweets) {
 			try {
-				sentiment = languageService.getSentimentForText(tweet.getText());
-				sentimentValues.add(sentiment.getSentiment().getScore().doubleValue());
+				sentimentValues.add(languageService.getSentimentForText(tweet.getText()));
 			} catch (Exception e) {
 				// Exception handling is for pussies
 			}
@@ -56,13 +55,12 @@ public class TwitterAnalyzer {
 	}
 	
 	public double getAverageSentimetForBluemixTweets(List<TwitterBluemixPost> tweets, IAlchemyLanguage languageService) {
-		DocumentSentiment sentiment;
+		
 		List<Double> sentimentValues = new ArrayList<Double>();
 		Double sumSentiment = 0.0;
 		for (TwitterBluemixPost tweet : tweets) {
 			try {
-				sentiment = languageService.getSentimentForText(tweet.postContent);
-				sentimentValues.add(sentiment.getSentiment().getScore().doubleValue());
+				sentimentValues.add(languageService.getSentimentForText(tweet.postContent));
 			} catch (Exception e) {
 				// Exception handling is for pussies
 			}
@@ -82,8 +80,7 @@ public class TwitterAnalyzer {
 		HashMap<Long, Double> map = new HashMap<Long, Double>();
 		for (Status tweet: tweets){
 			try {
-				sentiment = languageService.getSentimentForText(tweet.getText());
-				map.put(tweet.getId(), sentiment.getSentiment().getScore().doubleValue());
+				map.put(tweet.getId(), languageService.getSentimentForText(tweet.getText()));
 			} catch (Exception e) {
 				// Exception handling is for pussies
 			}
@@ -93,12 +90,11 @@ public class TwitterAnalyzer {
 	}
 	
 	public HashMap<String, Double> getSentimentForEachBluemixTweet(List<TwitterBluemixPost> tweets, IAlchemyLanguage languageService){
-		DocumentSentiment sentiment;
+		
 		HashMap<String, Double> map = new HashMap<String, Double>();
 		for (TwitterBluemixPost tweet: tweets){
 			try {
-				sentiment = languageService.getSentimentForText(tweet.postContent);
-				map.put(tweet.id, sentiment.getSentiment().getScore().doubleValue());
+				map.put(tweet.id, languageService.getSentimentForText(tweet.postContent));
 			} catch (Exception e) {
 				// Exception handling is for pussies
 			}
