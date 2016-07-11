@@ -525,7 +525,7 @@ function openSection(id) {
 						function(data) {
 							data = JSON.parse(data);
 							console.log(data);
-							$("#mapforcompany").empty().append("<div id=\"world-map\" style=\"width: 600px; height: 400px\"></div>");
+							$("#mapforcompany").empty().append("<div id=\"world-map\" style=\"width: 100%; height: 400px\"></div>");
 
 							var vecmap = $('#world-map').vectorMap({
 								map : 'world_mill',

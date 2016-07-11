@@ -391,16 +391,16 @@
 								</div>
 							</div>
 							<div class="box-body">
-								<div class="box box-info">
-									<div class="box-header with-border">
+								<div >
+									<!-- <div class="box-header with-border">
 										<h3 class="box-title"></h3>
-									</div>
+									</div> -->
 									<!-- /.box-header -->
-									<div class="box-body" id="mapforcompany">
-										<div id="world-map" style="width: 600px; height: 400px"></div>
+									<div id="mapforcompany">
+										<div id="world-map" style="width: 100%; height: 100%"></div>
 									</div>
 									<!-- /.box-body -->
-									<div class="box-footer"></div>
+									<!--<div class="box-footer"></div>-->
 									<!-- /.box-footer -->
 
 								</div>
@@ -423,7 +423,7 @@
 								<div id="avgNewsSentimentGraphComparation"
 									style="height: 300px;">
 									<canvas id="avgNewsSentimentGraphCanvasComparationC"
-										style="height: 300px;"></canvas>
+										style="height: 100%; width: 100%;"></canvas>
 								</div>
 							</div>
 							<!-- /.box-body -->

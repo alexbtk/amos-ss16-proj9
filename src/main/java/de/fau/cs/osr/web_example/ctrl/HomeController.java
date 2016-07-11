@@ -226,16 +226,23 @@ public class HomeController {
 			nameC.replaceAll("Association", "");
 			
 			List<TwitterBluemixPost> posts = twitterBluemixCrawler.crawlPosts(nameC.trim(), "1", "10");	
-			Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForBluemixTweets(posts, languageService);
 			
-			Double newsSentiment = service.getNumberSentimentAnalysisOfNews(requests.get("question6"),
-					"Company", "now-10d", "now", 5);
-			answers.add(
-					"{\"title\":\"Twiter vs News Sentiment\",\"content\":\""
-							+ "<p>News: " + newsSentiment 
-							+ "</p><p>Twiter:" + avgSentimentValue.toString() +
-							"</p>\",\"twiter\":" + avgSentimentValue.toString() + 
-							",\"news\":"+newsSentiment.toString()+"}");
+			if(posts != null){
+				Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForBluemixTweets(posts, languageService);
+
+				Double newsSentiment = service.getNumberSentimentAnalysisOfNews(requests.get("question6"),
+						"Company", "now-10d", "now", 5);
+				answers.add(
+						"{\"title\":\"Twiter vs News Sentiment\",\"content\":\""
+								+ "<p>News: " + newsSentiment 
+								+ "</p><p>Twiter:" + avgSentimentValue.toString() +
+								"</p>\",\"twiter\":" + avgSentimentValue.toString() + 
+								",\"news\":"+newsSentiment.toString()+"}");
+			}
+			else{
+				answers.add(
+						"{\"title\":\"Twiter vs News Sentiment\",\"content\":\"\"}");
+			}
 		}
 		if (requests.containsKey("question7")) {
 			Map map = DBpedia.getCompanyLocationCoordonates(requests.get("question7"));
@@ -452,6 +459,7 @@ public class HomeController {
 		}
 		if (requests.containsKey("avgTwitterSentimentPosts")) {
 			List<Status> posts = twitterCrawler.crawlPosts(requests.get("avgTwitterSentimentPosts"));
+			
 			Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForTweets(posts, languageService);
 			HashMap<Long, Double> map = twitterAnalyzer.getSentimentForEachTweet(posts, languageService);
 			
@@ -550,7 +558,7 @@ public class HomeController {
 	public String getCache(Model m){
 
 		String cache = this.cache.toString();
-		System.out.println("Cache is: " + cache);
+		//System.out.println("Cache is: " + cache);
 		if(cache.length() < 2)
 			m.addAttribute("cache", "No cache available");
 		else
