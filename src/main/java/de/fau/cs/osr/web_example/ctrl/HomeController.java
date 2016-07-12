@@ -309,7 +309,7 @@ public class HomeController {
 				Map.Entry pair = (Map.Entry) it.next();
 				it.remove();
 				HashMap<String, String> mapC = DBpedia
-						.getIndustryCompaniesNames("<" + pair.getValue().toString() + ">");
+						.getIndustryCompaniesNames("<" + pair.getValue().toString() + ">",requests.get("industriesCompetitors"));
 				Iterator itC = mapC.entrySet().iterator();
 				ArrayList<String> comp = new ArrayList<String>();
 				List location = new ArrayList<String>();
@@ -334,7 +334,7 @@ public class HomeController {
 			}
 		}
 		if (requests.containsKey("industryCompanies")) {
-			HashMap<String, String> map = DBpedia.getIndustryCompaniesNames(requests.get("industryCompanies"));
+			HashMap<String, String> map = DBpedia.getIndustryCompaniesNames(requests.get("industryCompanies"),"");
 			Iterator it = map.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry pair = (Map.Entry) it.next();
