@@ -1059,8 +1059,10 @@ function openSection(id) {
 					var valN = parseFloat($("#sentimentQuery #newsValues").text());
 					var reSe = 2.;
 					reSe = ((valT*twitter)/100.) + 4. + ((valN*news)/100.) + 4.;	
-					
-					reSe /= 2.0;
+					if($("#sentimentQuery").find("#twiterSlider").val() == "0" || $("#sentimentQuery").find("#newsSlider").val() == "0")
+						reSe -=4.;
+					else 
+						reSe /= 2.;
 					$('#sentimentResult').slider('setValue', (reSe-4.));
 				
 			    });		    
@@ -1075,7 +1077,7 @@ function openSection(id) {
 							$("#loading").hide();
 							var res = JSON.parse(data);		
 							console.log(res);
-							var valN = res[0]['news'];
+							var valN = Math.round(parseFloat(res[0]['news'])*1000.)/1000.;
 							$("#sentimentQuery #newsValues").text(valN);
 						
 		    }).fail( function(xhr, textStatus, errorThrown) {
@@ -1092,7 +1094,7 @@ function openSection(id) {
 							var res = JSON.parse(data);	
 							
 							console.log(res);
-							var valT = res[0]['twiter'];
+							var valT = Math.round(parseFloat(res[0]['twiter'])*1000.)/1000.;
 							$("#sentimentQuery #twitterValues").text(valT);
 						
 		    }).fail( function(xhr, textStatus, errorThrown) {
