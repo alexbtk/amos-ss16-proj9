@@ -315,6 +315,7 @@ public class HomeController {
 				List location = new ArrayList<String>();
 				while (itC.hasNext()) {
 					Map.Entry pairC = (Map.Entry) itC.next();
+					if(pairC.getKey().toString().contains("'"))continue;
 					comp.add("\"" + pairC.getKey().toString() + "\"");
 					
 					Map mapL = DBpedia.getCompanyLocationCoordonates(pairC.getKey().toString());
