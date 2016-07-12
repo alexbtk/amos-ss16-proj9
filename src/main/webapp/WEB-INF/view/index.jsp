@@ -412,6 +412,12 @@
 										data-widget="collapse" data-toggle="tooltip" title="Collapse">
 										<i class="fa fa-minus"></i>
 									</button>
+									<div class="col-lg-6 col-md-6">
+										<div id="twitterChartO" style="height: 250px; width: 250px;"></div>
+									</div>
+									<div class="col-lg-6 col-md-6">
+										<div id="newsChartO" style="height: 250px; width: 250px;"></div>
+									</div>
 								</div>
 							</div>
 							<div class="box-body">

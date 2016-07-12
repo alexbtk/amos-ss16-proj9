@@ -1028,6 +1028,94 @@ function openSection(id) {
 		    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
 		    });
 			
+			$.post("qeuryRequest", {
+				"avgTwitterBluemixSentimentPosts" : companyName
+			}).done(function(data) {
+				$("#loading").hide();
+				data = JSON.parse(data);
+				console.log("twitter");
+				console.log(data);
+				var sentValue = data[0]["avgSentiment"];
+				var negPostsArray = data[0]["negPosts"];
+				var neutPostsArray = data[0]["neutPosts"];
+				var posPostsArray = data[0]["posPosts"];
+
+							
+				$.jqplot.config.enablePlugins = true;
+				var plot1 = $.jqplot('twitterChartO', [[['negative sentiments',negPostsArray.length],['neutral sentiments',neutPostsArray.length],['positive sentiments',posPostsArray.length]]], {
+					grid: {
+			            drawBorder: false, 
+			            drawGridlines: false,
+			            background: '#ffffff',
+			            shadow:false
+			        },
+					gridPadding: {top:0, bottom:38, left:0, right:0},
+					
+			        seriesDefaults:{
+			            renderer:$.jqplot.PieRenderer,
+			            seriesColors: ["#e50202", "#eefd00", "#04ff08"],
+			            trendline:{ show:false }, 
+			            rendererOptions: { padding: 8, showDataLabels: true }
+			        },
+			        legend:{
+			            show:true, 
+			            placement: 'outside', 
+			            rendererOptions: {
+			                numberRows: 2
+			            }, 
+			            location:'s',
+			            marginTop: '15px'
+			        }       
+			    });
+				
+			}).fail(function(){
+				$("#loading").hide();
+		    	 $("#twitterstatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
+			});
+			
+			$.post("qeuryRequest", {
+				"question4" : companyName,
+				"timeframe" : 2
+			}).done(
+						function(data) {
+							$("#loading").hide();
+							var res = JSON.parse(data);		
+							var newsSentimentCountString = res[0]['content'];
+							var numberPattern = /\d+/g;
+							var numbers = newsSentimentCountString.match(numberPattern);
+							//alert(numbers[0]);
+							//alert(numbers[1]);
+							var plot2 = $.jqplot('newsChartO', [[['negative news',numbers[0]],['positive news',numbers[1]]]], {
+								grid: {
+						            drawBorder: false, 
+						            drawGridlines: false,
+						            background: '#ffffff',
+						            shadow:false
+						        },
+								gridPadding: {top:0, bottom:38, left:0, right:0},
+								
+						        seriesDefaults:{
+						            renderer:$.jqplot.PieRenderer,
+						            seriesColors: ["#e50202", "#04ff08"],
+						            trendline:{ show:false }, 
+						            rendererOptions: { padding: 8, showDataLabels: true }
+						        },
+						        legend:{
+						            show:true, 
+						            placement: 'outside', 
+						            rendererOptions: {
+						                numberRows: 2
+						            }, 
+						            location:'s',
+						            marginTop: '15px'
+						        }       
+						    });
+						
+		    }).fail(function(){
+		    	$("#loading").hide();
+		    	 $("#alchelmystatusprogress").removeClass("progress-bar-green").addClass("progress-bar-red");
+		    });
+			
 			var host = $('#overviewSection');
 			if($('#' + id + 'Section').find("#existOverviewQuery").length == 0)
 				host.append("<div id='existOverviewQuery' class='"+companyName+"'></div>");

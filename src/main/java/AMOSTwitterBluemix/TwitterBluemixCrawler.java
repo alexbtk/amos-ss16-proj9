@@ -68,7 +68,7 @@ public class TwitterBluemixCrawler {
 		ArrayList<TwitterBluemixPost> posts = new ArrayList<TwitterBluemixPost>();
 		
 		try {
-			Request request = new Request.Builder().header("Authorization", credential).url("https://" + userName + ":" + password + "@cdeservice.mybluemix.net:443/api/v1/messages/search?q=" + companyName + "&from=" + startRecord + "&size=" + numberOfRecords).build();
+			Request request = new Request.Builder().header("Authorization", credential).url("https://" + userName + ":" + password + "@cdeservice.mybluemix.net:443/api/v1/messages/search?q=\"" + companyName + "\"&from=" + startRecord + "&size=" + numberOfRecords).build();
 			okhttp3.Call call = client.newCall(request);
 			Response response = call.execute();
 			String responseString = response.body().string();
