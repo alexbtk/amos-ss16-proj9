@@ -89,7 +89,7 @@ public class HomeController {
 		fac = IAlchemyFactory.newInstance();
 		twitterAnalyzer = new TwitterAnalyzer();
 		avgNewsSentimentCache = new HashMap<String, AvgNewsSentimentCacheEntry>();
-		twitterBluemixCrawler = new TwitterBluemixCrawler(null, null);
+		twitterBluemixCrawler = null;
 		cache = AMOSCache.AMOSCache.getInstance();
 	}
 

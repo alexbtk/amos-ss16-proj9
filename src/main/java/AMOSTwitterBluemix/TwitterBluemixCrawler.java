@@ -36,7 +36,7 @@ public class TwitterBluemixCrawler {
 	private String userName = "2a600621-3b03-480e-a4fe-d7a4c1fb4df4";
 	private String password = "e9knQDBqcE";
 	
-	private AMOSCache cache;
+	//private AMOSCache cache;
 
 	public TwitterBluemixCrawler(String userName, String password) {
 		if (userName != null && password != null){
@@ -44,7 +44,7 @@ public class TwitterBluemixCrawler {
 		this.password = password;
 		}
 		
-		this.cache = AMOSCache.getInstance();
+		//this.cache = AMOSCache.getInstance();
 	}
 
 	/**
@@ -56,9 +56,9 @@ public class TwitterBluemixCrawler {
 	 * @return list of tweets (with additional attributes) about searched company
 	 */
 	public List<TwitterBluemixPost> crawlPosts(String companyName, String startRecord, String numberOfRecords) {
-		Object r = cache.getCurrentMethodCache(companyName, startRecord, numberOfRecords);
-		if(r != null)
-			return (List<TwitterBluemixPost>) r;
+		//Object r = cache.getCurrentMethodCache(companyName, startRecord, numberOfRecords);
+		//if(r != null)
+		//	return (List<TwitterBluemixPost>) r;
 		
 		OkHttpClient client = new OkHttpClient();
 		String credential = Credentials.basic(userName, password);
@@ -117,8 +117,8 @@ public class TwitterBluemixCrawler {
 			e.printStackTrace();
 		}
 		
-		if(posts.size() > 0)
-			cache.putCurrentMethodCache(companyName, startRecord, numberOfRecords, posts);
+		//if(posts.size() > 0)
+		//	cache.putCurrentMethodCache(companyName, startRecord, numberOfRecords, posts);
 		
 		return posts;
 
