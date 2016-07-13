@@ -644,10 +644,10 @@
 					<div class="col-lg-6 col-md-6">
 						<div class="row">
 							<div class="col-lg-6 col-md-6">
-								<div id="twitterChart" style="height: 400px; width: 400px;"></div>
+								<div id="twitterChart" style="height: 200px; width: 200px;"></div>
 							</div>
 							<div class="col-lg-6 col-md-6">
-								<div id="newsChart" style="height: 400px; width: 400px;"></div>
+								<div id="newsChart" style="height: 200px; width: 200px;"></div>
 							</div>
 						</div>
 					</div>
