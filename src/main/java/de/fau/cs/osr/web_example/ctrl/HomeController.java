@@ -232,16 +232,16 @@ public class HomeController {
 		}
 		if (requests.containsKey("question6h")) {
 			String nameC = requests.get("question6h");
-			nameC.replaceAll("Inc.", "");
+			/*nameC.replaceAll("Inc.", "");
 			nameC.replaceAll("Corporation", "");
 			nameC.replaceAll("Company", "");
-			nameC.replaceAll("Association", "");
+			nameC.replaceAll("Association", "");*/
 			Object r = cache.getCurrentMethodCache(requests.containsKey("question6h")+"twitterSentiment");
 			Double avgSentimentValue = 0.;
 			if(r == null){
 				List<TwitterBluemixPost> posts = twitterBluemixCrawler.crawlPosts(nameC.trim(), "1", "10");	
 	
-				avgSentimentValue = twitterAnalyzer.getAverageSentimetForBluemixTweets(posts, languageService);
+				avgSentimentValue = twitterAnalyzer.getAverageSentimetForBluemixTweets(posts, null);
 				if(Double.isNaN(avgSentimentValue)){
 					avgSentimentValue = 1.;
 					//twitterBluemixCrawler.crawlPosts(null, null, null);
@@ -503,8 +503,8 @@ public class HomeController {
 			List<TwitterBluemixPost> posts = twitterBluemixCrawler.crawlPosts(requests.get("avgTwitterBluemixSentimentPosts"), "1", "10");
 			
 			
-			Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForBluemixTweets(posts, languageService);
-			HashMap<String, Double> map = twitterAnalyzer.getSentimentForEachBluemixTweet(posts, languageService);
+			Double avgSentimentValue = twitterAnalyzer.getAverageSentimetForBluemixTweets(posts, null);
+			HashMap<String, Double> map = twitterAnalyzer.getSentimentForEachBluemixTweet(posts, null);
 			
 			List negPostsToSend = new ArrayList<String>();
 			List neutPostsToSend = new ArrayList<String>();
