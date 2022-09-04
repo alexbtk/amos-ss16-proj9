@@ -1,5 +1,4 @@
-# amos-ss16-proj9
-FAU OSS-AMOS project 9 repository
+
 
 ## Build
 Use the following command to build the project:
